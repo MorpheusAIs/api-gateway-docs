@@ -5,6 +5,11 @@
         "description": "API Gateway connecting Web2 clients to the Morpheus-Lumerin AI Marketplace",
         "version": "v1.1.1-test"
     },
+    "servers": [
+    {
+      "url": "https://api.dev.mor.org/api/v1/"
+    }
+  ]
     "paths": {
         "/api/v1/auth/me": {
             "get": {
