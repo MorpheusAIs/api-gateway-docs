@@ -9,7 +9,7 @@
     {
       "url": "https://api.dev.mor.org/api/v1/"
     }
-  ]
+  ],
     "paths": {
         "/api/v1/auth/me": {
             "get": {
@@ -2789,6 +2789,5 @@
                 "description": "🗝️ API key in format: 'Bearer sk-xxxxxx'"
             }
         }
-    },
-    "servers": []
+    }
 }
