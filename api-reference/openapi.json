@@ -10,6 +10,12 @@
       "url": "https://api.dev.mor.org/api/v1/"
     }
   ],
+    "navigation": {
+        "groups": [{
+          "group": "API reference",
+          "openapi": "openapi.json"
+        }]
+    },
     "paths": {
         "/api/v1/auth/me": {
             "get": {
