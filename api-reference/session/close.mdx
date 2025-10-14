@@ -1,0 +1,96 @@
+---
+title: "Close Session"
+api: "POST /api/v1/session/closesession"
+description: "Close the session associated with the current API key"
+---
+
+Close the session associated with the current API key.
+
+This endpoint terminates the active session and settles any remaining payments with the provider. Any unused session time may be refunded according to the session terms.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Whether the session was successfully closed
+</ResponseField>
+
+<ResponseField name="session_id" type="string">
+  ID of the closed session
+</ResponseField>
+
+<ResponseField name="refund" type="string">
+  Amount refunded for unused session time (if applicable)
+</ResponseField>
+
+<ResponseField name="total_usage" type="object">
+  Usage statistics for the session
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.dev.mor.org/api/v1/session/closesession \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.dev.mor.org/api/v1/session/closesession',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer sk-YOUR_API_KEY'
+    }
+  }
+);
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.dev.mor.org/api/v1/session/closesession',
+    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
+)
+
+result = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+{
+  "success": true,
+  "session_id": "0xabcdef1234567890",
+  "refund": "0.01",
+  "total_usage": {
+    "duration": 2400,
+    "requests": 125,
+    "tokens": 45000
+  }
+}
+```
+
+```json 404 No Active Session
+{
+  "detail": "No active session found for this API key"
+}
+```
+</ResponseExample>
+
+<Info>
+  Sessions automatically close when they expire. You only need to manually close a session if you want to terminate it early or switch to a different provider.
+</Info>
+
+<Note>
+  After closing a session, you can immediately create a new session with the same or different provider/model.
+</Note>
+

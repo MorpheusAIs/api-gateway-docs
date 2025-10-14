@@ -1,0 +1,144 @@
+---
+title: "Quick Start Guide"
+description: "Get started with the Morpheus API Gateway in minutes"
+---
+
+## Authentication Setup
+
+### 1. Get Your JWT Token
+
+First, authenticate via OAuth2 to get your JWT token for account management:
+
+```bash
+# Visit the OAuth2 login page
+https://auth.mor.org/oauth2/authorize
+```
+
+### 2. Create an API Key
+
+Use your JWT token to create an API key for making AI inference requests:
+
+```bash
+curl --request POST \
+  --url https://api.dev.mor.org/api/v1/auth/keys \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{"name": "My First Key"}'
+```
+
+Save the returned API key securely - you won't see it again!
+
+## Making Your First Request
+
+### List Available Models
+
+```bash
+curl --request GET \
+  --url https://api.dev.mor.org/api/v1/models \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+### Create a Chat Completion
+
+```bash
+curl --request POST \
+  --url https://api.dev.mor.org/api/v1/chat/completions \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-3.5-turbo",
+    "messages": [
+      {"role": "user", "content": "Hello!"}
+    ]
+  }'
+```
+
+## Using the OpenAI SDK
+
+The Morpheus Gateway is fully compatible with the OpenAI SDK:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.dev.mor.org/api/v1"
+)
+
+# List models
+models = client.models.list()
+
+# Create a chat completion
+completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user", "content": "Hello!"}
+    ]
+)
+
+print(completion.choices[0].message.content)
+```
+
+## Session Management (Advanced)
+
+For direct provider connections with blockchain payments:
+
+### 1. Store Your Private Key
+
+```bash
+curl --request POST \
+  --url https://api.dev.mor.org/api/v1/auth/private-key \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{"private_key": "YOUR_ENCRYPTED_PRIVATE_KEY"}'
+```
+
+### 2. Approve Token Spending
+
+```bash
+curl --request POST \
+  --url 'https://api.dev.mor.org/api/v1/session/approve?amount=1000' \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+### 3. Create a Session
+
+```bash
+curl --request POST \
+  --url 'https://api.dev.mor.org/api/v1/session/modelsession?model_id=0x1234...' \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sessionDuration": 3600,
+    "failover": true
+  }'
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/auth/me">
+    Learn about user authentication and API key management
+  </Card>
+  
+  <Card title="Models" icon="robot" href="/api-reference/models/list">
+    Explore available AI models and provider bids
+  </Card>
+  
+  <Card title="Chat Completions" icon="comments" href="/api-reference/chat/completions">
+    Make AI inference requests
+  </Card>
+  
+  <Card title="Session Management" icon="link" href="/api-reference/session/approve">
+    Manage blockchain sessions with providers
+  </Card>
+</CardGroup>
+
+## Support
+
+Need help? Reach out to us:
+
+- **Email**: devs@mor.org
+- **Discord**: [Join our community](https://discord.gg/morpheus)
+- **GitHub**: [Report issues](https://github.com/morpheusais)
+

@@ -1,33 +1,74 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Reference"
+description: "Comprehensive API documentation for the Morpheus API Gateway"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Welcome to Morpheus API Gateway
 
-## Welcome
+The Morpheus API Gateway connects Web2 clients to the Morpheus-Lumerin AI Marketplace. This gateway provides OpenAI-compatible endpoints for seamless integration with existing AI applications.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://api.dev.mor.org/api/v1/
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+The API supports two authentication methods:
+
+### Bearer Token (JWT)
+Used for user-facing endpoints like account management, API key generation, and settings.
+
+```bash
+Authorization: Bearer <jwt_token>
+```
+
+### API Key
+Used for AI inference endpoints like chat completions and model listings.
+
+```bash
+Authorization: Bearer sk-xxxxxxxxxxxxx
+```
+
+## API Categories
+
+- **Auth**: User authentication, API key management, private keys, and delegation
+- **Models**: List and query available AI models and bids
+- **Chat**: OpenAI-compatible chat completion endpoints
+- **Session**: Blockchain session management for provider connections
+- **Automation**: Automated session creation settings
+- **Chat History**: Store and retrieve chat conversations
+
+## Rate Limits
+
+Rate limits are applied per API key and vary based on your account tier. Contact support for enterprise rate limits.
+
+## Error Handling
+
+The API returns standard HTTP status codes:
+
+- `200` - Success
+- `201` - Created
+- `204` - No Content (successful deletion)
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Validation Error
+- `500` - Internal Server Error
+
+Error responses include a JSON body with details:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "detail": [
+    {
+      "loc": ["body", "field_name"],
+      "msg": "Field required",
+      "type": "missing"
+    }
+  ]
+}
 ```
+

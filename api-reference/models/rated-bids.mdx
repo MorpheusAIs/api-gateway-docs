@@ -1,0 +1,155 @@
+---
+title: "Get Rated Bids"
+api: "GET /api/v1/models/ratedbids"
+description: "Get rated bids for a specific model"
+---
+
+Get rated bids for a specific model.
+
+Connects to the proxy-router's `/blockchain/models/{id}/bids/rated` endpoint. Returns all available provider bids for the model, sorted by rating and price.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="model_id" type="string" required>
+  The blockchain ID (hex) of the model to get rated bids for, e.g., `0x1234...`
+</ParamField>
+
+### Response
+
+<ResponseField name="bids" type="array">
+  Array of rated bid objects
+  
+  <Expandable title="Bid Object">
+    <ResponseField name="bid_id" type="string">
+      Unique identifier for the bid
+    </ResponseField>
+    
+    <ResponseField name="provider" type="string">
+      Provider's blockchain address
+    </ResponseField>
+    
+    <ResponseField name="model_id" type="string">
+      Model's blockchain address
+    </ResponseField>
+    
+    <ResponseField name="price_per_second" type="string">
+      Price per second in MOR tokens
+    </ResponseField>
+    
+    <ResponseField name="rating" type="number">
+      Provider rating (0-5)
+    </ResponseField>
+    
+    <ResponseField name="total_sessions" type="integer">
+      Number of sessions completed
+    </ResponseField>
+    
+    <ResponseField name="availability" type="string">
+      Current availability status: `available`, `busy`, `offline`
+    </ResponseField>
+    
+    <ResponseField name="min_duration" type="integer">
+      Minimum session duration in seconds
+    </ResponseField>
+    
+    <ResponseField name="max_duration" type="integer">
+      Maximum session duration in seconds
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.dev.mor.org/api/v1/models/ratedbids?model_id=0x1234567890abcdef' \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.dev.mor.org/api/v1/models/ratedbids?model_id=0x1234567890abcdef',
+  {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer sk-YOUR_API_KEY'
+    }
+  }
+);
+
+const bids = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.dev.mor.org/api/v1/models/ratedbids',
+    params={'model_id': '0x1234567890abcdef'},
+    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
+)
+
+bids = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+{
+  "bids": [
+    {
+      "bid_id": "0xabcdef1234567890",
+      "provider": "0x9876543210fedcba",
+      "model_id": "0x1234567890abcdef",
+      "price_per_second": "0.000014",
+      "rating": 4.8,
+      "total_sessions": 1250,
+      "availability": "available",
+      "min_duration": 60,
+      "max_duration": 86400
+    },
+    {
+      "bid_id": "0xfedcba0987654321",
+      "provider": "0x1122334455667788",
+      "model_id": "0x1234567890abcdef",
+      "price_per_second": "0.000012",
+      "rating": 4.5,
+      "total_sessions": 890,
+      "availability": "available",
+      "min_duration": 300,
+      "max_duration": 43200
+    }
+  ]
+}
+```
+
+```json 422 Validation Error
+{
+  "detail": [
+    {
+      "loc": ["query", "model_id"],
+      "msg": "Field required",
+      "type": "missing"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Info>
+  **Understanding Ratings**: Provider ratings are calculated based on session success rate, response time, and user feedback. Higher-rated providers typically offer more reliable service.
+</Info>
+
+<Tip>
+  **Cost Calculation**: To calculate the total session cost, multiply `price_per_second` by your desired session duration. For example, a 1-hour session (3600 seconds) at 0.000014 MOR/second would cost 0.0504 MOR.
+</Tip>
+
+<Note>
+  Use the `bid_id` from this response when creating a session with `/api/v1/session/bidsession` to select a specific provider.
+</Note>
+

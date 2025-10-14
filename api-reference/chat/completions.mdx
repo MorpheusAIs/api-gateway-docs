@@ -1,0 +1,266 @@
+---
+title: "Chat Completions"
+api: "POST /api/v1/chat/completions"
+description: "Create AI chat completions with OpenAI-compatible API"
+---
+
+Create a chat completion with automatic session creation if enabled.
+
+Supports both streaming and non-streaming responses based on the `stream` parameter. Tool calling is supported but may work better with streaming enabled.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Body
+
+<ParamField body="messages" type="array" required>
+  Array of message objects representing the conversation
+  
+  <Expandable title="Message Object">
+    <ParamField body="role" type="string" required>
+      Role of the message author: `system`, `user`, `assistant`, or `tool`
+    </ParamField>
+    
+    <ParamField body="content" type="string">
+      Content of the message
+    </ParamField>
+    
+    <ParamField body="name" type="string">
+      Name of the author (optional)
+    </ParamField>
+    
+    <ParamField body="tool_calls" type="array">
+      Tool calls made by the assistant (for assistant messages)
+    </ParamField>
+    
+    <ParamField body="tool_call_id" type="string">
+      ID of the tool call this message is responding to (for tool messages)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="model" type="string">
+  Model ID to use for completion (blockchain hex address or name)
+</ParamField>
+
+<ParamField body="temperature" type="number" default={1}>
+  Sampling temperature between 0 and 2. Higher values make output more random.
+</ParamField>
+
+<ParamField body="top_p" type="number" default={1}>
+  Nucleus sampling parameter. Alternative to temperature.
+</ParamField>
+
+<ParamField body="n" type="integer" default={1}>
+  Number of completions to generate
+</ParamField>
+
+<ParamField body="stream" type="boolean" default={false}>
+  Whether to stream the response as server-sent events
+</ParamField>
+
+<ParamField body="stop" type="string | array">
+  Up to 4 sequences where the API will stop generating
+</ParamField>
+
+<ParamField body="max_tokens" type="integer">
+  Maximum number of tokens to generate
+</ParamField>
+
+<ParamField body="presence_penalty" type="number" default={0}>
+  Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
+</ParamField>
+
+<ParamField body="frequency_penalty" type="number" default={0}>
+  Number between -2.0 and 2.0. Positive values penalize new tokens based on their frequency in the text so far.
+</ParamField>
+
+<ParamField body="tools" type="array">
+  List of tools the model can call
+</ParamField>
+
+<ParamField body="tool_choice" type="string | object">
+  Controls which tool is called by the model
+</ParamField>
+
+<ParamField body="session_id" type="string">
+  Optional session ID to use. If not provided, uses the session associated with the API key.
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string">
+  Unique completion ID
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Always "chat.completion"
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Unix timestamp of completion creation
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model used for the completion
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  Array of completion choices
+  
+  <Expandable title="Choice Object">
+    <ResponseField name="index" type="integer">
+      Choice index
+    </ResponseField>
+    
+    <ResponseField name="message" type="object">
+      The generated message
+    </ResponseField>
+    
+    <ResponseField name="finish_reason" type="string">
+      Reason the generation stopped: `stop`, `length`, `tool_calls`, or `content_filter`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token usage statistics
+  
+  <Expandable title="Usage Object">
+    <ResponseField name="prompt_tokens" type="integer">
+      Number of tokens in the prompt
+    </ResponseField>
+    
+    <ResponseField name="completion_tokens" type="integer">
+      Number of tokens in the completion
+    </ResponseField>
+    
+    <ResponseField name="total_tokens" type="integer">
+      Total tokens used
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.dev.mor.org/api/v1/chat/completions \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-3.5-turbo",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello, how are you?"
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.dev.mor.org/api/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer sk-YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      { role: 'user', content: 'Hello, how are you?' }
+    ]
+  })
+});
+
+const completion = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.dev.mor.org/api/v1/chat/completions',
+    headers={
+        'Authorization': 'Bearer sk-YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'gpt-3.5-turbo',
+        'messages': [
+            {'role': 'user', 'content': 'Hello, how are you?'}
+        ]
+    }
+)
+
+completion = response.json()
+```
+
+```python OpenAI SDK
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.dev.mor.org/api/v1"
+)
+
+completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+)
+
+print(completion.choices[0].message.content)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+{
+  "id": "chatcmpl-123",
+  "object": "chat.completion",
+  "created": 1704067200,
+  "model": "gpt-3.5-turbo",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! I'm doing well, thank you for asking. How can I assist you today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 20,
+    "total_tokens": 32
+  }
+}
+```
+
+```json 422 Validation Error
+{
+  "detail": [
+    {
+      "loc": ["body", "messages"],
+      "msg": "Field required",
+      "type": "missing"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Tip>
+  The API is fully compatible with the OpenAI SDK. Simply change the `base_url` to point to the Morpheus Gateway.
+</Tip>
+
+<Note>
+  Streaming responses return server-sent events. Set `stream: true` in your request to enable streaming.
+</Note>
+
