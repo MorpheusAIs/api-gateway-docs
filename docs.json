@@ -24,6 +24,14 @@
             ]
           },
           {
+            "group": "How to guides",
+            "pages": [
+              "creating-api-key",
+              "viewing-models",
+              "using-swagger-ui"
+            ]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
