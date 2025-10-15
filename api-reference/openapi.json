@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-          "url": "https://api.mor.org/api/v1/"
+          "url": "https://api.mor.org"
         }
     ],
     "paths": {

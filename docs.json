@@ -2,6 +2,13 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Morpheus API Gateway",
+  "openapi": "/api-reference/openapi.json",
+  "api": {
+    "baseUrl": "https://api.mor.org/api/v1",
+    "auth": {
+      "method": "bearer"
+    }
+  },
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
