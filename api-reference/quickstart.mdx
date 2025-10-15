@@ -20,7 +20,7 @@ Use your JWT token to create an API key for making AI inference requests:
 
 ```bash
 curl --request POST \
-  --url https://api.dev.mor.org/api/v1/auth/keys \
+  --url https://api.mor.org/api/v1/auth/keys \
   --header 'Authorization: Bearer YOUR_JWT_TOKEN' \
   --header 'Content-Type: application/json' \
   --data '{"name": "My First Key"}'
@@ -34,7 +34,7 @@ Save the returned API key securely - you won't see it again!
 
 ```bash
 curl --request GET \
-  --url https://api.dev.mor.org/api/v1/models \
+  --url https://api.mor.org/api/v1/models \
   --header 'Authorization: Bearer sk-YOUR_API_KEY'
 ```
 
@@ -42,7 +42,7 @@ curl --request GET \
 
 ```bash
 curl --request POST \
-  --url https://api.dev.mor.org/api/v1/chat/completions \
+  --url https://api.mor.org/api/v1/chat/completions \
   --header 'Authorization: Bearer sk-YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -62,7 +62,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="sk-YOUR_API_KEY",
-    base_url="https://api.dev.mor.org/api/v1"
+    base_url="https://api.mor.org/api/v1"
 )
 
 # List models
@@ -87,7 +87,7 @@ For direct provider connections with blockchain payments:
 
 ```bash
 curl --request POST \
-  --url https://api.dev.mor.org/api/v1/auth/private-key \
+  --url https://api.mor.org/api/v1/auth/private-key \
   --header 'Authorization: Bearer YOUR_JWT_TOKEN' \
   --header 'Content-Type: application/json' \
   --data '{"private_key": "YOUR_ENCRYPTED_PRIVATE_KEY"}'
@@ -97,7 +97,7 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url 'https://api.dev.mor.org/api/v1/session/approve?amount=1000' \
+  --url 'https://api.mor.org/api/v1/session/approve?amount=1000' \
   --header 'Authorization: Bearer sk-YOUR_API_KEY'
 ```
 
@@ -105,7 +105,7 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url 'https://api.dev.mor.org/api/v1/session/modelsession?model_id=0x1234...' \
+  --url 'https://api.mor.org/api/v1/session/modelsession?model_id=0x1234...' \
   --header 'Authorization: Bearer sk-YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{

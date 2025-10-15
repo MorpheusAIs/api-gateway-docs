@@ -37,12 +37,12 @@ Requires JWT Bearer authentication with the token received from the login endpoi
 <RequestExample>
 ```bash cURL
 curl --request DELETE \
-  --url https://api.dev.mor.org/api/v1/auth/keys/123 \
+  --url https://api.mor.org/api/v1/auth/keys/123 \
   --header 'Authorization: Bearer YOUR_JWT_TOKEN'
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://api.dev.mor.org/api/v1/auth/keys/123', {
+const response = await fetch('https://api.mor.org/api/v1/auth/keys/123', {
   method: 'DELETE',
   headers: {
     'Authorization': 'Bearer YOUR_JWT_TOKEN'
@@ -56,7 +56,7 @@ const result = await response.json();
 import requests
 
 response = requests.delete(
-    'https://api.dev.mor.org/api/v1/auth/keys/123',
+    'https://api.mor.org/api/v1/auth/keys/123',
     headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
 )
 
