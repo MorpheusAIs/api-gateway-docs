@@ -3,6 +3,11 @@
   "theme": "mint",
   "name": "Morpheus API Gateway",
   "openapi": "/api-reference/openapi.json",
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-D0TCTKQ051"
+    }
+  },
   "api": {
     "baseUrl": "https://api.mor.org",
     "auth": {
