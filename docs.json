@@ -17,6 +17,8 @@
             "group": "Getting started",
             "pages": [
               "index",
+              "what-is-api-gateway",
+              "how-to-use-api-gateway",
               "quickstart",
               "development"
             ]
@@ -165,8 +167,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [
