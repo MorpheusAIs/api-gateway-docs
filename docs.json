@@ -17,8 +17,8 @@
             "group": "Getting started",
             "pages": [
               "index",
-              "what-is-api-gateway",
-              "how-to-use-api-gateway",
+              "guides/getting-started/what-is-api-gateway",
+              "guides/getting-started/how-to-use-api-gateway",
               "quickstart",
               "development"
             ]
@@ -26,18 +26,18 @@
           {
             "group": "How to guides",
             "pages": [
-              "creating-api-key",
-              "viewing-models",
-              "using-swagger-ui"
+              "guides/how-to/creating-api-key",
+              "guides/how-to/viewing-models",
+              "guides/how-to/using-swagger-ui"
             ]
           },
           {
             "group": "Integration guides",
             "pages": [
-              "integration-cursor",
-              "integration-brave-leo",
-              "integration-open-web-ui",
-              "integration-eliza"
+              "guides/integrations/cursor",
+              "guides/integrations/brave-leo",
+              "guides/integrations/open-web-ui",
+              "guides/integrations/eliza"
             ]
           },
           {
