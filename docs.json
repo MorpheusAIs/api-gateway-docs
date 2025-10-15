@@ -4,9 +4,12 @@
   "name": "Morpheus API Gateway",
   "openapi": "/api-reference/openapi.json",
   "api": {
-    "baseUrl": "https://api.mor.org/api/v1",
+    "baseUrl": "https://api.mor.org",
     "auth": {
       "method": "bearer"
+    },
+    "playground": {
+      "proxy": false
     }
   },
   "colors": {
