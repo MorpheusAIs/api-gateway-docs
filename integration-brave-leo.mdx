@@ -1,0 +1,116 @@
+---
+title: "Brave Leo Integration"
+description: "How to integrate Morpheus API Gateway with Brave Leo"
+---
+
+# How To Integrate with Brave Leo
+
+## Morpheus ↔ Brave Leo
+
+### What is Brave Leo?
+
+Brave Leo is an AI assistant built directly into the Brave browser that provides privacy-first AI capabilities. It allows you to bring your own model, making it perfect for integrating with the Morpheus Compute Marketplace.
+
+<Note>
+Reference: [How to use Brave Leo AI with Venice API](https://venice.ai/blog/how-to-use-brave-leo-ai-with-venice-api-a-privacy-first-browser-ai-assistant)
+</Note>
+
+## Prerequisites
+
+- Morpheus API Key
+- Brave Installed (version >1.76.52)
+- Morpheus Model Identified
+
+## Step by Step
+
+### Step 1: Download and Install Brave
+
+Download and Install the Brave browser (version >1.76.52) through [brave.com](https://brave.com)
+
+<img
+  src="/images/brave/bravehome.png"
+  alt="Brave homepage"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 2: Open Settings
+
+Open Brave browser and Click the hamburger icon on the top right and then settings
+
+<img
+  src="/images/brave/bravesettings.png"
+  alt="Brave settings"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 3: Access Leo Settings
+
+On the lefthand side click "Leo", and then go to the "Bring your own model" section
+
+<img
+  src="/images/brave/bravebyom.png"
+  alt="Bring your own model"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 4: Configure Your Model
+
+Click "Add new model" and start configuring the model:
+
+- **Label:** MorpheusAI
+- **Model request name:** Choose model from Morpheus Marketplace
+- **Server endpoint:** `https://api.mor.org/api/v1/chat/completions`
+- **Context size:** Customize or leave as 4000
+- **API Key:** Morpheus API Key
+- **System Prompt:** Customize or leave as default
+
+<img
+  src="/images/brave/bravemodels.png"
+  alt="Configure model"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 5: Add the Model
+
+Click add model at the bottom of the screen and go back to the "Bring your own model" section
+
+<img
+  src="/images/brave/braveselect.png"
+  alt="Select model"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 6: Set as Default
+
+Find the "Default model for new conversations" box, and change it to MorpheusAI.
+
+<img
+  src="/images/brave/bravedefault.png"
+  alt="Set default model"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 7: Select in Leo Assistant
+
+Go back to the main Leo Assistant page and click the 3 dots next to the "X" on the top bar, and select the MorpheusAI model if not already selected
+
+<img
+  src="/images/brave/leoselect.png"
+  alt="Select Leo model"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 8: Start Using!
+
+Go to a website and enter your prompt to use Brave Leo with Morpheus AI
+
+<img
+  src="/images/brave/usebrave.png"
+  alt="Use Brave Leo with Morpheus"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+<Tip>
+You're now ready to use Morpheus AI within Brave Leo! Enjoy privacy-first AI assistance powered by the Morpheus Compute Marketplace.
+</Tip>
+

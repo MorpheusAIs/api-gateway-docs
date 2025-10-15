@@ -32,6 +32,15 @@
             ]
           },
           {
+            "group": "Integration guides",
+            "pages": [
+              "integration-cursor",
+              "integration-brave-leo",
+              "integration-open-web-ui",
+              "integration-eliza"
+            ]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",
