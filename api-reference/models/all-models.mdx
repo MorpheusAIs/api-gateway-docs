@@ -1,0 +1,133 @@
+---
+title: "List All Models"
+api: "GET /api/v1/models/allmodels"
+description: "Get a list of all available models"
+---
+
+Get a list of all available models.
+
+Response is in OpenAI API format with selected fields from the blockchain data. Returns all non-deleted models, including both active and inactive models. This differs from `/api/v1/models` which only returns active models with available providers.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Response
+
+<ResponseField name="object" type="string">
+  Always "list"
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of all model objects
+  
+  <Expandable title="Model Object">
+    <ResponseField name="id" type="string">
+      Unique model identifier (blockchain hex address)
+    </ResponseField>
+    
+    <ResponseField name="object" type="string">
+      Always "model"
+    </ResponseField>
+    
+    <ResponseField name="created" type="integer">
+      Unix timestamp of model creation
+    </ResponseField>
+    
+    <ResponseField name="owned_by" type="string">
+      Model owner/organization
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.mor.org/api/v1/models/allmodels \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.mor.org/api/v1/models/allmodels', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer sk-YOUR_API_KEY'
+  }
+});
+
+const allModels = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.mor.org/api/v1/models/allmodels',
+    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
+)
+
+all_models = response.json()
+```
+
+```python OpenAI SDK
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Note: Use custom request for allmodels endpoint
+import requests
+response = requests.get(
+    f"{client.base_url}/models/allmodels",
+    headers={'Authorization': f'Bearer {client.api_key}'}
+)
+all_models = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "0x1234567890abcdef",
+      "object": "model",
+      "created": 1704067200,
+      "owned_by": "morpheus-ai"
+    },
+    {
+      "id": "0xabcdef1234567890",
+      "object": "model",
+      "created": 1704153600,
+      "owned_by": "lumerin"
+    },
+    {
+      "id": "0xfedcba0987654321",
+      "object": "model",
+      "created": 1703980800,
+      "owned_by": "community"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Info>
+  **All Models vs Active Models**: 
+  - `/api/v1/models` - Returns only active models with available providers (recommended for most use cases)
+  - `/api/v1/models/allmodels` - Returns all non-deleted models regardless of status
+</Info>
+
+<Tip>
+  Use this endpoint to discover all models in the marketplace, including those that may be temporarily unavailable or in testing.
+</Tip>
+
+<Note>
+  Models marked as deleted are excluded from the response. Only models that exist on the blockchain and haven't been soft-deleted are returned.
+</Note>
+

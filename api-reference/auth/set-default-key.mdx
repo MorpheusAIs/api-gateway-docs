@@ -1,0 +1,138 @@
+---
+title: "Set Default API Key"
+api: "PUT /api/v1/auth/keys/{key_id}/default"
+description: "Set an API key as the user's default"
+---
+
+Set an API key as the user's default.
+
+Clears any existing default and sets the specified key as the new default. This affects which key is returned by the `/api/v1/auth/keys/default` endpoint.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (JWT) from OAuth2 login
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="key_id" type="integer" required>
+  The ID of the API key to set as default
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the API key
+</ResponseField>
+
+<ResponseField name="key_prefix" type="string">
+  First few characters of the API key
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Optional name for the API key
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp of creation
+</ResponseField>
+
+<ResponseField name="is_active" type="boolean">
+  Whether the key is currently active
+</ResponseField>
+
+<ResponseField name="is_default" type="boolean">
+  Now set to true for this key
+</ResponseField>
+
+<ResponseField name="encrypted_key" type="string">
+  Encrypted version of the full key
+</ResponseField>
+
+<ResponseField name="encryption_version" type="integer">
+  Version of encryption used
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request PUT \
+  --url https://api.mor.org/api/v1/auth/keys/3/default \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.mor.org/api/v1/auth/keys/3/default',
+  {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'Bearer YOUR_JWT_TOKEN'
+    }
+  }
+);
+
+const defaultKey = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.put(
+    'https://api.mor.org/api/v1/auth/keys/3/default',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
+)
+
+default_key = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+{
+  "id": 3,
+  "key_prefix": "sk-5678",
+  "name": "Production Key",
+  "created_at": "2024-01-05T00:00:00Z",
+  "is_active": true,
+  "is_default": true,
+  "encrypted_key": null,
+  "encryption_version": 1
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "API key not found"
+}
+```
+
+```json 422 Validation Error
+{
+  "detail": [
+    {
+      "loc": ["path", "key_id"],
+      "msg": "Input should be a valid integer",
+      "type": "int_parsing"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Info>
+  **Automatic Clearing**: Setting a new default automatically clears the `is_default` flag from any other API keys. Only one key can be the default at a time.
+</Info>
+
+<Warning>
+  You can only set your own API keys as default. Attempting to set another user's key will result in a 404 error.
+</Warning>
+
+<Note>
+  The API key must be active to be set as default. Inactive keys cannot be designated as the default key.
+</Note>
+
+<Tip>
+  **Use Case**: Set a default key to ensure the same API key is used across your applications. This is especially useful when you have separate keys for development, staging, and production environments.
+</Tip>
+

@@ -1,0 +1,95 @@
+---
+title: "Delete Delegation"
+api: "DELETE /api/v1/auth/delegation/{delegation_id}"
+description: "Delete a specific delegation for the user"
+---
+
+Deletes a specific delegation for the user.
+
+This removes the delegation from the system. The delegated address will no longer have authority to perform actions on your behalf.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (JWT) from OAuth2 login
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="delegation_id" type="integer" required>
+  The ID of the delegation to delete
+</ParamField>
+
+### Response
+
+Returns `204 No Content` on successful deletion.
+
+<RequestExample>
+```bash cURL
+curl --request DELETE \
+  --url https://api.mor.org/api/v1/auth/delegation/1 \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.mor.org/api/v1/auth/delegation/1',
+  {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer YOUR_JWT_TOKEN'
+    }
+  }
+);
+
+// Response will be empty on success (204)
+```
+
+```python Python
+import requests
+
+response = requests.delete(
+    'https://api.mor.org/api/v1/auth/delegation/1',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
+)
+
+# Response status code will be 204 on success
+```
+</RequestExample>
+
+<ResponseExample>
+```json 204 No Content
+(Empty response body)
+```
+
+```json 404 Not Found
+{
+  "detail": "Delegation not found"
+}
+```
+
+```json 422 Validation Error
+{
+  "detail": [
+    {
+      "loc": ["path", "delegation_id"],
+      "msg": "Input should be a valid integer",
+      "type": "int_parsing"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Warning>
+  **Immediate Effect**: Deleting a delegation takes effect immediately. The delegated address will lose access to perform actions on your behalf as soon as the deletion is processed.
+</Warning>
+
+<Info>
+  You can only delete delegations that belong to your account. Attempting to delete another user's delegation will result in a 404 error.
+</Info>
+
+<Note>
+  If you want to temporarily disable a delegation without deleting it, consider updating it with `is_active: false` instead (requires a PUT endpoint implementation).
+</Note>
+
