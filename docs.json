@@ -10,6 +10,9 @@
     },
     "playground": {
       "proxy": false
+    },
+    "mdx": {
+      "server": "https://api.mor.org"
     }
   },
   "colors": {
@@ -51,6 +54,7 @@
       },
       {
         "tab": "API reference",
+        "openapi": "/api-reference/openapi.json",
         "groups": [
           {
             "group": "Getting Started",
