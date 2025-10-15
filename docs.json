@@ -54,7 +54,6 @@
       },
       {
         "tab": "API reference",
-        "openapi": "/api-reference/openapi.json",
         "groups": [
           {
             "group": "Getting Started",
