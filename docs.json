@@ -63,13 +63,41 @@
               "api-reference/auth/me",
               "api-reference/auth/list-keys",
               "api-reference/auth/create-key",
-              "api-reference/auth/delete-key"
+              "api-reference/auth/delete-key",
+              "api-reference/auth/first-key",
+              "api-reference/auth/default-key",
+              "api-reference/auth/set-default-key",
+              "api-reference/auth/default-key-decrypted"
+            ]
+          },
+          {
+            "group": "Private Keys",
+            "pages": [
+              "api-reference/auth/private-key-status",
+              "api-reference/auth/store-private-key",
+              "api-reference/auth/delete-private-key"
+            ]
+          },
+          {
+            "group": "Delegations",
+            "pages": [
+              "api-reference/auth/store-delegation",
+              "api-reference/auth/list-delegations",
+              "api-reference/auth/active-delegation",
+              "api-reference/auth/delete-delegation"
+            ]
+          },
+          {
+            "group": "Account Management",
+            "pages": [
+              "api-reference/auth/delete-account"
             ]
           },
           {
             "group": "Models",
             "pages": [
               "api-reference/models/list",
+              "api-reference/models/all-models",
               "api-reference/models/rated-bids"
             ]
           },
@@ -85,7 +113,15 @@
               "api-reference/session/approve",
               "api-reference/session/create-bid-session",
               "api-reference/session/create-model-session",
-              "api-reference/session/close"
+              "api-reference/session/close",
+              "api-reference/session/ping"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              "api-reference/automation/get-settings",
+              "api-reference/automation/update-settings"
             ]
           }
         ]
