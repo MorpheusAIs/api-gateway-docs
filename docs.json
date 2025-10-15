@@ -16,11 +16,8 @@
           {
             "group": "Getting started",
             "pages": [
-              "index",
               "guides/getting-started/what-is-api-gateway",
-              "guides/getting-started/how-to-use-api-gateway",
-              "quickstart",
-              "development"
+              "guides/getting-started/how-to-use-api-gateway"
             ]
           },
           {
@@ -38,13 +35,6 @@
               "guides/integrations/brave-leo",
               "guides/integrations/open-web-ui",
               "guides/integrations/eliza"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
             ]
           }
         ]
