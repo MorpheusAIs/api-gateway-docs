@@ -123,6 +123,28 @@
               "api-reference/automation/get-settings",
               "api-reference/automation/update-settings"
             ]
+          },
+          {
+            "group": "Chat History",
+            "pages": [
+              "api-reference/chat-history/create-chat",
+              "api-reference/chat-history/list-chats",
+              "api-reference/chat-history/get-chat",
+              "api-reference/chat-history/update-chat",
+              "api-reference/chat-history/delete-chat",
+              "api-reference/chat-history/create-message",
+              "api-reference/chat-history/list-messages",
+              "api-reference/chat-history/delete-message"
+            ]
+          },
+          {
+            "group": "Utility",
+            "pages": [
+              "api-reference/utility/root",
+              "api-reference/utility/health",
+              "api-reference/utility/health-models",
+              "api-reference/utility/cors-check"
+            ]
           }
         ]
       }
