@@ -1,0 +1,118 @@
+---
+title: "Create Chat"
+api: "POST /api/v1/chat-history/chats"
+description: "Create a new chat conversation"
+---
+
+Create a new chat conversation.
+
+Chat history allows you to store and organize your conversations for later retrieval. This is useful for building chat UIs and maintaining conversation context.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (JWT) from OAuth2 login
+</ParamField>
+
+### Body
+
+<ParamField body="title" type="string" required>
+  Chat title (max 200 characters)
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the chat
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  The chat title
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp when the chat was created
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  ISO 8601 timestamp when the chat was last updated
+</ResponseField>
+
+<ResponseField name="message_count" type="integer">
+  Number of messages in the chat (initially 0)
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.mor.org/api/v1/chat-history/chats \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "title": "My First Conversation"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.mor.org/api/v1/chat-history/chats', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    title: 'My First Conversation'
+  })
+});
+
+const chat = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.mor.org/api/v1/chat-history/chats',
+    headers={
+        'Authorization': 'Bearer YOUR_JWT_TOKEN',
+        'Content-Type': 'application/json'
+    },
+    json={'title': 'My First Conversation'}
+)
+
+chat = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201 Created
+{
+  "id": "chat_123abc",
+  "title": "My First Conversation",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T10:30:00Z",
+  "message_count": 0
+}
+```
+
+```json 422 Validation Error
+{
+  "detail": [
+    {
+      "loc": ["body", "title"],
+      "msg": "Field required",
+      "type": "missing"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+<Info>
+  **Chat Organization**: Use descriptive titles to easily identify and organize your conversations. The title can be updated later using the update endpoint.
+</Info>
+
+<Tip>
+  After creating a chat, use the returned `id` to add messages to the conversation with the `/api/v1/chat-history/chats/{chat_id}/messages` endpoint.
+</Tip>
+

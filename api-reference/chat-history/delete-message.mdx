@@ -1,0 +1,91 @@
+---
+title: "Delete Message"
+api: "DELETE /api/v1/chat-history/messages/{message_id}"
+description: "Delete a specific message"
+---
+
+Delete a specific message.
+
+Permanently removes a message from a chat conversation.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (JWT) from OAuth2 login
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="message_id" type="string" required>
+  The ID of the message to delete
+</ParamField>
+
+### Response
+
+Returns `204 No Content` on successful deletion.
+
+<RequestExample>
+```bash cURL
+curl --request DELETE \
+  --url https://api.mor.org/api/v1/chat-history/messages/msg_003 \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.mor.org/api/v1/chat-history/messages/msg_003',
+  {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer YOUR_JWT_TOKEN'
+    }
+  }
+);
+
+// Response will be empty on success (204)
+```
+
+```python Python
+import requests
+
+response = requests.delete(
+    'https://api.mor.org/api/v1/chat-history/messages/msg_003',
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
+)
+
+# Response status code will be 204 on success
+```
+</RequestExample>
+
+<ResponseExample>
+```json 204 No Content
+(Empty response body)
+```
+
+```json 404 Not Found
+{
+  "detail": "Message not found"
+}
+```
+</ResponseExample>
+
+<Warning>
+  **Irreversible**: Deleting a message permanently removes it from the conversation. This action cannot be undone.
+</Warning>
+
+<Info>
+  **Sequence Integrity**: When you delete a message, the sequence numbers of remaining messages are not changed. This preserves the chronological integrity of the conversation.
+</Info>
+
+<Note>
+  You can only delete messages from chats that belong to your account. Attempting to delete another user's message will result in a 404 error.
+</Note>
+
+<Tip>
+  **Use Cases**: Message deletion is useful for:
+  - Removing sensitive information
+  - Correcting errors in conversation history
+  - Cleaning up test messages
+  - Implementing "edit" functionality (delete + create new)
+</Tip>
+

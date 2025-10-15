@@ -1,0 +1,160 @@
+---
+title: "Model Health Check"
+api: "GET /health/models"
+description: "Detailed model service health check for monitoring and debugging"
+---
+
+Detailed model service health check for monitoring and debugging.
+
+Returns comprehensive information about the model fetching service, cache status, and available models for operational monitoring.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Response
+
+<ResponseField name="status" type="string">
+  Model service status: `healthy` or `unhealthy`
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  Current timestamp (ISO 8601)
+</ResponseField>
+
+<ResponseField name="cache_status" type="object">
+  Information about the model cache
+  
+  <Expandable title="Cache Status">
+    <ResponseField name="enabled" type="boolean">
+      Whether caching is enabled
+    </ResponseField>
+    
+    <ResponseField name="last_updated" type="string">
+      Last cache update timestamp
+    </ResponseField>
+    
+    <ResponseField name="next_refresh" type="string">
+      Next scheduled cache refresh
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="models" type="object">
+  Model availability statistics
+  
+  <Expandable title="Model Statistics">
+    <ResponseField name="total" type="integer">
+      Total number of models
+    </ResponseField>
+    
+    <ResponseField name="active" type="integer">
+      Number of active models with providers
+    </ResponseField>
+    
+    <ResponseField name="inactive" type="integer">
+      Number of inactive models
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="blockchain_connection" type="object">
+  Blockchain connectivity status
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.mor.org/health/models \
+  --header 'Authorization: Bearer sk-YOUR_API_KEY'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.mor.org/health/models', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer sk-YOUR_API_KEY'
+  }
+});
+
+const modelHealth = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.mor.org/health/models',
+    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
+)
+
+model_health = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response - Healthy
+{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "cache_status": {
+    "enabled": true,
+    "last_updated": "2024-01-15T10:25:00Z",
+    "next_refresh": "2024-01-15T10:35:00Z"
+  },
+  "models": {
+    "total": 25,
+    "active": 20,
+    "inactive": 5
+  },
+  "blockchain_connection": {
+    "status": "connected",
+    "block_height": 12345678
+  }
+}
+```
+
+```json 503 Response - Unhealthy
+{
+  "status": "unhealthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "errors": ["Blockchain connection failed"],
+  "cache_status": {
+    "enabled": true,
+    "last_updated": "2024-01-15T09:00:00Z",
+    "next_refresh": null
+  },
+  "models": {
+    "total": 0,
+    "active": 0,
+    "inactive": 0
+  },
+  "blockchain_connection": {
+    "status": "disconnected"
+  }
+}
+```
+</ResponseExample>
+
+<Info>
+  **Operational Monitoring**: This endpoint provides detailed insights into the model service's operational status, making it invaluable for debugging and monitoring the health of the model marketplace integration.
+</Info>
+
+<Warning>
+  **Authentication Required**: Unlike the general health endpoint, this requires API key authentication as it exposes detailed operational information.
+</Warning>
+
+<Tip>
+  **Troubleshooting**: If you're experiencing issues with model availability:
+  1. Check this endpoint to see if the blockchain connection is healthy
+  2. Verify the cache is updating regularly
+  3. Check if active models are available
+  4. Contact support with the timestamp and model statistics if issues persist
+</Tip>
+
+<Note>
+  The cache refresh interval is typically 5-10 minutes. If the `last_updated` timestamp is significantly older, there may be an issue with the model fetching service.
+</Note>
+

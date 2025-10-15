@@ -1,0 +1,143 @@
+---
+title: "Get Chat Messages"
+api: "GET /api/v1/chat-history/chats/{chat_id}/messages"
+description: "Get messages for a specific chat"
+---
+
+Get messages for a specific chat.
+
+Returns a paginated list of messages in chronological order.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token (JWT) from OAuth2 login
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="chat_id" type="string" required>
+  The ID of the chat to get messages from
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="skip" type="integer" default={0}>
+  Number of records to skip for pagination
+</ParamField>
+
+<ParamField query="limit" type="integer" default={100}>
+  Maximum number of records to return
+</ParamField>
+
+### Response
+
+Returns an array of message objects.
+
+<ResponseField name="id" type="string">
+  Unique message identifier
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  Message role: `user` or `assistant`
+</ResponseField>
+
+<ResponseField name="content" type="string">
+  Message content
+</ResponseField>
+
+<ResponseField name="sequence" type="integer">
+  Message order in conversation
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp
+</ResponseField>
+
+<ResponseField name="tokens" type="integer">
+  Token count (if available)
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://api.mor.org/api/v1/chat-history/chats/chat_123abc/messages?skip=0&limit=100' \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.mor.org/api/v1/chat-history/chats/chat_123abc/messages?skip=0&limit=100',
+  {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer YOUR_JWT_TOKEN'
+    }
+  }
+);
+
+const messages = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.mor.org/api/v1/chat-history/chats/chat_123abc/messages',
+    params={'skip': 0, 'limit': 100},
+    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
+)
+
+messages = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response
+[
+  {
+    "id": "msg_001",
+    "role": "user",
+    "content": "Hello, how are you?",
+    "sequence": 1,
+    "created_at": "2024-01-15T10:31:00Z",
+    "tokens": 5
+  },
+  {
+    "id": "msg_002",
+    "role": "assistant",
+    "content": "I'm doing well, thank you! How can I help you today?",
+    "sequence": 2,
+    "created_at": "2024-01-15T10:31:15Z",
+    "tokens": 12
+  },
+  {
+    "id": "msg_003",
+    "role": "user",
+    "content": "What is the weather like today?",
+    "sequence": 3,
+    "created_at": "2024-01-15T15:30:00Z",
+    "tokens": 7
+  }
+]
+```
+
+```json 404 Not Found
+{
+  "detail": "Chat not found"
+}
+```
+</ResponseExample>
+
+<Info>
+  **Chronological Order**: Messages are returned in chronological order based on the `sequence` field, making it easy to display conversations naturally.
+</Info>
+
+<Tip>
+  **Pagination**: For chats with many messages, use pagination to load messages in batches. This improves performance and reduces memory usage in your application.
+</Tip>
+
+<Note>
+  This endpoint is similar to getting a full chat with `/api/v1/chat-history/chats/{chat_id}`, but allows for more granular pagination control and doesn't include the chat metadata.
+</Note>
+

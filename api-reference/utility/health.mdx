@@ -1,0 +1,86 @@
+---
+title: "Health Check"
+api: "GET /health"
+description: "Health check endpoint with container diagnostics"
+---
+
+Health check endpoint with container diagnostics for deployment monitoring.
+
+Returns system health, uptime, and unique container identifier for support and log analysis. No sensitive AWS or hostname information is exposed.
+
+### Response
+
+<ResponseField name="status" type="string">
+  System status: `healthy` or `unhealthy`
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  Current timestamp (ISO 8601)
+</ResponseField>
+
+<ResponseField name="uptime" type="number">
+  System uptime in seconds
+</ResponseField>
+
+<ResponseField name="container_id" type="string">
+  Unique container identifier for log correlation
+</ResponseField>
+
+<ResponseField name="version" type="string">
+  API version
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.mor.org/health
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.mor.org/health');
+const health = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get('https://api.mor.org/health')
+health = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 Response - Healthy
+{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "uptime": 3600.5,
+  "container_id": "abc123def456",
+  "version": "v1.1.1"
+}
+```
+
+```json 503 Response - Unhealthy
+{
+  "status": "unhealthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "uptime": 3600.5,
+  "container_id": "abc123def456",
+  "version": "v1.1.1",
+  "errors": ["Database connection failed"]
+}
+```
+</ResponseExample>
+
+<Info>
+  **Monitoring**: This endpoint is designed for load balancers, monitoring systems, and health check tools. It provides essential diagnostic information without exposing sensitive data.
+</Info>
+
+<Tip>
+  **Container ID**: The `container_id` field is useful for correlating health check results with specific container instances in multi-instance deployments. Include this in support requests for faster issue resolution.
+</Tip>
+
+<Note>
+  This endpoint does not require authentication and should be used by monitoring systems to check API availability. A 200 status code with `"status": "healthy"` indicates the system is operational.
+</Note>
+
