@@ -29,30 +29,30 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
             "group": "Getting started",
             "pages": [
-              "guides/getting-started/what-is-api-gateway",
-              "guides/getting-started/how-to-use-api-gateway"
+              "documentation/getting-started/what-is-api-gateway",
+              "documentation/getting-started/how-to-use-api-gateway"
             ]
           },
           {
             "group": "How to guides",
             "pages": [
-              "guides/how-to/creating-api-key",
-              "guides/how-to/viewing-models",
-              "guides/how-to/using-swagger-ui"
+              "documentation/how-to/creating-api-key",
+              "documentation/how-to/viewing-models",
+              "documentation/how-to/using-swagger-ui"
             ]
           },
           {
             "group": "Integration guides",
             "pages": [
-              "guides/integrations/cursor",
-              "guides/integrations/brave-leo",
-              "guides/integrations/open-web-ui",
-              "guides/integrations/eliza"
+              "documentation/integrations/cursor",
+              "documentation/integrations/brave-leo",
+              "documentation/integrations/open-web-ui",
+              "documentation/integrations/eliza"
             ]
           }
         ]
@@ -78,23 +78,6 @@
               "api-reference/auth/default-key",
               "api-reference/auth/set-default-key",
               "api-reference/auth/default-key-decrypted"
-            ]
-          },
-          {
-            "group": "Private Keys",
-            "pages": [
-              "api-reference/auth/private-key-status",
-              "api-reference/auth/store-private-key",
-              "api-reference/auth/delete-private-key"
-            ]
-          },
-          {
-            "group": "Delegations",
-            "pages": [
-              "api-reference/auth/store-delegation",
-              "api-reference/auth/list-delegations",
-              "api-reference/auth/active-delegation",
-              "api-reference/auth/delete-delegation"
             ]
           },
           {
@@ -152,8 +135,7 @@
             "pages": [
               "api-reference/utility/root",
               "api-reference/utility/health",
-              "api-reference/utility/health-models",
-              "api-reference/utility/cors-check"
+              "api-reference/utility/health-models"
             ]
           }
         ]
@@ -162,14 +144,19 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://morpheus.mintlify.app/",
-          "icon": "book-open-cover"
-        },
-        {
           "anchor": "Blog",
           "href": "https://mor.org/blog",
           "icon": "newspaper"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://discord.gg/5pC8tMFJ",
+          "icon": "discord"
+        },
+        {
+          "anchor": "Announcements",
+          "href": "https://x.com/morpheusais",
+          "icon": "x"
         }
       ]
     }
