@@ -42,68 +42,6 @@ Response is in OpenAI API format with selected fields from the blockchain data. 
   </Expandable>
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl --request GET \
-  --url https://api.mor.org/api/v1/models \
-  --header 'Authorization: Bearer sk-YOUR_API_KEY'
-```
-
-```javascript JavaScript
-const response = await fetch('https://api.mor.org/api/v1/models', {
-  method: 'GET',
-  headers: {
-    'Authorization': 'Bearer sk-YOUR_API_KEY'
-  }
-});
-
-const models = await response.json();
-```
-
-```python Python
-import requests
-
-response = requests.get(
-    'https://api.mor.org/api/v1/models',
-    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
-)
-
-models = response.json()
-```
-
-```python OpenAI SDK
-from openai import OpenAI
-
-client = OpenAI(
-    api_key="sk-YOUR_API_KEY",
-    base_url="https://api.mor.org/api/v1"
-)
-
-models = client.models.list()
-```
-</RequestExample>
-
-<ResponseExample>
-```json 200 Response
-{
-  "object": "list",
-  "data": [
-    {
-      "id": "0x1234567890abcdef",
-      "object": "model",
-      "created": 1704067200,
-      "owned_by": "morpheus-ai"
-    },
-    {
-      "id": "0xabcdef1234567890",
-      "object": "model",
-      "created": 1704153600,
-      "owned_by": "lumerin"
-    }
-  ]
-}
-```
-</ResponseExample>
 
 <Tip>
   Use the model `id` (blockchain address) when creating sessions or making chat completion requests.

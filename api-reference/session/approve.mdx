@@ -34,62 +34,6 @@ Connects to the proxy-router's `/blockchain/approve` endpoint. For creating sess
   Approved amount
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl --request POST \
-  --url 'https://api.mor.org/api/v1/session/approve?amount=1000' \
-  --header 'Authorization: Bearer sk-YOUR_API_KEY'
-```
-
-```javascript JavaScript
-const response = await fetch(
-  'https://api.mor.org/api/v1/session/approve?amount=1000',
-  {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer sk-YOUR_API_KEY'
-    }
-  }
-);
-
-const approval = await response.json();
-```
-
-```python Python
-import requests
-
-response = requests.post(
-    'https://api.mor.org/api/v1/session/approve',
-    params={'amount': 1000},
-    headers={'Authorization': 'Bearer sk-YOUR_API_KEY'}
-)
-
-approval = response.json()
-```
-</RequestExample>
-
-<ResponseExample>
-```json 200 Response
-{
-  "success": true,
-  "transaction_hash": "0xabcdef1234567890fedcba0987654321",
-  "amount": "1000"
-}
-```
-
-```json 422 Validation Error
-{
-  "detail": [
-    {
-      "loc": ["query", "amount"],
-      "msg": "Field required",
-      "type": "missing"
-    }
-  ]
-}
-```
-</ResponseExample>
-
 <Info>
   **Calculating approval amount**: 
   

@@ -30,48 +30,6 @@ Returns system health, uptime, and unique container identifier for support and l
   API version
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl --request GET \
-  --url https://api.mor.org/health
-```
-
-```javascript JavaScript
-const response = await fetch('https://api.mor.org/health');
-const health = await response.json();
-```
-
-```python Python
-import requests
-
-response = requests.get('https://api.mor.org/health')
-health = response.json()
-```
-</RequestExample>
-
-<ResponseExample>
-```json 200 Response - Healthy
-{
-  "status": "healthy",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "uptime": 3600.5,
-  "container_id": "abc123def456",
-  "version": "v1.1.1"
-}
-```
-
-```json 503 Response - Unhealthy
-{
-  "status": "unhealthy",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "uptime": 3600.5,
-  "container_id": "abc123def456",
-  "version": "v1.1.1",
-  "errors": ["Database connection failed"]
-}
-```
-</ResponseExample>
-
 <Info>
   **Monitoring**: This endpoint is designed for load balancers, monitoring systems, and health check tools. It provides essential diagnostic information without exposing sensitive data.
 </Info>

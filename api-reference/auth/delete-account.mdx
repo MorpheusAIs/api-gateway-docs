@@ -82,57 +82,6 @@ This action is irreversible and will permanently delete all data associated with
   </Expandable>
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl --request DELETE \
-  --url https://api.mor.org/api/v1/auth/register \
-  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
-```
-
-```javascript JavaScript
-const response = await fetch('https://api.mor.org/api/v1/auth/register', {
-  method: 'DELETE',
-  headers: {
-    'Authorization': 'Bearer YOUR_JWT_TOKEN'
-  }
-});
-
-const result = await response.json();
-```
-
-```python Python
-import requests
-
-response = requests.delete(
-    'https://api.mor.org/api/v1/auth/register',
-    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
-)
-
-result = response.json()
-```
-</RequestExample>
-
-<ResponseExample>
-```json 200 Response
-{
-  "message": "User account successfully deleted",
-  "user_id": 123,
-  "deleted_at": "2024-01-15T10:30:00Z",
-  "deleted_data": {
-    "api_keys": 3,
-    "sessions": 2,
-    "private_key": true,
-    "automation_settings": true,
-    "delegations": 1
-  },
-  "cognito_deletion": {
-    "success": true,
-    "cognito_user_id": "abc123-def456-ghi789",
-    "message": "User successfully deleted from Cognito"
-  }
-}
-```
-</ResponseExample>
 
 <Warning>
   **IRREVERSIBLE ACTION**: This permanently deletes your account and all associated data. This action cannot be undone. Make sure to:

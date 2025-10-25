@@ -24,51 +24,6 @@ This action is irreversible and will prevent you from performing blockchain oper
   ISO 8601 timestamp when the key was deleted
 </ResponseField>
 
-<RequestExample>
-```bash cURL
-curl --request DELETE \
-  --url https://api.mor.org/api/v1/auth/private-key \
-  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
-```
-
-```javascript JavaScript
-const response = await fetch('https://api.mor.org/api/v1/auth/private-key', {
-  method: 'DELETE',
-  headers: {
-    'Authorization': 'Bearer YOUR_JWT_TOKEN'
-  }
-});
-
-const result = await response.json();
-```
-
-```python Python
-import requests
-
-response = requests.delete(
-    'https://api.mor.org/api/v1/auth/private-key',
-    headers={'Authorization': 'Bearer YOUR_JWT_TOKEN'}
-)
-
-result = response.json()
-```
-</RequestExample>
-
-<ResponseExample>
-```json 200 Response
-{
-  "message": "Private key deleted successfully",
-  "deleted_at": "2024-01-15T10:30:00Z"
-}
-```
-
-```json 404 Not Found
-{
-  "detail": "No private key found for this user"
-}
-```
-</ResponseExample>
-
 <Warning>
   **Irreversible Action**: After deleting your private key, you will need to store it again to perform blockchain operations. Make sure you have your private key saved elsewhere before deleting it from the gateway.
 </Warning>
