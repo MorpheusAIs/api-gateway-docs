@@ -18,9 +18,19 @@ description: "Step-by-step guide to getting started with the Morpheus API Gatewa
 
 Using the Morpheus API is truly simple. The structure of this gateway allows you to access the Morpheus Compute Marketplace just as you would with any other AI Provider (like OpenAI).
 
+## Step 1: Get to the Homepage
+
+First, go to [https://openbeta.mor.org](https://openbeta.mor.org) to get started
+
+<img
+  src="/images/startup/homepage.png"
+  alt="Home Page"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
 ## Step 1: Sign Up or Login
 
-First, head over to the admin page and sign up or login to your account.
+Click Login or Register if you haven't setup an account yet.
 
 <img
   src="/images/startup/login.png"
@@ -40,7 +50,7 @@ Then, you will be brought to your admin dashboard where you can manage your API 
 
 ## Step 3: Create API Key
 
-Next, create your first API Key by naming your key and clicking "Create Key". A new box will appear with your API key. Make sure you copy this down.
+Next, create your first API Key by naming your key and clicking "Create API Key". A new box will appear with your API key. Make sure you copy this down, it will be required and will not be shown again.
 
 <img
   src="/images/startup/apikey.png"
@@ -48,23 +58,29 @@ Next, create your first API Key by naming your key and clicking "Create Key". A 
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
 
-## Step 4: Configure Automation
+## Step 4: Select Default Key
 
-Then, enter the API key into the Automation settings tab to configure automatic session generation. This removes the need to create sessions with individual providers hosting your model of choice.
+Then, select the API key that you would like to use for prompt testing or within the Chat UI. Click the checkbox to set as default key, and then click the "Select" button. You will need to confirm the API key for security purposes.
 
 <img
-  src="/images/startup/automation.png"
-  alt="Automation Configuration"
+  src="/images/startup/defaultkey.png"
+  alt="Default API Key"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+<img
+  src="/images/startup/keyvalidation.png"
+  alt="Key Validation"
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
 
 ## Step 5: Start Testing
 
-Now you're ready to go! You can head over to the test page to begin some test chats with your API key.
+Now you're ready to go! Head over to the API reference page at apidocs.mor.org/api-reference/chat/completions to begin testing within the API Playground
 
 <img
   src="/images/startup/chat.png"
-  alt="Test Chat Interface"
+  alt="Chat Playground"
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
 
