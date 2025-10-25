@@ -42,8 +42,7 @@
             "group": "How to guides",
             "pages": [
               "documentation/how-to/creating-api-key",
-              "documentation/how-to/viewing-models",
-              "documentation/how-to/using-swagger-ui"
+              "documentation/how-to/viewing-models"
             ]
           },
           {

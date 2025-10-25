@@ -18,77 +18,86 @@ description: "How to view available models in the Morpheus Compute Marketplace"
 
 <br />
 
-The purpose of this document is to provide instructions for how to view the available active models within the Morpheus Compute Marketplace via the "Swagger UI". We will be launching a "playground" and improved front-facing UI to more easily interact with the Morpheus API Gateway in a user friendly fashion [coming soon].
+The purpose of this document is to provide instructions for how to view the available active models within the Morpheus Compute Marketplace via the "API Reference Page". 
+## Step 1: API Reference Page
 
-## Step 1: Access Swagger UI
-
-First go to [api.mor.org/docs](https://api.mor.org/docs)
+First go to API Reference tab of the website [apidocs.mor.org/api-reference/introduction](https://apidocs.mor.org/api-reference/introduction)
 
 <img
-  src="/images/models/homepage.png"
-  alt="API Gateway Homepage"
+  src="/images/models/apireferencehome.png"
+  alt="API Reference Homepage"
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
 
 ## Step 2: View Available Models
 
-Then go down to the models `/api/v1/models` endpoint. This is how you view the available models. This endpoint uses automated functionality to identify models with active "bids" from providers, signifying that they are actively available for use.
+Head down to the Models section on the lefthand toolbar and click [List Models](https://apidocs.mor.org/api-reference/models/list). This is how you view the models that are currently available and active within the API. This endpoint uses automated functionality to identify models with active "bids" from providers, signifying that they are actively available for use.
 
 <img
-  src="/images/models/models.png"
+  src="/images/models/listmodels.png"
   alt="Models endpoint"
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
 
+## Step 3: Execute Model List
+
+Now you can click the "Try it" button and actually execute the endpoint to see the available models. Enter your API Key and click "Send" to execute the call
+
+<img
+  src="/images/models/listedmodels.png"
+  alt="Models endpoint"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+This creates a curl request to the models endpoint, and sends it
+
 ```bash
 curl -X 'GET' \
-  'https://api.mor.org/api/v1/models/' \
+  'https://api.mor.org/api/v1/chat/models' \
   -H 'accept: application/json' \
-  -H 'Authorization: Bearer sk-2ardOd.8c2d111e430398e0ccaae07343ce163d9720cf2bc9231438c972e1f4de87136c'
+  -H 'Authorization: sk-K95AGZ.47513f0e8db18d689abe8c9907e2d8ae4d43d686a6132d085aac0deaabaaa392' \
+  -H 'Content-Type: application/json'
 ```
 
 Your response will be similar to this:
 
 ```json
-{
+ {
   "object": "list",
   "data": [
-    {
-      "id": "dolphin-2.9.2-qwen2-72b",
-      "blockchainID": "0xaa433d66ffa4e471684ba44c5c0cc6368bb92bda19ddd3350358b601231f0a15",
-      "created": 1747024642,
+   {
+      "id": "llama-3.3-70b",
+      "blockchainID": "0xa86a6e2f23ccc9be0d2756f471e2319598c07af3c6082a3fff5cfa3b6dda56de",
+      "created": 1757993282,
       "tags": [
-        "string"
-      ]
+        "LLM",
+        "llama-3.3-70b"
+      ],
+      "modelType": "LLM"
     },
     {
-      "id": "qwen-2.5-vl",
-      "blockchainID": "0x04cacb272c387bd9840bfe1d33c294e505bf1d3ee3c6ace2b2a1159f891f16f9",
-      "created": 1747024610,
+      "id": "qwen3-coder-480b-a35b-instruct",
+      "blockchainID": "0xce43b9525aeb56c2cd1b6c0d981b1614c6edd3cffe06edd4b3d2503fd025772d",
+      "created": 1760762538,
       "tags": [
-        "string"
-      ]
-    }
+        "LLM",
+        "qwen3-coder-480b-a35b-instruct"
+      ],
+      "modelType": "LLM"
+    },
   ]
 }
 ```
 
-## Step 3: View All Models (Including Historical)
+## Step 4: View All Models (Including Historical)
 
-The `/api/v1/models/allmodels` endpoint is also available for purposes of identifying models no longer being hosted, or for historical purposes.
+There is also an "allmodels" endpoint for purposes of identifying models no longer being hosted, or for historical purposes. That can be found at [All Models](https://apidocs.mor.org/api-reference/models/all-models). You can similarly use the playground to execute this by clicking "Try Now"
 
 <img
   src="/images/models/allmodels.png"
   alt="All Models endpoint"
   style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
 />
-
-```bash
-curl -X 'GET' \
-  'https://api.mor.org/api/v1/models/allmodels' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer sk-2ardOd.8c2d111e430398e0ccaae07343ce163d9720cf2bc9231438c972e1f4de87136c'
-```
 
 ## Understanding the Response
 
@@ -102,20 +111,14 @@ Notice that the models response contains a few pieces of information:
 
 When calling a chat/completion request, you can simply use the ID (name) or the blockchain ID, as follows:
 
-<img
-  src="/images/models/chat.png"
-  alt="Chat completion example"
-  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
-/>
-
 ```bash
 curl -X 'POST' \
   'https://api.mor.org/api/v1/chat/completions' \
   -H 'accept: application/json' \
-  -H 'Authorization: sk-MDRT7b.90f9d2c131be151bf407455617ff1a62148d2c6f30c73feda4bc87f0ad0ea9a6' \
+  -H 'Authorization: sk-K95AGZ.47513f0e8db18d689abe8c9907e2d8ae4d43d686a6132d085aac0deaabaaa392' \
   -H 'Content-Type: application/json' \
   -d '{
-  "model": "qwen-2.5-vl",
+  "model": "llama-3.3-70b",
   "messages": [
     {
       "role": "system",
@@ -137,7 +140,7 @@ Your response will be similar to this:
   "id": "chatcmpl-ee90c8c567f07a6426e6373125078f70",
   "object": "chat.completion",
   "created": 1747695418,
-  "model": "mistral-31-24b",
+  "model": "llama-3.3-70b",
   "choices": [
     {
       "index": 0,
