@@ -48,6 +48,7 @@
           {
             "group": "Integration guides",
             "pages": [
+              "documentation/integrations/vercel-ai-sdk-integration",
               "documentation/integrations/cursor",
               "documentation/integrations/brave-leo",
               "documentation/integrations/open-web-ui",
