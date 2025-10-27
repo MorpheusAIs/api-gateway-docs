@@ -1377,6 +1377,86 @@
                 }
             }
         },
+        "/api/v1/embeddings": {
+            "post": {
+                "tags": [
+                    "Embeddings"
+                ],
+                "summary": "Create Embeddings",
+                "description": "Create embeddings for the given input text(s).\n\nThis endpoint creates embeddings using the Morpheus Network providers.\nIt automatically manages sessions and routes requests to the appropriate embedding model.",
+                "operationId": "create_embeddings_api_v1_embeddings_post",
+                "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/EmbeddingRequest"
+                        },
+                        "examples": {
+                            "single_string": {
+                                "summary": "Single text input",
+                                "value": {
+                                    "input": "The quick brown fox jumps over the lazy dog",
+                                    "model": "text-embedding-bge-m3",
+                                    "encoding_format": "float"
+                                }
+                            },
+                            "array_input": {
+                                "summary": "Multiple text inputs",
+                                "value": {
+                                    "input": ["First text", "Second text", "Third text"],
+                                    "model": "text-embedding-bge-m3",
+                                    "encoding_format": "float"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Successful Response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmbeddingResponse"
+                            },
+                            "example": {
+                                "object": "list",
+                                "data": [
+                                    {
+                                        "object": "embedding",
+                                        "embedding": [-0.006929, -0.005336, 0.024047, 0.023847, -0.012345, 0.067890, -0.034567],
+                                        "index": 0
+                                    }
+                                ],
+                                "model": "text-embedding-bge-m3",
+                                "usage": {
+                                    "prompt_tokens": 8,
+                                    "total_tokens": 8
+                                }
+                            }
+                        }
+                    }
+                },
+                "422": {
+                    "description": "Validation Error",
+                    "content": {
+                        "application/json": {
+                        "schema": {
+                                "$ref": "#/components/schemas/HTTPValidationError"
+                            }
+                        }
+                    }
+                }
+            },
+            "security": [
+                    {
+                        "APIKeyAuth": []
+                    }
+                ]
+            }
+        },
         "/": {
             "get": {
                 "summary": "Root",
@@ -2050,6 +2130,156 @@
                     "created_at"
                 ],
                 "title": "DelegationRead"
+            },
+            "EmbeddingObject": {
+                "properties": {
+                    "object": {
+                        "type": "string",
+                        "title": "Object",
+                        "default": "embedding"
+                    },
+                    "embedding": {
+                        "items": {
+                            "type": "number"
+                        },
+                        "type": "array",
+                        "title": "Embedding"
+                    },
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "embedding",
+                    "index"
+                ],
+                "title": "EmbeddingObject",
+                "description": "Individual embedding object"
+            },
+            "EmbeddingRequest": {
+                "properties": {
+                    "input": {
+                        "type": "string",
+                        "title": "Input",
+                        "description": "Input text to generate embeddings for. Can be a single string or an array of strings (e.g., \"text\" or [\"text1\", \"text2\"]).",
+                        "example": "The quick brown fox jumps over the lazy dog",
+                        "default": "Sample text to generate embeddings"
+                    },
+                    "model": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Model"
+                    },
+                    "encoding_format": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Encoding Format",
+                        "default": "float"
+                    },
+                    "dimensions": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dimensions"
+                    },
+                    "user": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "User"
+                    },
+                    "session_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Session Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "input"
+                ],
+                "title": "EmbeddingRequest",
+                "description": "Request model for embeddings endpoint"
+            },
+            "EmbeddingResponse": {
+                "properties": {
+                    "object": {
+                        "type": "string",
+                        "title": "Object",
+                        "default": "list"
+                    },
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/EmbeddingObject"
+                        },
+                        "type": "array",
+                        "title": "Data"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "usage": {
+                        "$ref": "#/components/schemas/EmbeddingUsage"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data",
+                    "model",
+                    "usage"
+                ],
+                "title": "EmbeddingResponse",
+                "description": "Response model for embeddings endpoint"
+            },
+            "EmbeddingUsage": {
+                "properties": {
+                    "prompt_tokens": {
+                        "type": "integer",
+                        "title": "Prompt Tokens"
+                    },
+                    "total_tokens": {
+                        "type": "integer",
+                        "title": "Total Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_tokens",
+                    "total_tokens"
+                ],
+                "title": "EmbeddingUsage",
+                "description": "Usage statistics for embedding request"
             },
             "HTTPValidationError": {
                 "properties": {
