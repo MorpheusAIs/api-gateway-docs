@@ -1,0 +1,172 @@
+---
+title: "Create Embeddings"
+api: "POST /api/v1/embeddings"
+description: "Generate vector embeddings for input text using AI models"
+---
+
+Create embeddings for the given input text(s).
+
+This endpoint creates embeddings using the Morpheus Network providers. It automatically manages sessions and routes requests to the appropriate embedding model.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Body
+
+<ParamField body="input" type="string" required>
+  Input text to generate embeddings for. Can be a single string or an array of strings.
+  
+  **Single text example:**
+  ```json
+  "input": "The quick brown fox jumps over the lazy dog"
+  ```
+  
+  **Multiple texts example (batch processing):**
+  ```json
+  "input": ["First text", "Second text", "Third text"]
+  ```
+  
+  <Warning>
+  When using the interactive playground, it may show `"input": {}` - ignore this and manually edit the generated cURL command to use either a string `"text"` or array `["text1", "text2"]` format.
+  </Warning>
+</ParamField>
+
+<ParamField body="model" type="string" required>
+  Model ID to use for embedding generation (blockchain hex address or name)
+  
+  <Note>
+  Use the [List Models](/api-reference/models/list) endpoint to see available embedding models.
+  </Note>
+</ParamField>
+
+<ParamField body="encoding_format" type="string" default="float">
+  Format for the embedding vectors. Options: `float` or `base64`
+</ParamField>
+
+<ParamField body="dimensions" type="integer">
+  Number of dimensions for the output embeddings. Only supported by certain models.
+</ParamField>
+
+<ParamField body="user" type="string">
+  Unique identifier representing your end-user for monitoring and abuse detection
+</ParamField>
+
+### Response
+
+<ResponseField name="object" type="string">
+  Always returns `"list"`
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of embedding objects
+  
+  <Expandable title="Embedding Object">
+    <ResponseField name="object" type="string">
+      Always `"embedding"`
+    </ResponseField>
+    
+    <ResponseField name="embedding" type="array">
+      Vector representation of the input text as an array of floats (or base64 if specified)
+    </ResponseField>
+    
+    <ResponseField name="index" type="integer">
+      Index of the embedding in the array (corresponds to the input array position)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model used for generating the embeddings
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token usage statistics
+  
+  <Expandable title="Usage Object">
+    <ResponseField name="prompt_tokens" type="integer">
+      Number of tokens in the input
+    </ResponseField>
+    
+    <ResponseField name="total_tokens" type="integer">
+      Total tokens processed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="sk-xxxxxx",
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.embeddings.create(
+    model="text-embedding-model",
+    input="The quick brown fox jumps over the lazy dog"
+)
+
+print(response.data[0].embedding)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  apiKey: 'sk-xxxxxx',
+  baseURL: 'https://api.mor.org/api/v1'
+});
+
+const response = await client.embeddings.create({
+  model: 'text-embedding-model',
+  input: 'The quick brown fox jumps over the lazy dog'
+});
+
+console.log(response.data[0].embedding);
+```
+
+```curl cURL
+curl -X POST https://api.mor.org/api/v1/embeddings \
+  -H "Authorization: Bearer sk-xxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "text-embedding-model",
+    "input": "The quick brown fox jumps over the lazy dog"
+  }'
+```
+</CodeGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Semantic Search" icon="magnifying-glass">
+    Generate embeddings for documents and queries to enable similarity-based search
+  </Card>
+  
+  <Card title="Clustering" icon="object-group">
+    Group similar texts together by comparing embedding vectors
+  </Card>
+  
+  <Card title="Recommendations" icon="stars">
+    Build recommendation systems by finding similar items based on embeddings
+  </Card>
+  
+  <Card title="Classification" icon="tags">
+    Use embeddings as features for text classification models
+  </Card>
+</CardGroup>
+
+<Tip>
+  The API is fully compatible with the OpenAI SDK. Simply change the `base_url` to point to the Morpheus Gateway.
+</Tip>
+
+<Warning>
+  Embedding dimensions vary by model. Ensure your application can handle different vector sizes when switching models.
+</Warning>
+
