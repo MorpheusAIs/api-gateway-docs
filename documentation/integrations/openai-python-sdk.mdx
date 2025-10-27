@@ -1,0 +1,1096 @@
+---
+title: "OpenAI Python SDK Integration"
+description: "Complete guide to integrating the Morpheus API Gateway with OpenAI's Python SDK for text generation, streaming, and tool calling"
+---
+
+# Integrate Morpheus API Gateway with OpenAI Python SDK
+
+Learn how to integrate the Morpheus API Gateway with OpenAI's official Python SDK to build AI-powered applications with free, decentralized AI inference. This guide covers basic chat completions, streaming responses, tool calling, and async operations.
+
+## Overview
+
+The Morpheus API Gateway provides **free AI inference** through a decentralized compute marketplace. Since it's fully OpenAI-compatible, you can use the official OpenAI Python SDK by simply pointing it to the Morpheus base URL.
+
+<Info>
+The Morpheus API Gateway is currently in **Open Beta**, providing free access to AI inference without requiring wallet connections or staking MOR tokens.
+</Info>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- **Python 3.8+** installed on your system
+- A **Morpheus API key** from [openbeta.mor.org](https://openbeta.mor.org)
+- Basic knowledge of **Python** and **async/await** patterns
+- Familiarity with **REST APIs**
+
+<Steps>
+<Step title="Create a Morpheus API Key">
+Visit [openbeta.mor.org](https://openbeta.mor.org) and sign in to create your API key.
+
+1. Navigate to the API Keys section
+2. Click "Create API Key" and provide a name
+3. Copy your API key immediately (it won't be shown again)
+
+<Warning>
+Store your API key securely. Never commit it to version control or expose it in publicly accessible code.
+</Warning>
+</Step>
+
+<Step title="Install the OpenAI Python SDK">
+Install the official OpenAI Python library:
+
+```bash
+pip install openai
+```
+
+<Check>
+Verify installation by running `pip show openai` to see the installed version.
+</Check>
+</Step>
+
+<Step title="Configure Environment Variables">
+Create a `.env` file in your project root or set environment variables:
+
+```bash .env
+MORPHEUS_API_KEY=your_api_key_here
+```
+
+For better security, use environment variables instead of hardcoding API keys:
+
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.getenv("MORPHEUS_API_KEY")
+```
+
+<Warning>
+Never commit your API key to version control. Add `.env` to your `.gitignore` file.
+</Warning>
+</Step>
+</Steps>
+
+## Basic Integration
+
+### Setting Up the Client
+
+Configure the OpenAI client to use the Morpheus API Gateway by setting a custom `base_url`:
+
+```python setup.py
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+```
+
+<Tip>
+The only difference from using the standard OpenAI client is the `base_url` parameter. All other functionality remains the same.
+</Tip>
+
+### Available Models
+
+Query the available models using the Morpheus API:
+
+```python list_models.py
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+# List all available models
+models = client.models.list()
+for model in models.data:
+    print(f"Model: {model.id}")
+```
+
+<Accordion title="Common Morpheus Models">
+Popular models available through Morpheus:
+
+- **llama-3.3-70b:web** - Meta's Llama 3.3 with web search capabilities
+- **llama-3.3-70b** - Meta's Llama 3.3 base model
+- **qwen3-235b:web** - Qwen 3 with web search capabilities
+- **qwen3-235b** - Qwen 3 base model
+
+<Info>
+Model availability may vary based on provider availability in the Morpheus marketplace. The API automatically routes to the highest-rated provider for your selected model. The `:web` suffix indicates models optimized for web browsing tasks.
+</Info>
+</Accordion>
+
+## Text Generation
+
+### Basic Chat Completions
+
+Use the `chat.completions.create()` method for standard, non-streaming text generation:
+
+```python basic_chat.py
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="llama-3.3-70b",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain quantum computing in simple terms."}
+    ],
+    temperature=0.7,
+    max_tokens=1024
+)
+
+print(response.choices[0].message.content)
+```
+
+### Streaming Responses
+
+For real-time output, enable streaming to receive tokens as they're generated:
+
+```python streaming_chat.py
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+stream = client.chat.completions.create(
+    model="llama-3.3-70b:web",
+    messages=[
+        {"role": "user", "content": "Write a short story about artificial intelligence."}
+    ],
+    stream=True,
+    temperature=0.8
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+
+print()  # New line after streaming completes
+```
+
+<Tip>
+Streaming provides a better user experience by showing output immediately rather than waiting for the entire response.
+</Tip>
+
+## Asynchronous Operations
+
+### Async Client Setup
+
+Use the `AsyncOpenAI` client for concurrent operations and async/await patterns:
+
+```python async_client.py
+import asyncio
+import os
+from openai import AsyncOpenAI
+
+async def main():
+    client = AsyncOpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    )
+
+    response = await client.chat.completions.create(
+        model="llama-3.3-70b",
+        messages=[
+            {"role": "user", "content": "What is the capital of France?"}
+        ]
+    )
+
+    print(response.choices[0].message.content)
+
+asyncio.run(main())
+```
+
+### Async Streaming
+
+Combine async operations with streaming for efficient, concurrent request handling:
+
+```python async_streaming.py
+import asyncio
+import os
+from openai import AsyncOpenAI
+
+async def stream_chat(client, prompt):
+    stream = await client.chat.completions.create(
+        model="llama-3.3-70b:web",
+        messages=[{"role": "user", "content": prompt}],
+        stream=True
+    )
+
+    print(f"\nPrompt: {prompt}")
+    print("Response: ", end="")
+    
+    async for chunk in stream:
+        if chunk.choices[0].delta.content is not None:
+            print(chunk.choices[0].delta.content, end="", flush=True)
+    
+    print("\n")
+
+async def main():
+    client = AsyncOpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    )
+
+    # Process multiple streams concurrently
+    await asyncio.gather(
+        stream_chat(client, "Explain Python generators"),
+        stream_chat(client, "What is machine learning?"),
+        stream_chat(client, "Describe blockchain technology")
+    )
+
+asyncio.run(main())
+```
+
+<Info>
+Async operations are ideal for handling multiple concurrent requests efficiently, making your application more responsive.
+</Info>
+
+## Tool Calling
+
+Enable your AI models to execute functions and interact with external systems through tool calling.
+
+### Defining Tools
+
+Define tools using JSON schemas to specify available functions:
+
+```python tools_definition.py
+import json
+import os
+from openai import OpenAI
+
+def get_weather(location: str, unit: str = "celsius") -> dict:
+    """
+    Get the current weather for a location.
+    
+    Args:
+        location: City name or location
+        unit: Temperature unit (celsius or fahrenheit)
+    
+    Returns:
+        Weather information dictionary
+    """
+    # In a real application, call a weather API here
+    return {
+        "location": location,
+        "temperature": 22,
+        "unit": unit,
+        "condition": "sunny"
+    }
+
+def calculate(expression: str) -> dict:
+    """
+    Evaluate a mathematical expression.
+    
+    Args:
+        expression: Mathematical expression to evaluate
+    
+    Returns:
+        Calculation result
+    """
+    try:
+        result = eval(expression)
+        return {"result": result, "expression": expression}
+    except Exception as e:
+        return {"error": str(e)}
+
+# Define tool schemas
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city name, e.g. San Francisco"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "Temperature unit"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "calculate",
+            "description": "Perform a mathematical calculation",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "expression": {
+                        "type": "string",
+                        "description": "Mathematical expression to evaluate, e.g. '2 + 2'"
+                    }
+                },
+                "required": ["expression"]
+            }
+        }
+    }
+]
+
+# Map function names to implementations
+available_functions = {
+    "get_weather": get_weather,
+    "calculate": calculate
+}
+```
+
+### Using Tools with Chat Completions
+
+Integrate tools with chat completions to enable function calling:
+
+```python tool_calling.py
+import json
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+messages = [
+    {"role": "user", "content": "What's the weather like in Tokyo and calculate 15 * 23"}
+]
+
+# Initial request with tools
+response = client.chat.completions.create(
+    model="llama-3.3-70b:web",
+    messages=messages,
+    tools=tools,
+    tool_choice="auto"
+)
+
+response_message = response.choices[0].message
+messages.append(response_message)
+
+# Process tool calls
+if response_message.tool_calls:
+    for tool_call in response_message.tool_calls:
+        function_name = tool_call.function.name
+        function_args = json.loads(tool_call.function.arguments)
+        
+        print(f"Calling function: {function_name}")
+        print(f"Arguments: {function_args}")
+        
+        # Execute the function
+        function_to_call = available_functions[function_name]
+        function_response = function_to_call(**function_args)
+        
+        # Add function response to messages
+        messages.append({
+            "tool_call_id": tool_call.id,
+            "role": "tool",
+            "name": function_name,
+            "content": json.dumps(function_response)
+        })
+    
+    # Get final response with tool results
+    final_response = client.chat.completions.create(
+        model="llama-3.3-70b:web",
+        messages=messages
+    )
+    
+    print("\nFinal Response:")
+    print(final_response.choices[0].message.content)
+else:
+    print(response_message.content)
+```
+
+### Complete Tool Calling Example
+
+Here's a complete example with error handling and streaming:
+
+```python complete_tool_example.py
+import json
+import os
+from openai import OpenAI
+from typing import Dict, Any, Callable
+
+class ToolHandler:
+    def __init__(self, client: OpenAI):
+        self.client = client
+        self.functions: Dict[str, Callable] = {}
+        self.tools = []
+    
+    def register_function(self, func: Callable, schema: dict):
+        """Register a function and its schema for tool calling."""
+        self.functions[func.__name__] = func
+        self.tools.append({
+            "type": "function",
+            "function": schema
+        })
+    
+    def execute_tool_call(self, tool_call) -> dict:
+        """Execute a single tool call."""
+        function_name = tool_call.function.name
+        function_args = json.loads(tool_call.function.arguments)
+        
+        if function_name not in self.functions:
+            return {"error": f"Function {function_name} not found"}
+        
+        try:
+            result = self.functions[function_name](**function_args)
+            return result
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def chat_with_tools(self, messages: list, model: str = "llama-3.3-70b:web", 
+                       max_iterations: int = 5) -> str:
+        """
+        Handle chat completions with automatic tool calling.
+        
+        Args:
+            messages: List of message dictionaries
+            model: Model to use
+            max_iterations: Maximum number of tool calling iterations
+        
+        Returns:
+            Final assistant response
+        """
+        for iteration in range(max_iterations):
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                tools=self.tools if self.tools else None,
+                tool_choice="auto" if self.tools else None
+            )
+            
+            response_message = response.choices[0].message
+            messages.append(response_message)
+            
+            # Check if we're done
+            if not response_message.tool_calls:
+                return response_message.content
+            
+            # Process tool calls
+            for tool_call in response_message.tool_calls:
+                print(f"[Tool Call {iteration + 1}] {tool_call.function.name}")
+                
+                result = self.execute_tool_call(tool_call)
+                
+                messages.append({
+                    "tool_call_id": tool_call.id,
+                    "role": "tool",
+                    "name": tool_call.function.name,
+                    "content": json.dumps(result)
+                })
+        
+        return "Max iterations reached without completion"
+
+# Initialize client and handler
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+handler = ToolHandler(client)
+
+# Define and register functions
+def search_web(query: str) -> dict:
+    """Search the web for information."""
+    return {
+        "query": query,
+        "results": [
+            {"title": "Example Result", "snippet": "This is a sample search result."}
+        ]
+    }
+
+handler.register_function(search_web, {
+    "name": "search_web",
+    "description": "Search the web for current information",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "The search query"
+            }
+        },
+        "required": ["query"]
+    }
+})
+
+# Use the handler
+messages = [
+    {"role": "user", "content": "Search for recent AI developments"}
+]
+
+response = handler.chat_with_tools(messages)
+print(f"\nFinal Response:\n{response}")
+```
+
+<Tip>
+Always provide clear, detailed descriptions for your tools and parameters. This helps the model understand when and how to use each function.
+</Tip>
+
+## Advanced Configuration
+
+### Custom Timeouts and Retries
+
+Configure timeouts and retry behavior for production applications:
+
+```python config.py
+import os
+import httpx
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1",
+    timeout=httpx.Timeout(
+        connect=5.0,   # Connection timeout
+        read=60.0,     # Read timeout
+        write=10.0,    # Write timeout
+        pool=60.0      # Pool timeout
+    ),
+    max_retries=3
+)
+
+# Override timeout for specific requests
+response = client.with_options(timeout=30.0).chat.completions.create(
+    model="llama-3.3-70b",
+    messages=[{"role": "user", "content": "Quick question"}]
+)
+```
+
+### Token Usage Tracking
+
+Monitor token consumption and costs:
+
+```python token_tracking.py
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="llama-3.3-70b",
+    messages=[
+        {"role": "user", "content": "Explain neural networks"}
+    ]
+)
+
+usage = response.usage
+print(f"Prompt tokens: {usage.prompt_tokens}")
+print(f"Completion tokens: {usage.completion_tokens}")
+print(f"Total tokens: {usage.total_tokens}")
+
+# Log usage to database or analytics
+def log_usage(model: str, usage_data: dict):
+    """Log token usage for monitoring."""
+    print(f"Model: {model}")
+    print(f"Usage: {usage_data}")
+    # Add your logging logic here
+
+log_usage(response.model, {
+    "prompt_tokens": usage.prompt_tokens,
+    "completion_tokens": usage.completion_tokens,
+    "total_tokens": usage.total_tokens
+})
+```
+
+<Info>
+While Morpheus currently provides free inference during the Open Beta, tracking usage helps you understand your application's resource consumption.
+</Info>
+
+### Error Handling
+
+Implement robust error handling for production deployments:
+
+```python error_handling.py
+import os
+from openai import OpenAI, APIError, APITimeoutError, RateLimitError
+
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1",
+    max_retries=2
+)
+
+def safe_chat_completion(messages: list, model: str = "llama-3.3-70b") -> str:
+    """
+    Make a chat completion with comprehensive error handling.
+    
+    Args:
+        messages: List of message dictionaries
+        model: Model to use
+    
+    Returns:
+        Response text or error message
+    """
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            timeout=30.0
+        )
+        return response.choices[0].message.content
+    
+    except APITimeoutError:
+        return "Request timed out. Please try again."
+    
+    except RateLimitError:
+        return "Rate limit exceeded. Please wait before making more requests."
+    
+    except APIError as e:
+        print(f"API Error: {e.status_code} - {e.message}")
+        return f"An API error occurred: {e.message}"
+    
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return "An unexpected error occurred. Please try again."
+
+# Use the safe function
+messages = [
+    {"role": "user", "content": "Tell me about Python decorators"}
+]
+
+result = safe_chat_completion(messages)
+print(result)
+```
+
+### Context Manager Pattern
+
+Use context managers for automatic resource cleanup:
+
+```python context_manager.py
+import os
+from openai import OpenAI
+
+def process_queries(queries: list):
+    """Process multiple queries with automatic cleanup."""
+    with OpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    ) as client:
+        for query in queries:
+            response = client.chat.completions.create(
+                model="llama-3.3-70b",
+                messages=[{"role": "user", "content": query}]
+            )
+            print(f"Q: {query}")
+            print(f"A: {response.choices[0].message.content}\n")
+    
+    # HTTP client is automatically closed here
+
+queries = [
+    "What is async/await in Python?",
+    "Explain list comprehensions",
+    "What are Python decorators?"
+]
+
+process_queries(queries)
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+<Accordion title="Connection errors or timeouts">
+**Cause**: Network issues, firewall restrictions, or server unavailability.
+
+**Solution**: 
+- Check your internet connection
+- Verify the base URL is correct: `https://api.mor.org/api/v1`
+- Increase timeout values for slower connections
+- Ensure your firewall allows HTTPS connections
+
+```python
+client = OpenAI(
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1",
+    timeout=60.0,  # Increase timeout
+    max_retries=3   # Enable retries
+)
+```
+</Accordion>
+
+<Accordion title="Authentication errors (401 Unauthorized)">
+**Cause**: Invalid or missing API key.
+
+**Solution**:
+- Verify your API key is correct
+- Ensure the API key is properly loaded from environment variables
+- Check that the key hasn't been deleted from your Morpheus account
+
+```python
+import os
+
+# Debug API key loading
+api_key = os.getenv("MORPHEUS_API_KEY")
+print(f"API key loaded: {api_key is not None}")
+print(f"API key length: {len(api_key) if api_key else 0}")
+
+if not api_key:
+    raise ValueError("MORPHEUS_API_KEY environment variable not set")
+```
+</Accordion>
+
+<Accordion title="Tool calls fail or return unexpected results">
+**Cause**: Incorrect tool schema, missing function implementations, or model limitations.
+
+**Solution**:
+- Verify tool schemas match the JSON Schema specification
+- Ensure all required parameters are marked correctly
+- Provide detailed descriptions for tools and parameters
+- Test with different models (llama-3.3-70b often performs better)
+
+```python
+# Good tool definition
+{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "Get current weather for a specific location. Use this when the user asks about weather conditions.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City name, e.g., 'San Francisco' or 'Tokyo'"
+                },
+                "unit": {
+                    "type": "string",
+                    "enum": ["celsius", "fahrenheit"],
+                    "description": "Temperature unit to use"
+                }
+            },
+            "required": ["location"]
+        }
+    }
+}
+```
+</Accordion>
+
+<Accordion title="Streaming stops prematurely">
+**Cause**: Network interruption, timeout, or model completion.
+
+**Solution**:
+- Check the `finish_reason` in the response
+- Implement error handling for streams
+- Use appropriate timeout values
+
+```python
+try:
+    stream = client.chat.completions.create(
+        model="llama-3.3-70b",
+        messages=[{"role": "user", "content": "Long task"}],
+        stream=True,
+        timeout=120.0  # Longer timeout for streaming
+    )
+    
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end="", flush=True)
+        
+        # Check finish reason
+        if chunk.choices[0].finish_reason:
+            print(f"\nFinish reason: {chunk.choices[0].finish_reason}")
+            
+except Exception as e:
+    print(f"Stream error: {str(e)}")
+```
+</Accordion>
+
+<Accordion title="Model not found errors">
+**Cause**: Requested model is not available or misspelled.
+
+**Solution**:
+- List available models first
+- Use exact model names including suffixes (`:web`)
+- Check model availability in the marketplace
+
+```python
+# List available models
+models = client.models.list()
+available_models = [model.id for model in models.data]
+print("Available models:", available_models)
+
+# Verify model exists before using
+desired_model = "llama-3.3-70b:web"
+if desired_model in available_models:
+    response = client.chat.completions.create(
+        model=desired_model,
+        messages=[{"role": "user", "content": "Hello"}]
+    )
+else:
+    print(f"Model {desired_model} not available. Using default.")
+```
+</Accordion>
+
+<Accordion title="Async operations not working">
+**Cause**: Incorrect async/await usage or event loop issues.
+
+**Solution**:
+- Use `AsyncOpenAI` instead of `OpenAI`
+- Properly await all async operations
+- Run async functions with `asyncio.run()`
+
+```python
+import asyncio
+from openai import AsyncOpenAI
+
+async def correct_async_usage():
+    client = AsyncOpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    )
+    
+    # Await the response
+    response = await client.chat.completions.create(
+        model="llama-3.3-70b",
+        messages=[{"role": "user", "content": "Hello"}]
+    )
+    
+    return response.choices[0].message.content
+
+# Run the async function
+result = asyncio.run(correct_async_usage())
+print(result)
+```
+</Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<CardGroup cols={2}>
+<Card title="Use environment variables" icon="shield-check">
+  Always store API keys in environment variables, never hardcode them in your source code.
+</Card>
+
+<Card title="Implement retry logic" icon="rotate">
+  Use the built-in `max_retries` parameter or implement custom retry logic for production applications.
+</Card>
+
+<Card title="Monitor token usage" icon="chart-line">
+  Track token consumption to understand your application's resource needs and optimize prompts.
+</Card>
+
+<Card title="Handle errors gracefully" icon="circle-exclamation">
+  Implement comprehensive error handling to provide good user experiences when API calls fail.
+</Card>
+
+<Card title="Use async for concurrency" icon="bolt">
+  Leverage `AsyncOpenAI` for applications that need to handle multiple concurrent requests.
+</Card>
+
+<Card title="Validate tool schemas" icon="check-double">
+  Test tool calling implementations thoroughly and provide clear descriptions for reliable function execution.
+</Card>
+</CardGroup>
+
+## Example Applications
+
+### Command-Line Chat Application
+
+A simple command-line chat interface:
+
+```python cli_chat.py
+import os
+from openai import OpenAI
+
+def main():
+    client = OpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    )
+    
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."}
+    ]
+    
+    print("Morpheus Chat (type 'quit' to exit)")
+    print("-" * 50)
+    
+    while True:
+        user_input = input("\nYou: ").strip()
+        
+        if user_input.lower() in ['quit', 'exit', 'q']:
+            print("Goodbye!")
+            break
+        
+        if not user_input:
+            continue
+        
+        messages.append({"role": "user", "content": user_input})
+        
+        try:
+            stream = client.chat.completions.create(
+                model="llama-3.3-70b:web",
+                messages=messages,
+                stream=True,
+                temperature=0.7
+            )
+            
+            print("\nAssistant: ", end="", flush=True)
+            full_response = ""
+            
+            for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    print(content, end="", flush=True)
+                    full_response += content
+            
+            print()
+            messages.append({"role": "assistant", "content": full_response})
+            
+        except Exception as e:
+            print(f"\nError: {str(e)}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Batch Processing Script
+
+Process multiple prompts efficiently:
+
+```python batch_processor.py
+import os
+import asyncio
+from openai import AsyncOpenAI
+from typing import List, Dict
+
+async def process_batch(prompts: List[str], model: str = "llama-3.3-70b") -> List[Dict]:
+    """
+    Process multiple prompts concurrently.
+    
+    Args:
+        prompts: List of user prompts
+        model: Model to use
+    
+    Returns:
+        List of response dictionaries
+    """
+    client = AsyncOpenAI(
+        api_key=os.getenv("MORPHEUS_API_KEY"),
+        base_url="https://api.mor.org/api/v1"
+    )
+    
+    async def process_single(prompt: str) -> Dict:
+        try:
+            response = await client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                timeout=30.0
+            )
+            
+            return {
+                "prompt": prompt,
+                "response": response.choices[0].message.content,
+                "tokens": response.usage.total_tokens,
+                "success": True
+            }
+        except Exception as e:
+            return {
+                "prompt": prompt,
+                "error": str(e),
+                "success": False
+            }
+    
+    # Process all prompts concurrently
+    tasks = [process_single(prompt) for prompt in prompts]
+    results = await asyncio.gather(*tasks)
+    
+    return results
+
+# Example usage
+async def main():
+    prompts = [
+        "What is Python?",
+        "Explain machine learning",
+        "What are REST APIs?",
+        "Describe cloud computing",
+        "What is Docker?"
+    ]
+    
+    print(f"Processing {len(prompts)} prompts...")
+    results = await process_batch(prompts)
+    
+    # Display results
+    for i, result in enumerate(results, 1):
+        print(f"\n{'=' * 60}")
+        print(f"Prompt {i}: {result['prompt']}")
+        print(f"{'=' * 60}")
+        
+        if result['success']:
+            print(f"Response: {result['response']}")
+            print(f"Tokens used: {result['tokens']}")
+        else:
+            print(f"Error: {result['error']}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Explore Models" icon="sparkles" href="/documentation/how-to/viewing-models">
+  Browse all available models in the Morpheus marketplace and their capabilities.
+</Card>
+
+<Card title="OpenAI Python Docs" icon="book" href="https://github.com/openai/openai-python">
+  Explore the complete OpenAI Python SDK documentation for advanced features.
+</Card>
+
+<Card title="API Reference" icon="code" href="/api-reference/introduction">
+  Complete API documentation for all Morpheus Gateway endpoints and parameters.
+</Card>
+
+<Card title="Vercel AI SDK" icon="react" href="/documentation/integrations/vercel-ai-sdk-integration">
+  Learn how to integrate Morpheus with Vercel's AI SDK for frontend applications.
+</Card>
+</CardGroup>
+
+## Summary
+
+You've successfully integrated the Morpheus API Gateway with OpenAI's Python SDK! Key takeaways:
+
+<Check>
+**OpenAI Compatibility**: Morpheus works seamlessly with the official OpenAI Python SDK by using a custom `base_url`
+</Check>
+
+<Check>
+**Flexible Deployment**: Use synchronous or asynchronous clients based on your application needs
+</Check>
+
+<Check>
+**Streaming Support**: Real-time streaming responses work identically to OpenAI's API
+</Check>
+
+<Check>
+**Tool Calling**: Define and execute custom functions with JSON schema-based tool definitions
+</Check>
+
+<Check>
+**Free Inference**: Build AI applications with free, decentralized inference during the Open Beta
+</Check>
+
+The combination of Morpheus's free, decentralized AI inference and the OpenAI Python SDK's robust features enables you to build powerful AI applications without infrastructure costs or vendor lock-in.
+
