@@ -102,6 +102,12 @@
             ]
           },
           {
+            "group": "Embeddings",
+            "pages": [
+              "api-reference/embeddings/create-embeddings"
+            ]
+          },
+          {
             "group": "Session Management",
             "pages": [
               "api-reference/session/approve",
