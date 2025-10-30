@@ -16,13 +16,15 @@ https://api.mor.org/api/v1
 All API endpoints are prefixed with `/api/v1`. For example:
 - Models: `https://api.mor.org/api/v1/models`
 - Chat: `https://api.mor.org/api/v1/chat/completions`
+- Embeddings: `https://api.mor.org/api/v1/embeddings`
+
 
 ## Authentication
 
-The API supports two authentication methods:
+The API uses two authentication methods:
 
 ### Bearer Token (JWT)
-Used for user-facing endpoints like account management, API key generation, and settings.
+Used for user-level endpoints like account management, API key generation, and settings. This is handled on the back-end within the [Open Beta portal](https://openbeta.mor.org)
 
 ```bash
 Authorization: Bearer <jwt_token>
@@ -37,16 +39,16 @@ Authorization: Bearer sk-xxxxxxxxxxxxx
 
 ## API Categories
 
-- **Auth**: User authentication, API key management, private keys, and delegation
 - **Models**: List and query available AI models and bids
 - **Chat**: OpenAI-compatible chat completion endpoints
+- **Embeddings**: Embeddings endpoint to support vector storage (RAG)
 - **Session**: Blockchain session management for provider connections
-- **Automation**: Automated session creation settings
 - **Chat History**: Store and retrieve chat conversations
+- ** Utility**: Health Checks
 
 ## Rate Limits
 
-Rate limits are applied per API key and vary based on your account tier. Contact support for enterprise rate limits.
+Rate limits are applied per API key and vary based on your account tier. Contact support for enterprise rate limits. These have yet to be implemented.
 
 ## Error Handling
 
