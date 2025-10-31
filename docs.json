@@ -169,8 +169,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.png",
-    "dark": "/logo/dark.png"
+    "light": "/logo/Morpheus-white-bg.png",
+    "dark": "/logo/Morpheus-black-bg.png"
   },
   "navbar": {
     "links": [
