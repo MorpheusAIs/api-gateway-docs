@@ -1457,6 +1457,131 @@
                 ]
             }
         },
+        "/api/v1/audio/speech": {
+            "post": {
+                "tags": [
+                    "Audio"
+                ],
+                "summary": "Create Audio Speech",
+                "description": "Generate audio speech from text.\n\nThis endpoint converts text to speech using the Morpheus Network providers.\nIt automatically manages sessions and routes requests to the appropriate TTS model.\n\nReturns binary audio data in the specified format.\n\n**Note:** Swagger UI may not be able to play the audio directly. \nTo test, click \"Download\" and play the file in your media player, \nor use curl to save the audio file.",
+                "operationId": "create_audio_speech_api_v1_audio_speech_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AudioSpeechRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Binary audio file",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            },
+                            "audio/mpeg": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "audio/opus": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "audio/aac": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "audio/flac": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "audio/wav": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "audio/pcm": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "APIKeyAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/audio/transcriptions": {
+            "post": {
+                "tags": [
+                    "Audio"
+                ],
+                "summary": "Create Audio Transcription",
+                "description": "Transcribe audio file to text.\n\nThis endpoint transcribes audio files using the Morpheus Network providers.\nIt automatically manages sessions and routes requests to the appropriate transcription model.\n\nSupports both file upload and S3 pre-signed URLs.\nReturns JSON or plain text responses based on response_format parameter.",
+                "operationId": "create_audio_transcription_api_v1_audio_transcriptions_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_create_audio_transcription_api_v1_audio_transcriptions_post"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "APIKeyAuth": []
+                    }
+                ]
+            }
+        },
         "/": {
             "get": {
                 "summary": "Root",
@@ -2603,6 +2728,217 @@
                     "type"
                 ],
                 "title": "ValidationError"
+            },
+            "AudioSpeechRequest": {
+                "properties": {
+                    "input": {
+                        "type": "string",
+                        "title": "Input",
+                        "description": "Text to convert to speech"
+                    },
+                    "voice": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Voice",
+                        "description": "Voice to use for speech generation",
+                        "default": "af_alloy"
+                    },
+                    "response_format": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Response Format",
+                        "description": "Audio format: mp3, opus, aac, flac, wav, pcm",
+                        "default": "mp3"
+                    },
+                    "speed": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Speed",
+                        "description": "Speech speed",
+                        "default": 1
+                    },
+                    "session_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Session Id",
+                        "description": "Session ID (auto-created if not provided)"
+                    },
+                    "model": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Model",
+                        "description": "Model name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "input"
+                ],
+                "title": "AudioSpeechRequest",
+                "description": "Request model for audio speech endpoint"
+            },
+            "Body_create_audio_transcription_api_v1_audio_transcriptions_post": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "File",
+                        "description": "Audio file to transcribe"
+                    },
+                    "s3_presigned_url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "S3 Presigned Url",
+                        "description": "Pre-signed S3 URL as alternative to file upload"
+                    },
+                    "prompt": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Prompt",
+                        "description": "Optional text to guide transcription"
+                    },
+                    "temperature": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Temperature",
+                        "description": "Sampling temperature (0.0-1.0)"
+                    },
+                    "language": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Language",
+                        "description": "Language code (e.g., 'en')"
+                    },
+                    "response_format": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Response Format",
+                        "description": "Response format: json, text, srt, verbose_json, vtt"
+                    },
+                    "timestamp_granularities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Timestamp Granularities",
+                        "description": "Comma-separated: word, segment"
+                    },
+                    "output_content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Output Content",
+                        "description": "Output content type"
+                    },
+                    "enable_diarization": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enable Diarization",
+                        "description": "Enable speaker diarization",
+                        "default": false
+                    },
+                    "session_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Session Id",
+                        "description": "Session ID (auto-created if not provided)"
+                    },
+                    "model": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Model",
+                        "description": "Model name"
+                    }
+                },
+                "type": "object",
+                "title": "Body_create_audio_transcription_api_v1_audio_transcriptions_post"
             }
         },
         "securitySchemes": {

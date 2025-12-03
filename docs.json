@@ -108,6 +108,13 @@
             ]
           },
           {
+            "group": "Audio",
+            "pages": [
+              "api-reference/audio/speech",
+              "api-reference/audio/transcriptions"
+            ]
+          },
+          {
             "group": "Session Management",
             "pages": [
               "api-reference/session/approve",
