@@ -1,0 +1,164 @@
+---
+title: "Create Audio Speech"
+api: "POST /api/v1/audio/speech"
+description: "Generate audio speech from text using text-to-speech models"
+---
+
+Generate audio speech from text.
+
+This endpoint converts text to speech using the Morpheus Network providers. It automatically manages sessions and routes requests to the appropriate TTS model.
+
+Returns binary audio data in the specified format.
+
+<Note>
+Swagger UI may not be able to play the audio directly. To test, click "Download" and play the file in your media player, or use curl to save the audio file.
+</Note>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Body
+
+<ParamField body="input" type="string" required>
+  Text to convert to speech.
+  
+  **Example:**
+  ```json
+  "input": "Hello, this is a test of the text-to-speech system."
+  ```
+</ParamField>
+
+<ParamField body="model" type="string">
+  Model ID to use for speech generation (blockchain hex address or name).
+  
+  <Note>
+  Use the [List Models](/api-reference/models/list) endpoint to see available TTS models.
+  </Note>
+</ParamField>
+
+<ParamField body="voice" type="string" default="af_alloy">
+  Voice to use for speech generation. Available voices depend on the selected model.
+</ParamField>
+
+<ParamField body="response_format" type="string" default="mp3">
+  Audio format for the response. Options: `mp3`, `opus`, `aac`, `flac`, `wav`, `pcm`
+  
+  <Tip>
+  `mp3` is the most widely supported format. Use `wav` or `pcm` for uncompressed audio.
+  </Tip>
+</ParamField>
+
+<ParamField body="speed" type="number" default="1">
+  Speech speed multiplier. Range typically 0.25 to 4.0, where 1.0 is normal speed.
+</ParamField>
+
+<ParamField body="session_id" type="string">
+  Optional session ID to use for this request. If not provided, the system will automatically create or use the session associated with the API key.
+</ParamField>
+
+### Response
+
+The endpoint returns binary audio data in the requested format. The content type will match the `response_format` parameter (e.g., `audio/mpeg` for mp3, `audio/wav` for wav).
+
+<ResponseField name="Content-Type" type="string">
+  Audio MIME type matching the requested format:
+  - `audio/mpeg` for mp3
+  - `audio/opus` for opus
+  - `audio/aac` for aac
+  - `audio/flac` for flac
+  - `audio/wav` for wav
+  - `audio/pcm` for pcm
+</ResponseField>
+
+<ResponseField name="Body" type="binary">
+  Binary audio file data
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="sk-xxxxxx",
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-model",
+    input="Hello, this is a test of the text-to-speech system.",
+    voice="af_alloy",
+    response_format="mp3"
+)
+
+# Save the audio file
+with open("output.mp3", "wb") as f:
+    f.write(response.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+import fs from 'fs';
+
+const client = new OpenAI({
+  apiKey: 'sk-xxxxxx',
+  baseURL: 'https://api.mor.org/api/v1'
+});
+
+const response = await client.audio.speech.create({
+  model: 'tts-model',
+  input: 'Hello, this is a test of the text-to-speech system.',
+  voice: 'af_alloy',
+  response_format: 'mp3'
+});
+
+// Save the audio file
+const buffer = Buffer.from(await response.arrayBuffer());
+fs.writeFileSync('output.mp3', buffer);
+```
+
+```curl cURL
+curl -X POST https://api.mor.org/api/v1/audio/speech \
+  -H "Authorization: Bearer sk-xxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "tts-model",
+    "input": "Hello, this is a test of the text-to-speech system.",
+    "voice": "af_alloy",
+    "response_format": "mp3"
+  }' \
+  --output output.mp3
+```
+</CodeGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Accessibility" icon="accessibility">
+    Convert text content to audio for visually impaired users
+  </Card>
+  
+  <Card title="Content Creation" icon="video">
+    Generate voiceovers for videos, podcasts, and multimedia content
+  </Card>
+  
+  <Card title="Interactive Applications" icon="chat-bubble-left-right">
+    Add voice responses to chatbots and virtual assistants
+  </Card>
+  
+  <Card title="Language Learning" icon="academic-cap">
+    Create pronunciation guides and language learning materials
+  </Card>
+</CardGroup>
+
+<Tip>
+  The API is fully compatible with the OpenAI SDK. Simply change the `base_url` to point to the Morpheus Gateway.
+</Tip>
+
+<Warning>
+  Large text inputs may result in longer processing times. Consider breaking very long texts into smaller segments for better performance.
+</Warning>

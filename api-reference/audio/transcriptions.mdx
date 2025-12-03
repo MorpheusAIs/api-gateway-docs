@@ -1,0 +1,223 @@
+---
+title: "Create Audio Transcription"
+api: "POST /api/v1/audio/transcriptions"
+description: "Transcribe audio files to text using speech-to-text models"
+---
+
+Transcribe audio file to text.
+
+This endpoint transcribes audio files using the Morpheus Network providers. It automatically manages sessions and routes requests to the appropriate transcription model.
+
+Supports both file upload and S3 pre-signed URLs. Returns JSON or plain text responses based on `response_format` parameter.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key in format: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Body (multipart/form-data)
+
+<ParamField body="file" type="binary">
+  Audio file to transcribe. Supported formats include: mp3, mp4, mpeg, mpga, m4a, wav, webm.
+  
+  <Note>
+  Either `file` or `s3_presigned_url` must be provided, but not both.
+  </Note>
+</ParamField>
+
+<ParamField body="s3_presigned_url" type="string">
+  Pre-signed S3 URL as alternative to file upload. Useful for large files or when files are already stored in S3.
+  
+  <Tip>
+  Use S3 pre-signed URLs for files larger than 25MB or when you want to avoid uploading files directly.
+  </Tip>
+</ParamField>
+
+<ParamField body="model" type="string">
+  Model ID to use for transcription (blockchain hex address or name).
+  
+  <Note>
+  Use the [List Models](/api-reference/models/list) endpoint to see available transcription models.
+  </Note>
+</ParamField>
+
+<ParamField body="language" type="string">
+  Language code (e.g., `en`, `es`, `fr`) to help improve transcription accuracy. If not specified, the model will attempt to detect the language automatically.
+</ParamField>
+
+<ParamField body="prompt" type="string">
+  Optional text to guide the model's transcription. Useful for proper nouns, technical terms, or specific vocabulary that may appear in the audio.
+</ParamField>
+
+<ParamField body="response_format" type="string" default="json">
+  Format for the transcription response. Options:
+  - `json` - JSON object with text and metadata
+  - `text` - Plain text only
+  - `srt` - SubRip subtitle format
+  - `verbose_json` - Detailed JSON with word-level timestamps
+  - `vtt` - WebVTT subtitle format
+</ParamField>
+
+<ParamField body="temperature" type="number">
+  Sampling temperature between 0.0 and 1.0. Higher values make the output more random, lower values make it more deterministic.
+</ParamField>
+
+<ParamField body="timestamp_granularities" type="string">
+  Comma-separated list of timestamp granularities. Options: `word`, `segment`. Only applicable when `response_format` is `verbose_json`.
+</ParamField>
+
+<ParamField body="enable_diarization" type="boolean" default="false">
+  Enable speaker diarization to identify different speakers in the audio. Requires models that support this feature.
+</ParamField>
+
+<ParamField body="output_content" type="string">
+  Output content type specification for advanced use cases.
+</ParamField>
+
+<ParamField body="session_id" type="string">
+  Optional session ID to use for this request. If not provided, the system will automatically create or use the session associated with the API key.
+</ParamField>
+
+### Response
+
+The response format depends on the `response_format` parameter:
+
+<ResponseField name="text" type="string">
+  Transcribed text (when `response_format` is `json` or `text`)
+</ResponseField>
+
+<ResponseField name="segments" type="array">
+  Array of transcription segments with timestamps (when `response_format` is `verbose_json`)
+  
+  <Expandable title="Segment Object">
+    <ResponseField name="id" type="integer">
+      Segment identifier
+    </ResponseField>
+    
+    <ResponseField name="start" type="number">
+      Start time in seconds
+    </ResponseField>
+    
+    <ResponseField name="end" type="number">
+      End time in seconds
+    </ResponseField>
+    
+    <ResponseField name="text" type="string">
+      Transcribed text for this segment
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="words" type="array">
+  Array of word-level timestamps (when `timestamp_granularities` includes `word`)
+  
+  <Expandable title="Word Object">
+    <ResponseField name="word" type="string">
+      The transcribed word
+    </ResponseField>
+    
+    <ResponseField name="start" type="number">
+      Start time in seconds
+    </ResponseField>
+    
+    <ResponseField name="end" type="number">
+      End time in seconds
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="sk-xxxxxx",
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Upload audio file
+with open("audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-model",
+        file=audio_file,
+        response_format="verbose_json",
+        timestamp_granularities=["word", "segment"]
+    )
+
+print(transcript.text)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+import fs from 'fs';
+
+const client = new OpenAI({
+  apiKey: 'sk-xxxxxx',
+  baseURL: 'https://api.mor.org/api/v1'
+});
+
+const transcript = await client.audio.transcriptions.create({
+  model: 'whisper-model',
+  file: fs.createReadStream('audio.mp3'),
+  response_format: 'verbose_json',
+  timestamp_granularities: ['word', 'segment']
+});
+
+console.log(transcript.text);
+```
+
+```curl cURL
+curl -X POST https://api.mor.org/api/v1/audio/transcriptions \
+  -H "Authorization: Bearer sk-xxxxxx" \
+  -F "file=@audio.mp3" \
+  -F "model=whisper-model" \
+  -F "response_format=verbose_json" \
+  -F "timestamp_granularities=word,segment"
+```
+
+```bash Using S3 Pre-signed URL
+curl -X POST https://api.mor.org/api/v1/audio/transcriptions \
+  -H "Authorization: Bearer sk-xxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "s3_presigned_url": "https://s3.amazonaws.com/bucket/audio.mp3?presigned-url-params",
+    "model": "whisper-model",
+    "response_format": "json"
+  }'
+```
+</CodeGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Meeting Notes" icon="document-text">
+    Automatically transcribe meetings and generate searchable text records
+  </Card>
+  
+  <Card title="Content Accessibility" icon="closed-captioning">
+    Create captions and subtitles for video content
+  </Card>
+  
+  <Card title="Voice Commands" icon="microphone">
+    Convert voice commands to text for voice-controlled applications
+  </Card>
+  
+  <Card title="Podcast Transcription" icon="radio">
+    Generate searchable transcripts for podcast episodes
+  </Card>
+</CardGroup>
+
+<Tip>
+  Use `verbose_json` with `timestamp_granularities` to get word-level timestamps, which are useful for creating interactive transcripts or synchronizing with video.
+</Tip>
+
+<Warning>
+  Large audio files may take longer to process. For files over 25MB, consider using S3 pre-signed URLs instead of direct file uploads.
+</Warning>
+
+<Info>
+  Speaker diarization can help identify different speakers in multi-person conversations, but requires models that support this feature.
+</Info>
