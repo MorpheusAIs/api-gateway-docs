@@ -1547,6 +1547,7 @@
                 "description": "Transcribe audio file to text.\n\nThis endpoint transcribes audio files using the Morpheus Network providers.\nIt automatically manages sessions and routes requests to the appropriate transcription model.\n\nSupports both file upload and S3 pre-signed URLs.\nReturns JSON or plain text responses based on response_format parameter.",
                 "operationId": "create_audio_transcription_api_v1_audio_transcriptions_post",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
