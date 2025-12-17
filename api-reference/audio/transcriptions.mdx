@@ -10,6 +10,10 @@ This endpoint transcribes audio files using the Morpheus Network providers. It a
 
 Supports both file upload and S3 pre-signed URLs. Returns JSON or plain text responses based on `response_format` parameter.
 
+<Warning>
+**Playground limitation**: The interactive API playground does not correctly handle file uploads. Use the cURL examples below or an SDK instead. For testing in the playground, use the `s3_presigned_url` parameter as an alternative.
+</Warning>
+
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
