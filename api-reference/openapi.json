@@ -1551,56 +1551,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary",
-                                        "description": "Audio file to transcribe. Supported formats include: mp3, mp4, mpeg, mpga, m4a, wav, webm."
-                                    },
-                                    "s3_presigned_url": {
-                                        "type": "string",
-                                        "description": "Pre-signed S3 URL as alternative to file upload. Useful for large files or when files are already stored in S3."
-                                    },
-                                    "model": {
-                                        "type": "string",
-                                        "description": "Model ID to use for transcription (blockchain hex address or name)."
-                                    },
-                                    "language": {
-                                        "type": "string",
-                                        "description": "Language code (e.g., 'en', 'es', 'fr') to help improve transcription accuracy."
-                                    },
-                                    "prompt": {
-                                        "type": "string",
-                                        "description": "Optional text to guide the model's transcription. Useful for proper nouns, technical terms, or specific vocabulary."
-                                    },
-                                    "response_format": {
-                                        "type": "string",
-                                        "description": "Format for the transcription response. Options: json, text, srt, verbose_json, vtt",
-                                        "default": "json"
-                                    },
-                                    "temperature": {
-                                        "type": "number",
-                                        "description": "Sampling temperature between 0.0 and 1.0. Higher values make the output more random."
-                                    },
-                                    "timestamp_granularities": {
-                                        "type": "string",
-                                        "description": "Comma-separated list of timestamp granularities. Options: word, segment. Only applicable when response_format is verbose_json."
-                                    },
-                                    "enable_diarization": {
-                                        "type": "boolean",
-                                        "description": "Enable speaker diarization to identify different speakers in the audio.",
-                                        "default": false
-                                    },
-                                    "output_content": {
-                                        "type": "string",
-                                        "description": "Output content type specification for advanced use cases."
-                                    },
-                                    "session_id": {
-                                        "type": "string",
-                                        "description": "Optional session ID to use for this request. If not provided, the system will automatically create or use the session associated with the API key."
-                                    }
-                                }
+                                "$ref": "#/components/schemas/Body_create_audio_transcription_api_v1_audio_transcriptions_post"
                             }
                         }
                     }
