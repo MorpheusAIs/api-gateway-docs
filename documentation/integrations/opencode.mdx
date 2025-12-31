@@ -53,7 +53,7 @@ The Morpheus API Gateway is currently in **Open Beta**, providing free access to
 
 Before you begin, ensure you have:
 
-- **OpenCode** installed on your system
+- **OpenCode** installed on your system [opencode.ai/docs](https://opencode.ai/docs#install)
 - A **Morpheus AI account** at [app.mor.org](https://app.mor.org)
 - Basic familiarity with **JSON configuration files**
 - Access to your system's **terminal or command line**
@@ -62,10 +62,9 @@ Before you begin, ensure you have:
 <Step title="Get Your Morpheus AI API Key">
 Visit [app.mor.org](https://app.mor.org) and create your API key.
 
-1. Navigate to **Settings** → **API Keys**
-2. Click **Create New API Key**
-3. Provide a descriptive name for the key
-4. Copy the generated API key (starts with `sk-`)
+1. On the main page (API Keys) Click **Create New Key**
+2. Provide a descriptive name for the key
+3. Copy the generated API key (starts with `sk-`)
 
 <Warning>
 Store your API key securely. You won't be able to view it again after the initial creation. Never commit API keys to version control.
@@ -107,70 +106,7 @@ Start OpenCode for the first time:
 opencode
 ```
 
-You're now ready to add Morpheus AI credentials.
-</Step>
-</Steps>
-
-## Adding Morpheus AI Credentials
-
-OpenCode stores API credentials securely in `~/.local/share/opencode/auth.json`. Use the `/connect` command to add your Morpheus AI API key.
-
-### Using the `/connect` Command
-
-<Steps>
-<Step title="Execute the connect command">
-In the OpenCode terminal, run:
-
-```
-/connect
-```
-</Step>
-
-<Step title="Select 'Other' as the provider">
-When prompted to select a provider, choose **Other**:
-
-```
-┌  Add credential
-│
-│ ◆  Select provider
-│  ...
-│  ● Other
-└
-```
-</Step>
-
-<Step title="Enter the provider ID">
-Type `morpheus-ai` as the provider identifier:
-
-```
-┌  Add credential
-│
-│ ◇  Enter provider id
-│  morpheus-ai
-└
-```
-
-<Info>
-The provider ID must exactly match `morpheus-ai` for the configuration to work correctly.
-</Info>
-</Step>
-
-<Step title="Paste your API key">
-Enter your Morpheus AI API key when prompted:
-
-```
-┌  Add credential
-│
-│ ▲  This only stores a credential for morpheus-ai - you will need to configure it in opencode.json
-│
-│ ◇  Enter your API key
-│  sk-xxxxxxxxxxxxx
-└
-```
-
-<Check>
-Your Morpheus AI credentials are now securely stored! Next, you'll configure the provider settings.
-</Check>
+You're now ready to configure Morpheus AI as a provider.
 </Step>
 </Steps>
 
@@ -456,6 +392,69 @@ If you prefer a simpler setup with just essential models:
 <Tip>
 Start with a minimal configuration and add more models as needed. This keeps your model selection clean and focused.
 </Tip>
+
+## Adding Morpheus AI Credentials
+
+OpenCode stores API credentials securely in `~/.local/share/opencode/auth.json`. Use the `/connect` command to add your Morpheus AI API key.
+
+### Using the `/connect` Command
+
+<Steps>
+<Step title="Execute the connect command">
+In the OpenCode terminal, run:
+
+```
+/connect
+```
+</Step>
+
+<Step title="Select 'Other' as the provider">
+When prompted to select a provider, choose **Other**:
+
+```
+┌  Add credential
+│
+│ ◆  Select provider
+│  ...
+│  ● Other
+└
+```
+</Step>
+
+<Step title="Enter the provider ID">
+Type `morpheus-ai` as the provider identifier:
+
+```
+┌  Add credential
+│
+│ ◇  Enter provider id
+│  morpheus-ai
+└
+```
+
+<Info>
+The provider ID must exactly match `morpheus-ai` for the configuration to work correctly.
+</Info>
+</Step>
+
+<Step title="Paste your API key">
+Enter your Morpheus AI API key when prompted:
+
+```
+┌  Add credential
+│
+│ ▲  This only stores a credential for morpheus-ai - you will need to configure it in opencode.json
+│
+│ ◇  Enter your API key
+│  sk-xxxxxxxxxxxxx
+└
+```
+
+<Check>
+Your Morpheus AI credentials are now securely stored and ready to use with your configured provider!
+</Check>
+</Step>
+</Steps>
 
 ## Setting Default Models
 
