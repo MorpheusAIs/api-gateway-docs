@@ -70,25 +70,6 @@
             ]
           },
           {
-            "group": "Authentication",
-            "pages": [
-              "api-reference/auth/me",
-              "api-reference/auth/list-keys",
-              "api-reference/auth/create-key",
-              "api-reference/auth/delete-key",
-              "api-reference/auth/first-key",
-              "api-reference/auth/default-key",
-              "api-reference/auth/set-default-key",
-              "api-reference/auth/default-key-decrypted"
-            ]
-          },
-          {
-            "group": "Account Management",
-            "pages": [
-              "api-reference/auth/delete-account"
-            ]
-          },
-          {
             "group": "Models",
             "pages": [
               "api-reference/models/list",
@@ -111,38 +92,7 @@
           {
             "group": "Audio",
             "pages": [
-              "api-reference/audio/speech",
-              "api-reference/audio/transcriptions"
-            ]
-          },
-          {
-            "group": "Session Management",
-            "pages": [
-              "api-reference/session/approve",
-              "api-reference/session/create-bid-session",
-              "api-reference/session/create-model-session",
-              "api-reference/session/close",
-              "api-reference/session/ping"
-            ]
-          },
-          {
-            "group": "Automation",
-            "pages": [
-              "api-reference/automation/get-settings",
-              "api-reference/automation/update-settings"
-            ]
-          },
-          {
-            "group": "Chat History",
-            "pages": [
-              "api-reference/chat-history/create-chat",
-              "api-reference/chat-history/list-chats",
-              "api-reference/chat-history/get-chat",
-              "api-reference/chat-history/update-chat",
-              "api-reference/chat-history/delete-chat",
-              "api-reference/chat-history/create-message",
-              "api-reference/chat-history/list-messages",
-              "api-reference/chat-history/delete-message"
+              "api-reference/audio/speech"
             ]
           },
           {
