@@ -1,0 +1,252 @@
+---
+title: "LangChain Integration"
+description: "How to integrate Morpheus Inference API with LangChain"
+---
+
+# How To Integrate with LangChain
+
+### What is LangChain?
+
+LangChain is the most popular framework for building applications powered by large language models. It provides a standard interface for chains, agents, and memory, making it easy to build complex AI applications.
+
+Since the Morpheus Inference API is **fully OpenAI-compatible**, you can use it with LangChain by simply configuring the OpenAI provider with a custom base URL.
+
+## Prerequisites
+
+- Morpheus API Key from [app.mor.org](https://app.mor.org)
+- Python 3.8+ or Node.js 18+
+- LangChain installed
+
+## Python Integration
+
+### Installation
+
+```bash
+pip install langchain langchain-openai
+```
+
+### Basic Setup
+
+```python
+import os
+from langchain_openai import ChatOpenAI
+
+# Configure the Morpheus-powered LLM
+llm = ChatOpenAI(
+    model="llama-3.3-70b",
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Simple invocation
+response = llm.invoke("What is the capital of France?")
+print(response.content)
+```
+
+### Streaming
+
+```python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    model="llama-3.3-70b",
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1",
+    streaming=True
+)
+
+for chunk in llm.stream("Write a short poem about AI"):
+    print(chunk.content, end="", flush=True)
+```
+
+### Using with Chains
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+llm = ChatOpenAI(
+    model="llama-3.3-70b",
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant that explains concepts simply."),
+    ("user", "{input}")
+])
+
+chain = prompt | llm | StrOutputParser()
+
+response = chain.invoke({"input": "Explain quantum computing"})
+print(response)
+```
+
+### Using with Agents
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import tool
+
+llm = ChatOpenAI(
+    model="llama-3.3-70b",
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+@tool
+def get_weather(city: str) -> str:
+    """Get the current weather for a city."""
+    # Your weather API implementation
+    return f"The weather in {city} is sunny, 72°F"
+
+@tool
+def calculate(expression: str) -> str:
+    """Evaluate a mathematical expression."""
+    return str(eval(expression))
+
+tools = [get_weather, calculate]
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant with access to tools."),
+    ("user", "{input}"),
+    ("placeholder", "{agent_scratchpad}")
+])
+
+agent = create_tool_calling_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+response = agent_executor.invoke({
+    "input": "What's the weather in Tokyo and what is 15 * 23?"
+})
+print(response["output"])
+```
+
+### Embeddings
+
+```python
+from langchain_openai import OpenAIEmbeddings
+
+embeddings = OpenAIEmbeddings(
+    model="text-embedding-bge-m3",
+    api_key=os.getenv("MORPHEUS_API_KEY"),
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Create embeddings
+vectors = embeddings.embed_documents([
+    "Hello world",
+    "How are you?"
+])
+
+# Single query embedding
+query_vector = embeddings.embed_query("What is AI?")
+```
+
+## JavaScript/TypeScript Integration
+
+### Installation
+
+```bash
+npm install langchain @langchain/openai
+```
+
+### Basic Setup
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+
+const llm = new ChatOpenAI({
+  model: "llama-3.3-70b",
+  apiKey: process.env.MORPHEUS_API_KEY,
+  configuration: {
+    baseURL: "https://api.mor.org/api/v1",
+  },
+});
+
+const response = await llm.invoke("What is the capital of France?");
+console.log(response.content);
+```
+
+### Streaming
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+
+const llm = new ChatOpenAI({
+  model: "llama-3.3-70b",
+  apiKey: process.env.MORPHEUS_API_KEY,
+  configuration: {
+    baseURL: "https://api.mor.org/api/v1",
+  },
+  streaming: true,
+});
+
+const stream = await llm.stream("Write a short poem about AI");
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.content);
+}
+```
+
+### Using with Chains
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+
+const llm = new ChatOpenAI({
+  model: "llama-3.3-70b",
+  apiKey: process.env.MORPHEUS_API_KEY,
+  configuration: {
+    baseURL: "https://api.mor.org/api/v1",
+  },
+});
+
+const prompt = ChatPromptTemplate.fromMessages([
+  ["system", "You are a helpful assistant that explains concepts simply."],
+  ["user", "{input}"],
+]);
+
+const chain = prompt.pipe(llm).pipe(new StringOutputParser());
+
+const response = await chain.invoke({ input: "Explain quantum computing" });
+console.log(response);
+```
+
+## Environment Variables
+
+Store your API key securely:
+
+```bash
+# .env
+MORPHEUS_API_KEY=sk-your-api-key-here
+```
+
+<Warning>
+Never commit API keys to version control. Add `.env` to your `.gitignore` file.
+</Warning>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Available Models" icon="list" href="/documentation/models">
+  See all models available through Morpheus.
+</Card>
+
+<Card title="OpenAI Python SDK" icon="python" href="/documentation/integrations/openai-python-sdk">
+  Direct OpenAI SDK integration guide.
+</Card>
+
+<Card title="Chat Completions API" icon="message" href="/api-reference/chat/completions">
+  Full API reference for chat completions.
+</Card>
+
+<Card title="Embeddings API" icon="magnifying-glass" href="/api-reference/embeddings/create-embeddings">
+  Create embeddings for RAG applications.
+</Card>
+</CardGroup>

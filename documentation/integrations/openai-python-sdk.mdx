@@ -1,18 +1,18 @@
 ---
 title: "OpenAI Python SDK Integration"
-description: "Complete guide to integrating the Morpheus API Gateway with OpenAI's Python SDK for text generation, streaming, and tool calling"
+description: "Complete guide to integrating the Morpheus Inference API with OpenAI's Python SDK for text generation, streaming, and tool calling"
 ---
 
-# Integrate Morpheus API Gateway with OpenAI Python SDK
+# Integrate Morpheus Inference API with OpenAI Python SDK
 
-Learn how to integrate the Morpheus API Gateway with OpenAI's official Python SDK to build AI-powered applications with free, decentralized AI inference. This guide covers basic chat completions, streaming responses, tool calling, and async operations.
+Learn how to integrate the Morpheus Inference API with OpenAI's official Python SDK. This guide covers basic chat completions, streaming responses, tool calling, and async operations.
 
 ## Overview
 
-The Morpheus API Gateway provides **free AI inference** through a decentralized compute marketplace. Since it's fully OpenAI-compatible, you can use the official OpenAI Python SDK by simply pointing it to the Morpheus base URL.
+The Morpheus Inference API is **fully OpenAI-compatible**. Simply point the official OpenAI Python SDK to the Morpheus base URL and start building.
 
 <Info>
-The Morpheus API Gateway is currently in **Open Beta**, providing free access to AI inference without requiring wallet connections or staking MOR tokens.
+**Base URL:** `https://api.mor.org/api/v1`
 </Info>
 
 ## Prerequisites
@@ -77,7 +77,7 @@ Never commit your API key to version control. Add `.env` to your `.gitignore` fi
 
 ### Setting Up the Client
 
-Configure the OpenAI client to use the Morpheus API Gateway by setting a custom `base_url`:
+Configure the OpenAI client to use the Morpheus Inference API by setting a custom `base_url`:
 
 ```python setup.py
 import os
@@ -615,10 +615,6 @@ log_usage(response.model, {
 })
 ```
 
-<Info>
-While Morpheus currently provides free inference during the Open Beta, tracking usage helps you understand your application's resource consumption.
-</Info>
-
 ### Error Handling
 
 Implement robust error handling for production deployments:
@@ -1070,7 +1066,7 @@ if __name__ == "__main__":
 
 ## Summary
 
-You've successfully integrated the Morpheus API Gateway with OpenAI's Python SDK! Key takeaways:
+You've successfully integrated the Morpheus Inference API with OpenAI's Python SDK! Key takeaways:
 
 <Check>
 **OpenAI Compatibility**: Morpheus works seamlessly with the official OpenAI Python SDK by using a custom `base_url`
@@ -1086,10 +1082,6 @@ You've successfully integrated the Morpheus API Gateway with OpenAI's Python SDK
 
 <Check>
 **Tool Calling**: Define and execute custom functions with JSON schema-based tool definitions
-</Check>
-
-<Check>
-**Free Inference**: Build AI applications with free, decentralized inference during the Open Beta
 </Check>
 
 The combination of Morpheus's free, decentralized AI inference and the OpenAI Python SDK's robust features enables you to build powerful AI applications without infrastructure costs or vendor lock-in.

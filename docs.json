@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Morpheus API Gateway",
+  "name": "Morpheus Inference API",
   "openapi": "/api-reference/openapi.json",
   "integrations": {
     "ga4": {
@@ -32,41 +32,68 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "documentation/getting-started/what-is-api-gateway",
-              "documentation/getting-started/how-to-use-api-gateway"
+              "quickstart"
             ]
           },
           {
-            "group": "How to guides",
+            "group": "Models",
             "pages": [
-              "documentation/how-to/creating-api-key",
+              "documentation/models"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "documentation/guides/setting-up-your-account",
               "documentation/how-to/viewing-models"
             ]
           },
           {
-            "group": "Integration guides",
+            "group": "SDKs",
             "pages": [
-              "documentation/integrations/opencode",
-              "documentation/integrations/vercel-ai-sdk-integration",
               "documentation/integrations/openai-python-sdk",
+              "documentation/integrations/vercel-ai-sdk-integration"
+            ]
+          },
+          {
+            "group": "AI Coding Tools",
+            "pages": [
               "documentation/integrations/cursor",
-              "documentation/integrations/brave-leo",
-              "documentation/integrations/open-web-ui",
+              "documentation/integrations/opencode"
+            ]
+          },
+          {
+            "group": "Agent Frameworks",
+            "pages": [
+              "documentation/integrations/langchain",
               "documentation/integrations/eliza"
+            ]
+          },
+          {
+            "group": "Workflow Automation",
+            "pages": [
+              "documentation/integrations/n8n"
+            ]
+          },
+          {
+            "group": "Chat UIs",
+            "pages": [
+              "documentation/integrations/open-web-ui",
+              "documentation/integrations/brave-leo"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
             "group": "Getting Started",
             "pages": [
-              "api-reference/introduction",
-              "api-reference/quickstart"
+              "api-reference/introduction"
             ]
           },
           {

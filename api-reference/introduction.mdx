@@ -1,11 +1,95 @@
 ---
 title: "API Reference"
-description: "Comprehensive API documentation for the Morpheus API Gateway"
+description: "Comprehensive API documentation for the Morpheus Inference API"
 ---
 
-## Welcome to Morpheus API Gateway
+## Welcome to the Morpheus Inference API
 
-The Morpheus API Gateway connects Web2 clients to the Morpheus-Lumerin AI Marketplace. This gateway provides OpenAI-compatible endpoints for seamless integration with existing AI applications.
+The Morpheus Inference API provides a simple method for users to access the Morpheus Inference Marketplace. This API is **fully OpenAI-compatible**, enabling seamless integration with existing AI applications while utilizing a decentralized marketplace to protect you and your data.
+
+## OpenAI Compatibility
+
+The Morpheus Inference API implements the OpenAI API specification, ensuring compatibility with existing OpenAI clients and tools. Simply change the base URL and API key to switch from OpenAI to Morpheus:
+
+<Tabs>
+<Tab title="curl">
+```bash
+curl https://api.mor.org/api/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama-3.3-70b",
+    "messages": [
+      {"role": "user", "content": "Hello!"}
+    ]
+  }'
+```
+</Tab>
+
+<Tab title="Python">
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="llama-3.3-70b",
+    messages=[
+        {"role": "user", "content": "Hello!"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "YOUR_API_KEY",
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const response = await client.chat.completions.create({
+  model: "llama-3.3-70b",
+  messages: [
+    { role: "user", content: "Hello!" }
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+</Tab>
+
+<Tab title="TypeScript">
+```typescript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.MORPHEUS_API_KEY!,
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const response = await client.chat.completions.create({
+  model: "llama-3.3-70b",
+  messages: [
+    { role: "user", content: "Hello!" }
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+</Tab>
+</Tabs>
+
+<Tip>
+Any application that supports "OpenAI-compatible" APIs can work with Morpheus. This includes Cursor, Continue, LangChain, and hundreds of other tools.
+</Tip>
 
 ## Base URL
 
@@ -18,20 +102,11 @@ All API endpoints are prefixed with `/api/v1`. For example:
 - Chat: `https://api.mor.org/api/v1/chat/completions`
 - Embeddings: `https://api.mor.org/api/v1/embeddings`
 
-
 ## Authentication
 
-The API uses two authentication methods:
+The Inference API uses API key authentication. Generate your API key from the Admin Portal at [app.mor.org](https://app.mor.org).
 
-### Bearer Token (JWT)
-Used for user-level endpoints like account management, API key generation, and settings. This is handled on the back-end within the [Open Beta portal](https://app.mor.org)
-
-```bash
-Authorization: Bearer <jwt_token>
-```
-
-### API Key
-Used for AI inference endpoints like chat completions and model listings.
+Include your API key in the `Authorization` header:
 
 ```bash
 Authorization: Bearer sk-xxxxxxxxxxxxx
@@ -42,11 +117,11 @@ Authorization: Bearer sk-xxxxxxxxxxxxx
 - **Models**: List and query available AI models and bids
 - **Chat**: OpenAI-compatible chat completion endpoints
 - **Embeddings**: Embeddings endpoint to support vector storage (RAG)
-- ** Utility**: Health Checks
+- **Utility**: Health Checks
 
 ## Rate Limits
 
-Rate limits are applied per API key and vary based on your account tier. Contact support for enterprise rate limits. These have yet to be implemented.
+Rate limits are applied at the user level and vary based on your account tier. Contact support for enterprise rate limits.
 
 ## Error Handling
 

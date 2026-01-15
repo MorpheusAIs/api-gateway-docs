@@ -1,19 +1,15 @@
 ---
 title: "AI SDK v5 Integration"
-description: "Complete guide to integrating the Morpheus API Gateway with Vercel's AI SDK v5 for streaming text generation and tool calling"
+description: "Complete guide to integrating the Morpheus Inference API with Vercel's AI SDK v5 for streaming text generation and tool calling"
 ---
 
-# Integrate Morpheus API Gateway with Vercel AI SDK
+# Integrate Morpheus Inference API with Vercel AI SDK
 
-Learn how to integrate the Morpheus API Gateway with Vercel's AI SDK v5 to build AI-powered applications with free, decentralized AI inference. This guide covers streaming responses, tool calling, and handling Morpheus-specific implementation details.
+Learn how to integrate the Morpheus Inference API with Vercel's AI SDK v5 to build AI-powered applications with free, decentralized AI inference. This guide covers streaming responses, tool calling, and handling Morpheus-specific implementation details.
 
 ## Overview
 
-The Morpheus API Gateway provides **free AI inference** through a decentralized compute marketplace. By integrating with Vercel's AI SDK, you get access to powerful models like Qwen, Llama, and more while maintaining a familiar OpenAI-compatible API structure.
-
-<Info>
-The Morpheus API Gateway is currently in **Open Beta**, providing free access to AI inference without requiring wallet connections or staking MOR tokens.
-</Info>
+The Morpheus Inference API provides **free AI inference** through a decentralized compute marketplace. By integrating with Vercel's AI SDK, you get access to powerful models like Qwen, Llama, and more while maintaining a familiar OpenAI-compatible API structure.
 
 ## Prerequisites
 
@@ -83,7 +79,7 @@ Never commit your API key to version control. Add `.env.local` to your `.gitigno
 
 ### Setting Up the Morpheus Provider
 
-The Morpheus API Gateway is OpenAI-compatible, allowing you to use the `@ai-sdk/openai-compatible` provider:
+The Morpheus Inference API is OpenAI-compatible, allowing you to use the `@ai-sdk/openai-compatible` provider:
 
 ```typescript lib/morpheus.ts
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
@@ -104,7 +100,7 @@ The `createOpenAICompatible` provider allows any OpenAI-compatible API to work s
 Query the available models using the Morpheus API:
 
 ```bash
-curl -X GET 'https://api.mor.org/api/v1/chat/models' \
+curl -X GET 'https://api.mor.org/api/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -H 'Content-Type: application/json'
 ```
@@ -655,10 +651,6 @@ const result = streamText({
 });
 ```
 
-<Info>
-While Morpheus currently provides free inference during the Open Beta, tracking usage is good practice for understanding your application's resource consumption.
-</Info>
-
 ### Error Handling
 
 Implement robust error handling for production applications:
@@ -720,7 +712,7 @@ Use `maxRetries` to automatically retry failed requests. This is especially usef
 
 ## Summary
 
-You've successfully integrated the Morpheus API Gateway with Vercel's AI SDK! Key takeaways:
+You've successfully integrated the Morpheus Inference API with Vercel's AI SDK! Key takeaways:
 
 <Check>
 **OpenAI Compatibility**: Morpheus works seamlessly with the AI SDK's OpenAI-compatible provider
@@ -736,10 +728,6 @@ You've successfully integrated the Morpheus API Gateway with Vercel's AI SDK! Ke
 
 <Check>
 **Model Selection**: Choose between different Morpheus models (Llama, Qwen) based on your needs
-</Check>
-
-<Check>
-**Free Inference**: Build AI applications with free, decentralized inference during the Open Beta
 </Check>
 
 The combination of Morpheus's free, decentralized AI inference and the AI SDK's powerful abstractions enables you to build sophisticated AI applications without infrastructure costs or vendor lock-in.

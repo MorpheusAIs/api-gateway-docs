@@ -1,0 +1,75 @@
+---
+title: "n8n Integration"
+description: "How to integrate Morpheus Inference API with n8n workflow automation"
+---
+
+# How To Integrate with n8n
+
+### What is n8n?
+
+n8n is a powerful workflow automation platform that allows you to connect various services and automate tasks. With its OpenAI-compatible node, you can easily integrate the Morpheus Inference API into your automation workflows.
+
+<Note>
+The n8n integration guide is currently under development. Check back soon for detailed instructions on how to integrate n8n with Morpheus.
+</Note>
+
+## Prerequisites
+
+- Morpheus API Key from [app.mor.org](https://app.mor.org)
+- n8n instance (self-hosted or cloud)
+- Basic familiarity with n8n workflows
+
+## Quick Setup
+
+Since the Morpheus Inference API is **fully OpenAI-compatible**, you can use n8n's OpenAI node with custom credentials.
+
+### Step 1: Create Custom Credentials
+
+In n8n, create new OpenAI credentials with:
+
+- **API Key:** Your Morpheus API key
+- **Base URL:** `https://api.mor.org/api/v1`
+
+### Step 2: Configure the OpenAI Node
+
+Add an OpenAI node to your workflow and select your Morpheus credentials.
+
+### Step 3: Set the Model
+
+Use any available Morpheus model such as:
+- `llama-3.3-70b`
+- `qwen3-235b`
+- `mistral-31-24b`
+
+## Coming Soon
+
+This integration guide will include:
+
+- Step-by-step credential configuration with screenshots
+- Example workflows for common use cases
+- Chat completion node configuration
+- Embedding generation for RAG workflows
+- Error handling and retry strategies
+- Best practices for production workflows
+
+Stay tuned for updates!
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Available Models" icon="list" href="/documentation/models">
+  See all models available through Morpheus.
+</Card>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Get started with the Morpheus Inference API.
+</Card>
+
+<Card title="Chat Completions API" icon="message" href="/api-reference/chat/completions">
+  Full API reference for chat completions.
+</Card>
+
+<Card title="LangChain Integration" icon="link" href="/documentation/integrations/langchain">
+  Integrate with LangChain for complex AI applications.
+</Card>
+</CardGroup>

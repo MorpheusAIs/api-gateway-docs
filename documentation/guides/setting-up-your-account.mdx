@@ -1,0 +1,131 @@
+---
+title: "Setting Up Your Account"
+description: "Create your Morpheus account and get your API key"
+---
+
+# Setting Up Your Account
+
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/GIMjS6-C-ww"
+  title="Creating API Keys Tutorial"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  style={{ width: '100%', borderRadius: '0.5rem' }}
+></iframe>
+
+<br />
+
+Before you can use the Morpheus Inference API, you need to create an account and generate an API key. This takes about 2 minutes.
+
+<Info>
+**Portal URL:** [app.mor.org](https://app.mor.org)
+</Info>
+
+---
+
+## Step 1: Go to the Portal
+
+Visit [app.mor.org](https://app.mor.org) to get started.
+
+<img
+  src="/images/startup/homepage.png"
+  alt="Morpheus Portal Homepage"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## Step 2: Create an Account
+
+Click **Register** to create a new account. You'll need to provide:
+- Email address
+- Password
+
+After registering, check your email to verify your account.
+
+<img
+  src="/images/startup/login.png"
+  alt="Registration Page"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## Step 3: Access Your Dashboard
+
+After logging in, you'll see your admin dashboard. This is where you manage your API keys.
+
+<img
+  src="/images/startup/manage.png"
+  alt="Admin Dashboard"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## Step 4: Create an API Key
+
+1. Enter a name for your API key (e.g., "Development", "Production")
+2. Click **Create API Key**
+3. Your new API key will be displayed
+
+<Warning>
+**Copy your API key immediately!** It will only be shown once. Store it somewhere secure.
+</Warning>
+
+<img
+  src="/images/startup/apikey.png"
+  alt="API Key Creation"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## Step 5: Set Default Key (Optional)
+
+If you want to use the built-in chat UI or test page at app.mor.org, you'll need to set a default API key:
+
+1. Find your API key in the list
+2. Click the checkbox to select it as default
+3. Confirm by entering your API key
+
+<img
+  src="/images/startup/defaultkey.png"
+  alt="Set Default API Key"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## You're Ready!
+
+You now have everything you need to start using the Morpheus Inference API:
+
+<Info>
+**Base URL:** `https://api.mor.org/api/v1`
+
+**API Key:** The key you just created (starts with `sk-`)
+</Info>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Make your first API request with code examples.
+</Card>
+
+<Card title="Available Models" icon="sparkles" href="/documentation/models">
+  See all available models and their capabilities.
+</Card>
+
+<Card title="Cursor Integration" icon="code" href="/documentation/integrations/cursor">
+  Use Morpheus with Cursor IDE.
+</Card>
+
+<Card title="OpenAI Python SDK" icon="python" href="/documentation/integrations/openai-python-sdk">
+  Integrate with Python using the OpenAI SDK.
+</Card>
+</CardGroup>

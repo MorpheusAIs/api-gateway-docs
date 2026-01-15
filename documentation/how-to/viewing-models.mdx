@@ -1,6 +1,6 @@
 ---
 title: "Viewing Models"
-description: "How to view available models in the Morpheus Compute Marketplace"
+description: "How to view available models in the Morpheus Inference Marketplace"
 ---
 
 # How to View Models
@@ -8,7 +8,7 @@ description: "How to view available models in the Morpheus Compute Marketplace"
 <iframe
   width="560"
   height="315"
-  src="https://www.youtube.com/embed/gpMuim9cxzg"
+  src="https://www.youtube.com/embed/7QX4ocNPmP0"
   title="How to View Available Models Tutorial"
   frameBorder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -18,7 +18,7 @@ description: "How to view available models in the Morpheus Compute Marketplace"
 
 <br />
 
-The purpose of this document is to provide instructions for how to view the available active models within the Morpheus Compute Marketplace via the "API Reference Page". 
+The purpose of this document is to provide instructions for how to view the available active models within the Morpheus Inference Marketplace via the "API Reference Page". 
 ## Step 1: API Reference Page
 
 First go to API Reference tab of the website [apidocs.mor.org/api-reference/introduction](https://apidocs.mor.org/api-reference/introduction)
@@ -53,7 +53,7 @@ This creates a curl request to the models endpoint, and sends it
 
 ```bash
 curl -X 'GET' \
-  'https://api.mor.org/api/v1/chat/models' \
+  'https://api.mor.org/api/v1/models' \
   -H 'accept: application/json' \
   -H 'Authorization: sk-K95AGZ.47513f0e8db18d689abe8c9907e2d8ae4d43d686a6132d085aac0deaabaaa392' \
   -H 'Content-Type: application/json'
@@ -104,7 +104,7 @@ There is also an "allmodels" endpoint for purposes of identifying models no long
 Notice that the models response contains a few pieces of information:
 
 - **ID:** This is the "name" of the model. This can be used directly within the chat/completions endpoint in the "model" section
-- **blockchainID:** This is the 0x... blockchain ID for the model, which exists on-chain within the Morpheus Compute Node
+- **blockchainID:** This is the blockchain ID for the model within the Morpheus Inference Marketplace
 - **Tags:** These tags are input by providers to help identify key use cases or specific attributes of the model
 
 ## Using Models in Chat Completions
@@ -162,7 +162,7 @@ Your response will be similar to this:
 
 ## Ready to Use!
 
-Now you can begin using the Morpheus Compute Node through the API Gateway! For integrations, use the following information:
+Now you can begin using the Morpheus Inference Marketplace! For integrations, use the following information:
 
 <Info>
 **Base URL:** [https://api.mor.org/api/v1](https://api.mor.org/api/v1)
