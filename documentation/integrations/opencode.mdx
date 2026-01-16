@@ -112,35 +112,43 @@ You're now ready to configure Morpheus AI as a provider.
 
 ## Configuring the Provider
 
-Create or update your OpenCode configuration to define the Morpheus AI provider and available models.
+Create your OpenCode configuration file to define the Morpheus AI provider and available models.
 
-### Configuration Location
+### Create the Configuration File
 
 <Tabs>
 <Tab title="Global Configuration (Recommended)">
-Edit the global configuration file:
+Create the global configuration directory and file. This makes Morpheus AI available across all your projects.
 
-```
-~/.config/opencode/opencode.json
+```bash
+# Create the config directory if it doesn't exist
+mkdir -p ~/.config/opencode
+
+# Create and open the config file
+nano ~/.config/opencode/opencode.json
 ```
 
-This makes Morpheus AI available across all your projects.
+<Tip>
+You can use any text editor instead of `nano` (e.g., `vim`, `code`, or your preferred editor).
+</Tip>
 </Tab>
 
 <Tab title="Project Configuration">
-Create a configuration file in your project root:
+Create an `opencode.json` file in your project root. This makes Morpheus AI available only for the specific project.
 
-```
-./opencode.json
-```
+```bash
+# Navigate to your project directory
+cd /path/to/your/project
 
-This makes Morpheus AI available only for the specific project.
+# Create the config file
+nano opencode.json
+```
 </Tab>
 </Tabs>
 
 ### Full Provider Configuration
 
-Add the following configuration to your `opencode.json` file:
+Copy and paste the following configuration into your `opencode.json` file:
 
 ```json opencode.json
 {
@@ -153,18 +161,72 @@ Add the following configuration to your `opencode.json` file:
         "baseURL": "https://api.mor.org/api/v1"
       },
       "models": {
-        "glm-4.6": {
-          "name": "GLM 4.6",
+        "glm-4.7": {
+          "name": "GLM 4.7",
           "limit": {
-            "context": 200000,
+            "context": 198000,
             "output": 65536
           }
         },
-        "glm-4.6-web": {
-          "name": "GLM 4.6 (Web)",
+        "glm-4.7:web": {
+          "name": "GLM 4.7 (Web)",
           "limit": {
-            "context": 200000,
+            "context": 198000,
             "output": 65536
+          }
+        },
+        "glm-4.7-thinking": {
+          "name": "GLM 4.7 Thinking",
+          "limit": {
+            "context": 198000,
+            "output": 65536
+          }
+        },
+        "glm-4.7-thinking:web": {
+          "name": "GLM 4.7 Thinking (Web)",
+          "limit": {
+            "context": 198000,
+            "output": 65536
+          }
+        },
+        "gpt-oss-120b": {
+          "name": "GPT OSS 120B",
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "options": {
+            "timeout": 600000
+          }
+        },
+        "gpt-oss-120b:web": {
+          "name": "GPT OSS 120B (Web)",
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "options": {
+            "timeout": 600000
+          }
+        },
+        "qwen3-coder-480b-a35b-instruct": {
+          "name": "Qwen3 Coder 480B",
+          "limit": {
+            "context": 256000,
+            "output": 16384
+          },
+          "options": {
+            "timeout": 600000
+          }
+        },
+        "qwen3-coder-480b-a35b-instruct:web": {
+          "name": "Qwen3 Coder 480B (Web)",
+          "limit": {
+            "context": 256000,
+            "output": 16384
+          },
+          "options": {
+            "timeout": 600000
           }
         },
         "kimi-k2-thinking": {
@@ -174,156 +236,11 @@ Add the following configuration to your `opencode.json` file:
             "output": 16384
           }
         },
-        "kimi-k2-thinking-web": {
+        "kimi-k2-thinking:web": {
           "name": "Kimi K2 Thinking (Web)",
           "limit": {
             "context": 256000,
             "output": 16384
-          }
-        },
-        "qwen3-coder-480b-a35b-instruct": {
-          "name": "Qwen3 Coder 480B",
-          "limit": {
-            "context": 262144,
-            "output": 16384
-          },
-          "options": {
-            "timeout": 600000
-          }
-        },
-        "qwen3-coder-480b-a35b-instruct-web": {
-          "name": "Qwen3 Coder 480B (Web)",
-          "limit": {
-            "context": 262144,
-            "output": 16384
-          },
-          "options": {
-            "timeout": 600000
-          }
-        },
-        "hermes-3-llama-3.1-405b": {
-          "name": "Hermes 3 Llama 3.1 405B",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          },
-          "options": {
-            "timeout": 600000
-          }
-        },
-        "hermes-3-llama-3.1-405b-web": {
-          "name": "Hermes 3 Llama 3.1 405B (Web)",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          },
-          "options": {
-            "timeout": 600000
-          }
-        },
-        "qwen3-235b": {
-          "name": "Qwen3 235B",
-          "limit": {
-            "context": 131072,
-            "output": 8192
-          }
-        },
-        "qwen3-235b-web": {
-          "name": "Qwen3 235B (Web)",
-          "limit": {
-            "context": 131072,
-            "output": 8192
-          }
-        },
-        "qwen3-next-80b": {
-          "name": "Qwen3 Next 80B",
-          "limit": {
-            "context": 131072,
-            "output": 4096
-          }
-        },
-        "qwen3-next-80b-web": {
-          "name": "Qwen3 Next 80B (Web)",
-          "limit": {
-            "context": 131072,
-            "output": 4096
-          }
-        },
-        "llama-3.3-70b": {
-          "name": "Llama 3.3 70B",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "llama-3.3-70b-web": {
-          "name": "Llama 3.3 70B (Web)",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "mistral-31-24b": {
-          "name": "Mistral 31 24B",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "mistral-31-24b-web": {
-          "name": "Mistral 31 24B (Web)",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "venice-uncensored": {
-          "name": "Venice Uncensored",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "venice-uncensored-web": {
-          "name": "Venice Uncensored (Web)",
-          "limit": {
-            "context": 128000,
-            "output": 8192
-          }
-        },
-        "qwen3-4b": {
-          "name": "Qwen3 4B",
-          "limit": {
-            "context": 131072,
-            "output": 4096
-          }
-        },
-        "qwen3-4b-web": {
-          "name": "Qwen3 4B (Web)",
-          "limit": {
-            "context": 131072,
-            "output": 4096
-          }
-        },
-        "llama-3.2-3b": {
-          "name": "Llama 3.2 3B",
-          "limit": {
-            "context": 32000,
-            "output": 4096
-          }
-        },
-        "llama-3.2-3b-web": {
-          "name": "Llama 3.2 3B (Web)",
-          "limit": {
-            "context": 32000,
-            "output": 4096
-          }
-        },
-        "hermes-4-14b": {
-          "name": "Hermes 4 14B",
-          "limit": {
-            "context": 128000,
-            "output": 4096
           }
         }
       }
@@ -331,6 +248,10 @@ Add the following configuration to your `opencode.json` file:
   }
 }
 ```
+
+<Info>
+**Save the file:** If using `nano`, press `Ctrl+O` to save, then `Ctrl+X` to exit. If using `vim`, press `Esc` then type `:wq` and press Enter.
+</Info>
 
 ### Understanding the Configuration
 
@@ -350,18 +271,18 @@ Each model includes:
 </Accordion>
 
 <Accordion title="Web Model Variants">
-Models with the `-web` suffix have enhanced capabilities:
+Models with the `:web` suffix have enhanced capabilities:
 - Web search integration
 - Current information access
 - Browser-optimized responses
 
-Standard models without `-web` are optimized for pure reasoning and code generation tasks.
+Standard models without `:web` are optimized for pure reasoning and code generation tasks.
 </Accordion>
 </AccordionGroup>
 
 ### Minimal Configuration
 
-If you prefer a simpler setup with just essential models:
+If you prefer a simpler setup with just one model to start:
 
 ```json opencode.json
 {
@@ -374,14 +295,8 @@ If you prefer a simpler setup with just essential models:
         "baseURL": "https://api.mor.org/api/v1"
       },
       "models": {
-        "glm-4.6": {
-          "name": "GLM 4.6"
-        },
-        "kimi-k2-thinking": {
-          "name": "Kimi K2 Thinking"
-        },
-        "qwen3-coder-480b-a35b-instruct": {
-          "name": "Qwen3 Coder 480B"
+        "glm-4.7": {
+          "name": "GLM 4.7"
         }
       }
     }
@@ -390,7 +305,7 @@ If you prefer a simpler setup with just essential models:
 ```
 
 <Tip>
-Start with a minimal configuration and add more models as needed. This keeps your model selection clean and focused.
+Start with a minimal configuration and add more models as needed. See the [Available Models](/documentation/models) page for the full list of models you can add.
 </Tip>
 
 ## Adding Morpheus AI Credentials
@@ -400,114 +315,74 @@ OpenCode stores API credentials securely in `~/.local/share/opencode/auth.json`.
 ### Using the `/connect` Command
 
 <Steps>
+<Step title="Launch OpenCode">
+Open your terminal and start OpenCode:
+
+```bash
+opencode
+```
+
+This will open the OpenCode TUI (terminal user interface).
+</Step>
+
 <Step title="Execute the connect command">
-In the OpenCode terminal, run:
+Inside OpenCode, run the connect command:
 
 ```
 /connect
 ```
 </Step>
 
-<Step title="Select 'Other' as the provider">
-When prompted to select a provider, choose **Other**:
+<Step title="Select Morpheus AI">
+Type `morpheus` to filter the providers, then select **Morpheus AI** from the list:
 
 ```
-┌  Add credential
+┌  Connect a provider
 │
-│ ◆  Select provider
-│  ...
-│  ● Other
+│  morpheus
+│
+│  Other
+│  Morpheus AI
 └
 ```
 </Step>
 
-<Step title="Enter the provider ID">
-Type `morpheus-ai` as the provider identifier:
+<Step title="Enter your API key">
+Paste your Morpheus AI API key when prompted:
 
 ```
 ┌  Add credential
-│
-│ ◇  Enter provider id
-│  morpheus-ai
-└
-```
-
-<Info>
-The provider ID must exactly match `morpheus-ai` for the configuration to work correctly.
-</Info>
-</Step>
-
-<Step title="Paste your API key">
-Enter your Morpheus AI API key when prompted:
-
-```
-┌  Add credential
-│
-│ ▲  This only stores a credential for morpheus-ai - you will need to configure it in opencode.json
 │
 │ ◇  Enter your API key
 │  sk-xxxxxxxxxxxxx
 └
 ```
+</Step>
+
+<Step title="Select a model">
+Choose the model you want to use from the list. All models from your configuration will appear:
+
+```
+┌  Morpheus AI
+│
+│  Search
+│
+│  Morpheus AI
+│  GLM 4.7
+│  GLM 4.7 (Web)
+│  ● GLM 4.7 Thinking
+│  GLM 4.7 Thinking (Web)
+│  GPT OSS 120B
+└
+```
 
 <Check>
-Your Morpheus AI credentials are now securely stored and ready to use with your configured provider!
+You're now connected to Morpheus AI and ready to start coding!
 </Check>
 </Step>
 </Steps>
 
-## Setting Default Models
-
-Configure your preferred models for different types of tasks:
-
-```json opencode.json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "model": "morpheus-ai/glm-4.6",
-  "small_model": "morpheus-ai/llama-3.3-70b",
-  "provider": {
-    "morpheus-ai": {
-      ...
-    }
-  }
-}
-```
-
-<ParamField path="model" type="string">
-Default model used for main coding tasks, complex reasoning, and detailed responses.
-</ParamField>
-
-<ParamField path="small_model" type="string">
-Faster, smaller model used for quick tasks like syntax checking, simple completions, and rapid iterations.
-</ParamField>
-
-## Using Morpheus AI in OpenCode
-
-Once configured, restart OpenCode to load the new provider settings.
-
-### Restart OpenCode
-
-```bash
-# Press Ctrl+C to exit the current session
-# Then restart
-opencode
-```
-
-### Select a Model
-
-Use the `/models` command to view and select from available Morpheus AI models:
-
-```
-/models
-```
-
-You'll see all configured Morpheus AI models listed. Select one to start using it for your coding tasks.
-
-<Tip>
-Switch models at any time using the `/models` command. Different models excel at different tasks - experiment to find the best fit for your workflow.
-</Tip>
-
-### Start Coding
+## Start Coding
 
 With Morpheus AI configured, you can now:
 
@@ -529,42 +404,18 @@ With Morpheus AI configured, you can now:
 
 ## Available Models
 
-The Morpheus marketplace offers a diverse range of models optimized for different tasks:
-
-### Premium Models (Best Performance)
+The following models are included in the configuration above:
 
 | Model | Context | Output | Best For |
 |-------|---------|--------|----------|
-| **Qwen3 Coder 480B** | 262K | 16K | Complex code generation, architecture design |
-| **Hermes 3 Llama 405B** | 128K | 8K | Advanced reasoning, system design |
+| **GLM 4.7** | 198K | 65K | General purpose, long context, documentation |
+| **GLM 4.7 Thinking** | 198K | 65K | Extended thinking, analysis, reasoning |
+| **GPT OSS 120B** | 128K | 8K | GPT-style responses, function calling |
+| **Qwen3 Coder 480B** | 256K | 16K | Complex code generation, architecture design |
 | **Kimi K2 Thinking** | 256K | 16K | Complex problem solving, multi-step reasoning |
-| **GLM 4.6** | 200K | 65K | Long-form code generation, documentation |
-
-### Balanced Models (Great All-Rounders)
-
-| Model | Context | Output | Best For |
-|-------|---------|--------|----------|
-| **Qwen3 235B** | 131K | 8K | General coding tasks |
-| **Llama 3.3 70B** | 128K | 8K | Code completion, debugging |
-| **Qwen3 Next 80B** | 131K | 4K | Fast responses, quick iterations |
-| **Mistral 31 24B** | 128K | 8K | Balanced performance, good reasoning |
-
-### Lightweight Models (Fast & Efficient)
-
-| Model | Context | Output | Best For |
-|-------|---------|--------|----------|
-| **Hermes 4 14B** | 128K | 4K | Quick completions, syntax help |
-| **Qwen3 4B** | 131K | 4K | Simple tasks, rapid iteration |
-| **Llama 3.2 3B** | 32K | 4K | Lightweight tasks, low-latency responses |
-
-### Specialized Models
-
-| Model | Context | Output | Best For |
-|-------|---------|--------|----------|
-| **Venice Uncensored** | 128K | 8K | Unrestricted content generation |
 
 <Info>
-Model availability depends on provider availability in the Morpheus marketplace. The API automatically routes to the highest-rated provider for your selected model. Check the [API documentation](https://apidocs.mor.org/api-reference/introduction) for the latest model availability.
+For additional models, see the [Available Models](/documentation/models) page. You can add any model from that page to your configuration by following the same format shown above.
 </Info>
 
 ## Verifying Your Setup
@@ -679,82 +530,15 @@ chmod 644 ~/.config/opencode/opencode.json
 </Accordion>
 </AccordionGroup>
 
-## Best Practices
+## Security Notes
 
-<CardGroup cols={2}>
-<Card title="Choose the right model" icon="brain">
-Select models based on your task complexity. Use large models for complex reasoning and smaller models for quick completions.
-</Card>
+<Warning>
+Follow these security best practices to protect your API credentials:
+</Warning>
 
-<Card title="Configure small_model" icon="gauge-high">
-Set a lightweight model as your `small_model` for faster responses on simple tasks, improving your coding workflow.
-</Card>
-
-<Card title="Secure your API key" icon="lock">
-Never commit your API key to version control. Keep it in the secure OpenCode auth storage or environment variables.
-</Card>
-
-<Card title="Switch models freely" icon="shuffle">
-Use the `/models` command to try different models. Each excels at different tasks - find what works best for you.
-</Card>
-
-<Card title="Use Web variants strategically" icon="globe">
-Leverage `-web` suffix models when you need current information or web-enhanced responses. Use standard models for pure coding tasks.
-</Card>
-
-<Card title="Monitor performance" icon="chart-line">
-Pay attention to response times and quality. Adjust your model selection based on your workflow needs.
-</Card>
-</CardGroup>
-
-## Advanced Configuration
-
-### Project-Specific Models
-
-Override global settings for specific projects:
-
-```json project-root/opencode.json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "model": "morpheus-ai/qwen3-coder-480b-a35b-instruct",
-  "small_model": "morpheus-ai/qwen3-4b"
-}
-```
-
-<Tip>
-Use project-specific configurations when working on specialized projects that benefit from particular models.
-</Tip>
-
-### Custom Model Limits
-
-Adjust context and output limits based on your needs:
-
-```json opencode.json
-{
-  "provider": {
-    "morpheus-ai": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Morpheus AI",
-      "options": {
-        "baseURL": "https://api.mor.org/api/v1"
-      },
-      "models": {
-        "custom-model": {
-          "name": "Custom Model",
-          "limit": {
-            "context": 100000,
-            "output": 4096
-          },
-          "options": {
-            "timeout": 300000,
-            "temperature": 0.7
-          }
-        }
-      }
-    }
-  }
-}
-```
+- **Local storage**: Your API key is stored locally in `~/.local/share/opencode/auth.json`
+- **Never commit keys**: Don't commit API keys or configuration files with credentials to public repositories
+- **Rotate compromised keys**: If your API key is compromised, immediately rotate it via the Morpheus AI dashboard
 
 ## Additional Resources
 
@@ -771,44 +555,10 @@ Adjust context and output limits based on your needs:
   Learn more about OpenCode provider configuration and advanced features.
 </Card>
 
-<Card title="Community Support" icon="discord" href="https://opencode.ai/discord">
-  Join the OpenCode Discord community for help and discussions.
+<Card title="Available Models" icon="sparkles" href="/documentation/models">
+  See all available models and their capabilities.
 </Card>
 </CardGroup>
-
-## Security Notes
-
-<Warning>
-Follow these security best practices to protect your API credentials:
-</Warning>
-
-- **Local storage**: Your API key is stored locally in `~/.local/share/opencode/auth.json`
-- **Never commit keys**: Don't commit API keys or configuration files with credentials to public repositories
-- **Add to .gitignore**: Include both `~/.config/opencode/opencode.json` and `~/.local/share/opencode/auth.json` in your `.gitignore` if sharing config files
-- **Rotate compromised keys**: If your API key is compromised, immediately rotate it via the Morpheus AI dashboard
-- **Use project configs carefully**: Ensure project-specific `opencode.json` files don't contain sensitive information
-
-## Next Steps
-
-Once configured, you can:
-
-<Steps>
-<Step title="Switch between models">
-Use the `/models` command to select different models for various tasks and compare their performance.
-</Step>
-
-<Step title="Create project configurations">
-Set up project-specific `opencode.json` files with models optimized for each project's needs.
-</Step>
-
-<Step title="Optimize your workflow">
-Adjust context and output limits based on your typical use cases to balance performance and capability.
-</Step>
-
-<Step title="Monitor usage">
-Track your usage and billing in the Morpheus AI dashboard at [app.mor.org](https://app.mor.org).
-</Step>
-</Steps>
 
 ## Summary
 
@@ -826,8 +576,4 @@ You've successfully integrated Morpheus AI with OpenCode! Here's what you've acc
 **Model selection**: Learned how to choose and switch between models for different tasks
 </Check>
 
-<Check>
-**Best practices**: Understand security, performance optimization, and troubleshooting
-</Check>
-
-Happy coding with Morpheus AI! 🚀
+Happy coding with Morpheus AI!
