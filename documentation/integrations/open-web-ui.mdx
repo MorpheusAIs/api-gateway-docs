@@ -20,19 +20,72 @@ description: "How to integrate Morpheus Inference API with Open Web-UI"
 
 ## Morpheus ↔ Open Web-UI
 
+### What is Open Web-UI?
+
+Open Web-UI is a self-hosted, feature-rich web interface for interacting with large language models. It provides a ChatGPT-like experience that you can run locally, with support for OpenAI-compatible APIs—making it a perfect match for Morpheus.
+
+## Prerequisites
+
+- Docker installed on your machine
+- Morpheus API Key
+- Morpheus Model Identified
+
+## Step by Step
+
+### Step 1: Pull the Docker Image
+
+Open your terminal and pull the Open Web-UI Docker image:
+
+```bash
+docker pull ghcr.io/open-webui/open-webui:main
+```
+
+### Step 2: Run the Docker Container
+
+Start Open Web-UI with persistent data storage:
+
+```bash
+docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+```
+
 <Note>
-The Open Web-UI integration guide is currently under development. Check back soon for detailed instructions on how to integrate Open Web-UI with Morpheus.
+The `-v open-webui:/app/backend/data` flag ensures your data persists between container restarts.
 </Note>
 
-### Coming Soon
+### Step 3: Access Open Web-UI
 
-This integration guide will include:
+Open your browser and navigate to:
 
-- Prerequisites for Open Web-UI setup
-- Step-by-step configuration instructions
-- API endpoint configuration
-- Model selection and testing
-- Troubleshooting tips
+```
+http://localhost:3000
+```
 
-Stay tuned for updates!
+### Step 4: Create an Account
+
+On your first visit, you'll be prompted to create an account. Fill in your details and sign up—this account is stored locally on your machine.
+
+### Step 5: Open Admin Settings
+
+Once logged in, click on the **gear icon** in the bottom left to open **Admin Settings**.
+
+### Step 6: Navigate to Connections
+
+In the Admin Settings, go to **Connections** and find the **OpenAI** section. Click **Manage** (the wrench icon).
+
+### Step 7: Add Morpheus Connection
+
+Click the **+** button to add a new connection and configure:
+
+- **URL:** `https://api.mor.org/api/v1`
+- **API Key:** Your Morpheus API Key
+
+Click **Save** to confirm.
+
+### Step 8: Start Chatting!
+
+Return to the main chat interface. Your Morpheus models will now appear in the model selector dropdown. Select a model and start chatting!
+
+<Tip>
+You're now ready to use Morpheus AI within Open Web-UI! Enjoy a self-hosted ChatGPT-like experience powered by the Morpheus Inference Marketplace.
+</Tip>
 
