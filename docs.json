@@ -41,7 +41,8 @@
           {
             "group": "Models",
             "pages": [
-              "documentation/models"
+              "documentation/models",
+              "documentation/models/pricing"
             ]
           },
           {
