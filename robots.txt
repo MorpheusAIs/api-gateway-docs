@@ -1,0 +1,62 @@
+# Morpheus API Gateway Documentation - robots.txt
+# Optimized for AI search engines and generative AI platforms
+
+# Allow all AI crawlers and search engines
+User-agent: *
+Allow: /
+
+# OpenAI (ChatGPT, GPT-4, etc.)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google (Search, Bard/Gemini, AI Overviews)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Microsoft Bing (Search + Copilot)
+User-agent: Bingbot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# Common AI research crawlers
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# Sitemap location (Mintlify auto-generates this)
+Sitemap: https://api-gateway-docs.mor.org/sitemap.xml
+
+# Crawl-delay to be respectful (optional)
+# Crawl-delay: 1

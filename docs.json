@@ -3,6 +3,18 @@
   "theme": "mint",
   "name": "Morpheus Inference API",
   "openapi": "/api-reference/openapi.json",
+  "metadata": {
+    "og:site_name": "Morpheus API Gateway Documentation",
+    "og:title": "Morpheus API Gateway - Free AI Inference API",
+    "og:description": "Access free AI inference through Morpheus Compute Marketplace. OpenAI-compatible API for LLMs including GPT, Claude, and more. Get started with just an API key.",
+    "og:url": "https://api-gateway-docs.mor.org",
+    "og:image": "https://api-gateway-docs.mor.org/images/og-image.png",
+    "twitter:title": "Morpheus API Gateway - Free AI Inference API",
+    "twitter:description": "Access free AI inference through Morpheus Compute Marketplace. OpenAI-compatible API for LLMs.",
+    "twitter:site": "@morpheusais",
+    "description": "Official documentation for Morpheus API Gateway - a free, OpenAI-compatible API for accessing AI inference through the Morpheus Compute Marketplace. Learn how to integrate with ChatGPT, Claude, Cursor, and more.",
+    "keywords": "Morpheus, API Gateway, AI inference, LLM API, free AI, OpenAI compatible, Morpheus Compute, decentralized AI, MOR token, AI marketplace, ChatGPT alternative, Claude API, AI integration"
+  },
   "integrations": {
     "ga4": {
       "measurementId": "G-D0TCTKQ051"
