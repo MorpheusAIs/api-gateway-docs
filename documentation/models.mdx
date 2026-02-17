@@ -19,12 +19,10 @@ These are the most capable models available for complex tasks.
 
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
+| `minimax-m2.5` | 1M | Code, Function Calling, Vision, Reasoning | AI agents, autonomous workflows, multi-step tool orchestration |
 | `qwen3-coder-480b-a35b-instruct` | 256K | Code, Function Calling | Code generation, programming |
-| `qwen3-coder-480b-a35b-instruct:web` | 256K | Code, Function Calling, Web | Code with web search |
-| `hermes-3-llama-3.1-405b` | 128K | Web Search | General purpose, instruction following |
-| `hermes-3-llama-3.1-405b:web` | 128K | Web Search | General purpose with web |
+| `hermes-3-llama-3.1-405b` | 128K | — | General purpose, instruction following |
 | `gpt-oss-120b` | 128K | Function Calling | GPT-style responses |
-| `gpt-oss-120b:web` | 128K | Function Calling, Web | GPT-style with web search |
 
 ### Reasoning Models
 
@@ -32,12 +30,11 @@ Models optimized for step-by-step thinking and complex problem solving.
 
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
+| `glm-5` | 200K | Code, Function Calling, Reasoning | Agentic engineering, complex systems, long-horizon tasks |
+| `kimi-k2.5` | 256K | Code, Function Calling, Reasoning, Vision | Math, visual reasoning, parallel agent workflows |
 | `kimi-k2-thinking` | 256K | Code, Function Calling, Reasoning | Deep reasoning, math, logic, coding |
-| `kimi-k2-thinking:web` | 256K | Code, Function Calling, Reasoning, Web | Deep reasoning with web search |
 | `glm-4.7-thinking` | 198K | Function Calling, Reasoning | Extended thinking, analysis |
-| `glm-4.7-thinking:web` | 198K | Function Calling, Reasoning, Web | Extended thinking with web |
 | `qwen3-235b` | 128K | Function Calling | Complex reasoning, long documents |
-| `qwen3-235b:web` | 128K | Function Calling, Web | Complex reasoning with web |
 
 ### Mid-Size Models
 
@@ -46,18 +43,9 @@ Balanced performance and speed for most use cases.
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
 | `llama-3.3-70b` | 128K | Function Calling | General purpose, reliable |
-| `llama-3.3-70b:web` | 128K | Function Calling, Web | General purpose with web |
 | `qwen3-next-80b` | 256K | Function Calling | Next-gen reasoning, long context |
-| `qwen3-next-80b:web` | 256K | Function Calling, Web | Next-gen with web search |
 | `mistral-31-24b` | 128K | Function Calling, Vision | Fast, efficient, image analysis |
-| `mistral-31-24b:web` | 128K | Function Calling, Vision, Web | Fast with web search |
-| `glm-4.6` | 198K | Function Calling, Reasoning | General purpose, long context |
-| `glm-4.6:web` | 198K | Function Calling, Reasoning, Web | General purpose with web |
-| `glm-4.7` | 198K | Function Calling, Reasoning | Improved GLM, largest context |
-| `glm-4.7:web` | 198K | Function Calling, Reasoning, Web | Improved GLM with web |
 | `venice-uncensored` | 32K | — | Uncensored, creative, roleplay |
-| `venice-uncensored:web` | 32K | Web | Uncensored with web search |
-| `hermes-4-14b` | 128K | — | Efficient instruction following |
 
 ### Fast Models
 
@@ -65,10 +53,9 @@ Optimized for speed and low latency.
 
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
+| `glm-4.7-flash` | 200K | Function Calling, Reasoning | Agentic coding, tool-use workflows, local deployment |
 | `llama-3.2-3b` | 128K | Function Calling | Fastest responses, simple tasks |
-| `llama-3.2-3b:web` | 128K | Function Calling, Web | Fast with web search |
 | `qwen3-4b` | 32K | Function Calling, Reasoning | Lightweight, mobile, low-latency |
-| `qwen3-4b:web` | 32K | Function Calling, Reasoning, Web | Lightweight with web |
 
 ## Embeddings Models
 
@@ -86,11 +73,11 @@ For vector embeddings and semantic search.
 |-------|----------|
 | `tts-kokoro` | Natural-sounding voice synthesis |
 
-### Speech-to-Text
+{/* ### Speech-to-Text
 
 | Model | Best For |
 |-------|----------|
-| `whisper-v3-large-turbo` | Transcription, audio processing |
+| `whisper-v3-large-turbo` | Transcription, audio processing | */}
 
 ## Model Capabilities
 
@@ -104,36 +91,46 @@ Models with function calling can invoke tools and APIs. Use the `tools` paramete
 <Accordion title="Reasoning">
 Reasoning models support extended thinking and step-by-step problem solving. They're optimized for complex math, logic, and analytical tasks.
 
-**Supported models:** `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.6`, `glm-4.7`, `qwen3-4b`
+**Supported models:** `glm-5`, `kimi-k2.5`, `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.7-flash`, `glm-4.7`, `qwen3-4b`, `minimax-m2.5`
 </Accordion>
 
 <Accordion title="Vision">
 Vision-capable models can analyze images passed in the messages array.
 
-**Supported models:** `mistral-31-24b`
+**Supported models:** `mistral-31-24b`, `kimi-k2.5`, `minimax-m2.5`
 </Accordion>
 
 <Accordion title="Web Search">
-Models with the `:web` suffix can search the internet for current information.
+Any model can be upgraded with real-time web search by appending `:web` to the model name. See the [Web Search](#web-search-with-web) section below for details.
 
-**Supported models:** All models have a `:web` variant
+**Available for:** All models
 </Accordion>
 
 <Accordion title="Code Optimization">
 Models specifically optimized for code generation and programming tasks.
 
-**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`
+**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`, `glm-5`, `minimax-m2.5`
 </Accordion>
 </AccordionGroup>
 
-## Model Naming Convention
+## Web Search with `:web`
 
-Models with the `:web` suffix have web search capabilities enabled, allowing them to access current information from the internet.
+Every model listed above can be enhanced with real-time web search capabilities — you don't need a separate model for it. Simply append `:web` to any model name, and the model will search the internet for current information before generating its response.
 
-| Suffix | Meaning |
-|--------|---------|
-| (none) | Base model without web access |
-| `:web` | Model with web search capabilities |
+<Note>
+The model tables above only list base model names. To use any model **with web search**, just add `:web` to the end. For example, `llama-3.3-70b` becomes `llama-3.3-70b:web`. This works universally across every model in the Morpheus marketplace.
+</Note>
+
+| Base Model | With Web Search | What Changes |
+|------------|----------------|--------------|
+| `glm-5` | `glm-5:web` | Adds real-time internet search to responses |
+| `kimi-k2.5` | `kimi-k2.5:web` | Combines deep reasoning with current web data |
+| `glm-4.7-flash` | `glm-4.7-flash:web` | Adds web search to fast, efficient responses |
+| _any model_ | _model-name_`:web` | Same pattern — works for all models |
+
+<Tip>
+**Verify exact model names** — including `:web` variants — by querying the [`/models` endpoint](/api-reference/models/all-models). The `:web` suffix is universal, but the base model name must match exactly what the API returns.
+</Tip>
 
 ## Using Models
 
@@ -209,27 +206,41 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 <AccordionGroup>
 <Accordion title="Best for coding">
 - **`qwen3-coder-480b-a35b-instruct`** - Top choice for code generation (256K context)
+- **`minimax-m2.5`** - SOTA agentic coding, full-stack development (1M context)
+- **`glm-5`** - Agentic engineering, multi-file systems design (200K context)
 - **`kimi-k2-thinking`** - Best for complex algorithmic problems with reasoning
 - **`llama-3.3-70b`** - Good balance of speed and quality
 </Accordion>
 
 <Accordion title="Best for long documents">
+- **`minimax-m2.5`** - 1M context window
 - **`qwen3-next-80b`** - 256K context window
+- **`kimi-k2.5`** - 256K context with multimodal reasoning
 - **`qwen3-coder-480b-a35b-instruct`** - 256K context window
-- **`glm-4.7`** - 198K context, excellent at document analysis
+- **`glm-5`** - 200K context, excellent at document analysis
 - **`kimi-k2-thinking`** - 256K context with reasoning
 </Accordion>
 
 <Accordion title="Best for speed">
+- **`glm-4.7-flash`** - 30B MoE (3B active), 200K context, runs on consumer GPUs
 - **`qwen3-4b`** - Fastest, 32K context
 - **`llama-3.2-3b`** - Very fast, 128K context
 - **`mistral-31-24b`** - Good speed with vision support
 </Accordion>
 
 <Accordion title="Best for reasoning">
+- **`kimi-k2.5`** - Top math/logic benchmarks (AIME 96%), multimodal, 256K context
+- **`glm-5`** - Agentic engineering, systems reasoning, 200K context
 - **`kimi-k2-thinking`** - Deep reasoning chains, 256K context
 - **`glm-4.7-thinking`** - Extended thinking mode, 198K context
 - **`qwen3-235b`** - Complex analysis, 128K context
+</Accordion>
+
+<Accordion title="Best for AI agents">
+- **`minimax-m2.5`** - Purpose-built for agents, 80.2% SWE-Bench, multi-step tool orchestration
+- **`glm-5`** - Long-horizon agentic tasks, #1 open-source on Vending Bench 2
+- **`kimi-k2.5`** - Agent Swarm with up to 100 parallel sub-agents
+- **`glm-4.7-flash`** - Lightweight agentic coding, efficient tool-use workflows
 </Accordion>
 
 <Accordion title="Best for uncensored/creative">
