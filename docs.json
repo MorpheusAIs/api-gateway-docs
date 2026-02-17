@@ -47,7 +47,8 @@
             "group": "Getting Started",
             "pages": [
               "documentation/getting-started/what-is-api-gateway",
-              "quickstart"
+              "quickstart",
+              "documentation/getting-started/credits"
             ]
           },
           {

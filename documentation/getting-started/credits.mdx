@@ -1,0 +1,158 @@
+---
+title: "Credits & Billing"
+description: "Learn how to obtain and manage credits for the Morpheus Inference API"
+---
+
+# Credits & Billing
+
+To use the Morpheus Inference API, you need credits. All credits and billing are denominated in **USD amounts**. This page explains how to obtain credits, how they are consumed, and how your daily credit allowance is calculated.
+
+---
+
+## Accessing Billing
+
+To manage your credits, go to [app.mor.org](https://app.mor.org) and click the **Billing** tab in the left sidebar.
+
+<img
+  src="/images/billing/billing-sidebar.png"
+  alt="Billing tab in the Inference API Admin sidebar"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+The Billing page shows your **Available Credit** (pre-paid balance) and **Daily API credit remaining** (staking allowance), along with options for adding funds and managing your staking connection.
+
+<img
+  src="/images/billing/billing-overview.png"
+  alt="Billing page overview showing available credit and daily API credit remaining"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+---
+
+## How to Obtain Credits
+
+There are two ways to acquire credits:
+
+<CardGroup cols={2}>
+<Card title="Purchase Credits" icon="credit-card">
+  Buy credits directly with a credit card or cryptocurrency. Credits are added to your **Available Credit** balance immediately.
+</Card>
+
+<Card title="Stake MOR Tokens" icon="coins">
+  Stake MOR tokens to earn a **Daily Credit Allowance** that refreshes every day at midnight UTC.
+</Card>
+</CardGroup>
+
+---
+
+## Option A: Purchasing Credits
+
+You can purchase credits directly from the **Add Funds** section on the Billing page. Two payment methods are available:
+
+- **Credit Card** — Powered by Stripe
+- **Pay with Crypto** — Powered by Coinbase Commerce
+
+<img
+  src="/images/billing/add-funds.png"
+  alt="Add Funds section showing Credit Card and Pay with Crypto options"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+Purchased credits are added to your **Available Credit** balance and do not expire.
+
+---
+
+## Option B: Staking MOR for Daily Credits
+
+You can earn a daily credit allowance by staking MOR tokens into the **Morpheus Marketplace API** builder subnet. This gives you a recurring daily credit allocation without purchasing credits directly.
+
+### Step 1: Stake MOR Tokens
+
+Go to the [Morpheus Marketplace API builder subnet on the Morpheus Dashboard](https://dashboard.mor.org/builders/morpheus-marketplace-api?subnet_id=0x415471125cc4d03b89818acb8426981fa28a3eee03a9097176297a9a6ae87c8d&network=Base) and stake your MOR tokens.
+
+<img
+  src="/images/billing/stake-mor.png"
+  alt="Morpheus Marketplace API builder subnet staking page"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+### Step 2: Connect Your Wallet
+
+Once you have staked in the subnet, return to the Billing page on [app.mor.org](https://app.mor.org). In the **Staking Status** section, connect the same wallet you used to stake and assign it to your Morpheus account.
+
+<img
+  src="/images/billing/staking-status.png"
+  alt="Staking Status section with Connect Wallet button"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+After connecting, your daily credit allowance will appear under **Daily API credit remaining** on the Billing page.
+
+---
+
+## Credit Usage Order
+
+<Note>
+By default, the API will **first consume your Daily Credit Allowance** from staking. Once your daily allowance is fully exhausted, pre-paid credits from your **Available Credit** balance will begin being used — but only if you have enabled the **Allow Overages** toggle.
+</Note>
+
+<img
+  src="/images/billing/allow-overages.png"
+  alt="Allow Overages toggle — use credit balance when daily allowance runs out"
+  style={{ borderRadius: '0.5rem', border: '2px solid rgba(16, 185, 129, 0.3)' }}
+/>
+
+| Priority | Credit Source | Description |
+|----------|-------------|-------------|
+| 1st | Daily Credit Allowance | Free daily credits earned from staking MOR |
+| 2nd | Available Credit | Pre-paid credits (used only when daily allowance is exhausted and overages are enabled) |
+
+<Warning>
+If **Allow Overages** is disabled (the default), only your Daily Staking Allowance will be used. Once it runs out, API requests will stop working until the next daily refresh. Enable **Allow Overages** if you want pre-paid credits to kick in automatically.
+</Warning>
+
+---
+
+## How Daily Credit Allowance is Calculated
+
+Your daily credit allowance from staking is derived by three factors:
+
+1. **Your stake** — The amount of MOR you have staked in the Morpheus Marketplace API builder subnet.
+2. **Total stake** — The total amount of MOR staked by all users in all builder subnets.
+3. **MOR token price** — The current market price of the MOR token in USD.
+
+### The Calculation
+
+Your daily credit allowance is proportional to your **share** of the total stake in the builder protocol, adjusted with the current MOR token price:
+
+```
+Daily Credit Allowance (USD) = (Your MOR Staked / Total MOR Staked) × Daily Credit Pool
+```
+
+The **Daily Credit Pool** is derived from the builder subnet's rewards, priced in USD using the current MOR token market price.
+
+### Refresh Schedule
+
+<Info>
+Credits are **calculated and refreshed daily at midnight UTC**. Your allowance will be **recalculated at the next refresh period** (midnight UTC) according to your stake, the total staked amount and changes to the price of MOR.
+</Info>
+
+**Key points:**
+- Staking more MOR increases your share and therefore your daily allowance.
+- If other users stake or unstake, your proportional share (and allowance) will change at the next refresh.
+- MOR token price fluctuations affect the USD value of your daily allowance.
+- Changes to your stake are **not reflected immediately** — they take effect at the next midnight UTC refresh.
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="View Model Pricing" icon="tags" href="/documentation/models/pricing">
+  See per-model pricing and rate limits to estimate your credit usage.
+</Card>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Make your first API request with code examples.
+</Card>
+</CardGroup>
