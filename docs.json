@@ -63,7 +63,9 @@
             "group": "Guides",
             "pages": [
               "documentation/guides/setting-up-your-account",
-              "documentation/how-to/viewing-models"
+              "documentation/how-to/viewing-models",
+              "documentation/guides/tool-calling",
+              "documentation/guides/vision"
             ]
           },
           {

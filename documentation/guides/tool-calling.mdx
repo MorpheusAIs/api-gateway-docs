@@ -1,0 +1,547 @@
+---
+title: "Tool Calling (Function Calling)"
+description: "Let models invoke tools and external APIs using the Morpheus Inference API"
+---
+
+# Tool Calling (Function Calling)
+
+Tool calling allows models to invoke external functions, APIs, and tools during a conversation. The model decides when to call a function based on the user's message and returns structured arguments you can use to execute the function in your application.
+
+<Info>
+The Morpheus Inference API is **fully OpenAI-compatible** — tool calling works exactly like OpenAI's function calling API. If you've used OpenAI tools before, you already know how to use this.
+</Info>
+
+## Supported Models
+
+Most models on the Morpheus API support function calling. See the [Available Models](/documentation/models) page for the full list — look for the **Function Calling** capability.
+
+Popular choices for tool calling:
+
+| Model | Best For |
+|-------|----------|
+| `glm-5` | Complex multi-step tool orchestration |
+| `kimi-k2.5` | Parallel tool calls, agent workflows |
+| `minimax-m2.5` | Autonomous multi-tool agents |
+| `mistral-31-24b` | Fast, efficient tool use |
+| `glm-4.7-flash` | Lightweight agentic coding |
+
+## How It Works
+
+1. **Define tools** — Describe available functions with names, descriptions, and JSON Schema parameters
+2. **Send request** — Include tools in your chat completion request
+3. **Model responds** — The model either answers directly or returns a `tool_calls` array with function names and arguments
+4. **Execute functions** — Run the requested functions in your application
+5. **Return results** — Send function results back to the model for a final response
+
+## Basic Example
+
+Define a tool and let the model decide when to call it:
+
+<Tabs>
+<Tab title="curl">
+```bash
+curl https://api.mor.org/api/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "glm-5",
+    "messages": [
+      {"role": "user", "content": "What is the weather like in San Francisco?"}
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get the current weather for a location",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city name, e.g. San Francisco"
+              },
+              "unit": {
+                "type": "string",
+                "enum": ["celsius", "fahrenheit"],
+                "description": "Temperature unit"
+              }
+            },
+            "required": ["location"]
+          }
+        }
+      }
+    ]
+  }'
+```
+</Tab>
+
+<Tab title="Python">
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city name, e.g. San Francisco"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "Temperature unit"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+
+response = client.chat.completions.create(
+    model="glm-5",
+    messages=[
+        {"role": "user", "content": "What is the weather like in San Francisco?"}
+    ],
+    tools=tools
+)
+
+# Check if the model wants to call a function
+message = response.choices[0].message
+
+if message.tool_calls:
+    for tool_call in message.tool_calls:
+        print(f"Function: {tool_call.function.name}")
+        print(f"Arguments: {tool_call.function.arguments}")
+else:
+    print(message.content)
+```
+
+Install the OpenAI SDK: `pip install openai`
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "YOUR_API_KEY",
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get the current weather for a location",
+      parameters: {
+        type: "object",
+        properties: {
+          location: {
+            type: "string",
+            description: "The city name, e.g. San Francisco",
+          },
+          unit: {
+            type: "string",
+            enum: ["celsius", "fahrenheit"],
+            description: "Temperature unit",
+          },
+        },
+        required: ["location"],
+      },
+    },
+  },
+];
+
+const response = await client.chat.completions.create({
+  model: "glm-5",
+  messages: [
+    { role: "user", content: "What is the weather like in San Francisco?" },
+  ],
+  tools,
+});
+
+// Check if the model wants to call a function
+const message = response.choices[0].message;
+
+if (message.tool_calls) {
+  for (const toolCall of message.tool_calls) {
+    console.log(`Function: ${toolCall.function.name}`);
+    console.log(`Arguments: ${toolCall.function.arguments}`);
+  }
+} else {
+  console.log(message.content);
+}
+```
+
+Install the OpenAI SDK: `npm install openai`
+</Tab>
+
+<Tab title="TypeScript">
+```typescript
+import OpenAI from "openai";
+import type { ChatCompletionTool } from "openai/resources/chat/completions";
+
+const client = new OpenAI({
+  apiKey: process.env.MORPHEUS_API_KEY!,
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const tools: ChatCompletionTool[] = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get the current weather for a location",
+      parameters: {
+        type: "object",
+        properties: {
+          location: {
+            type: "string",
+            description: "The city name, e.g. San Francisco",
+          },
+          unit: {
+            type: "string",
+            enum: ["celsius", "fahrenheit"],
+            description: "Temperature unit",
+          },
+        },
+        required: ["location"],
+      },
+    },
+  },
+];
+
+const response = await client.chat.completions.create({
+  model: "glm-5",
+  messages: [
+    { role: "user", content: "What is the weather like in San Francisco?" },
+  ],
+  tools,
+});
+
+const message = response.choices[0].message;
+
+if (message.tool_calls) {
+  for (const toolCall of message.tool_calls) {
+    console.log(`Function: ${toolCall.function.name}`);
+    console.log(`Arguments: ${toolCall.function.arguments}`);
+  }
+} else {
+  console.log(message.content);
+}
+```
+
+Install the OpenAI SDK: `npm install openai`
+</Tab>
+</Tabs>
+
+## Complete Tool Calling Loop
+
+In a real application, you execute the function and send the result back to the model:
+
+<Tabs>
+<Tab title="Python">
+```python
+import json
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Define your tools
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "City name"},
+                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+
+# Your actual function implementation
+def get_weather(location: str, unit: str = "fahrenheit") -> str:
+    # Replace with a real weather API call
+    return json.dumps({"temperature": 72, "unit": unit, "condition": "sunny"})
+
+# Step 1: Send the user message with tools
+messages = [{"role": "user", "content": "What's the weather in San Francisco?"}]
+
+response = client.chat.completions.create(
+    model="glm-5",
+    messages=messages,
+    tools=tools
+)
+
+message = response.choices[0].message
+
+# Step 2: Check if the model wants to call a function
+if message.tool_calls:
+    # Add the assistant's response to the conversation
+    messages.append(message)
+
+    # Step 3: Execute each tool call and add results
+    for tool_call in message.tool_calls:
+        function_name = tool_call.function.name
+        arguments = json.loads(tool_call.function.arguments)
+
+        # Call your function
+        result = get_weather(**arguments)
+
+        # Add the function result to the conversation
+        messages.append({
+            "role": "tool",
+            "tool_call_id": tool_call.id,
+            "content": result
+        })
+
+    # Step 4: Get the final response with function results
+    final_response = client.chat.completions.create(
+        model="glm-5",
+        messages=messages,
+        tools=tools
+    )
+
+    print(final_response.choices[0].message.content)
+else:
+    print(message.content)
+```
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "YOUR_API_KEY",
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get the current weather for a location",
+      parameters: {
+        type: "object",
+        properties: {
+          location: { type: "string", description: "City name" },
+          unit: { type: "string", enum: ["celsius", "fahrenheit"] },
+        },
+        required: ["location"],
+      },
+    },
+  },
+];
+
+// Your actual function implementation
+function getWeather(location, unit = "fahrenheit") {
+  // Replace with a real weather API call
+  return JSON.stringify({ temperature: 72, unit, condition: "sunny" });
+}
+
+const functionMap = { get_weather: getWeather };
+
+// Step 1: Send the user message with tools
+const messages = [
+  { role: "user", content: "What's the weather in San Francisco?" },
+];
+
+const response = await client.chat.completions.create({
+  model: "glm-5",
+  messages,
+  tools,
+});
+
+const message = response.choices[0].message;
+
+// Step 2: Check if the model wants to call a function
+if (message.tool_calls) {
+  messages.push(message);
+
+  // Step 3: Execute each tool call
+  for (const toolCall of message.tool_calls) {
+    const args = JSON.parse(toolCall.function.arguments);
+    const fn = functionMap[toolCall.function.name];
+    const result = fn(args.location, args.unit);
+
+    messages.push({
+      role: "tool",
+      tool_call_id: toolCall.id,
+      content: result,
+    });
+  }
+
+  // Step 4: Get the final response
+  const finalResponse = await client.chat.completions.create({
+    model: "glm-5",
+    messages,
+    tools,
+  });
+
+  console.log(finalResponse.choices[0].message.content);
+} else {
+  console.log(message.content);
+}
+```
+</Tab>
+</Tabs>
+
+## Response Format
+
+When a model decides to call a tool, the response includes a `tool_calls` array:
+
+```json
+{
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": " I'll check the current weather in San Francisco for you.  ",
+        "tool_calls": [
+          {
+            "id": "call_abc123",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"location\": \"San Francisco\"}"
+            }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ]
+}
+```
+
+<Note>
+When `finish_reason` is `"tool_calls"`, the model is requesting function execution. The `content` field may contain a brief message or be `null` — always check for `tool_calls` first regardless of whether `content` is present.
+</Note>
+
+## Multiple Tools
+
+You can define multiple tools and the model will choose which to call:
+
+```python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string"}
+                },
+                "required": ["location"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_web",
+            "description": "Search the web for information",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"}
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_stock_price",
+            "description": "Get the current stock price",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "symbol": {"type": "string", "description": "Stock ticker symbol"}
+                },
+                "required": ["symbol"]
+            }
+        }
+    }
+]
+```
+
+## Tips
+
+<AccordionGroup>
+<Accordion title="Write clear function descriptions">
+The model uses the `description` field to decide when to call a function. Be specific about what the function does and when it should be used.
+
+```json
+// Good
+"description": "Get the current weather forecast for a specific city. Returns temperature, conditions, and humidity."
+
+// Bad
+"description": "weather"
+```
+</Accordion>
+
+<Accordion title="Use detailed parameter descriptions">
+Help the model provide the right arguments by describing each parameter clearly, including format expectations and valid values.
+
+```json
+"location": {
+  "type": "string",
+  "description": "City and state, e.g. 'San Francisco, CA' or 'New York, NY'"
+}
+```
+</Accordion>
+
+<Accordion title="Handle the tool call loop">
+Always check `finish_reason` — if it's `"tool_calls"`, execute the functions and send results back. The model may call multiple functions in sequence before giving a final answer.
+</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Available Models" icon="sparkles" href="/documentation/models">
+  See which models support function calling.
+</Card>
+
+<Card title="Chat Completions API" icon="message" href="/api-reference/chat/completions">
+  Full API reference for chat completions.
+</Card>
+
+<Card title="Vision Guide" icon="eye" href="/documentation/guides/vision">
+  Send images to vision-capable models.
+</Card>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Get started with your first API call.
+</Card>
+</CardGroup>

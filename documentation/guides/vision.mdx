@@ -1,0 +1,401 @@
+---
+title: "Vision (Image Analysis)"
+description: "Send images to vision-capable models for analysis using the Morpheus Inference API"
+---
+
+# Vision (Image Analysis)
+
+Vision-capable models can analyze images alongside text, enabling use cases like image description, visual reasoning, document extraction, and more. Images are passed as part of the messages array using the OpenAI-compatible multimodal format.
+
+<Info>
+The Morpheus Inference API is **fully OpenAI-compatible** — vision works exactly like OpenAI's multimodal API. If you've used GPT-4 Vision before, you already know how to use this.
+</Info>
+
+## Supported Models
+
+| Model | Context Window | Best For |
+|-------|---------------|----------|
+| `kimi-k2.5` | 256K | Visual reasoning, math from images, complex multimodal tasks |
+| `mistral-31-24b` | 128K | Fast image analysis, efficient visual processing |
+
+## How It Works
+
+Instead of sending a plain text string as the message `content`, you send an array of content parts — mixing text and images in a single message:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {"type": "text", "text": "What do you see in this image?"},
+    {"type": "image_url", "image_url": {"url": "https://example.com/image.jpg"}}
+  ]
+}
+```
+
+Images can be provided as:
+- **URL** — A direct link to an image (`https://...`)
+- **Base64** — Inline image data (`data:image/jpeg;base64,...`)
+
+## Basic Example
+
+Send an image URL for analysis:
+
+<Tabs>
+<Tab title="curl">
+```bash
+curl https://api.mor.org/api/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kimi-k2.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "What do you see in this image? Describe it in detail."},
+          {"type": "image_url", "image_url": {"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"}}
+        ]
+      }
+    ]
+  }'
+```
+</Tab>
+
+<Tab title="Python">
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What do you see in this image? Describe it in detail."},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+Install the OpenAI SDK: `pip install openai`
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "YOUR_API_KEY",
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const response = await client.chat.completions.create({
+  model: "kimi-k2.5",
+  messages: [
+    {
+      role: "user",
+      content: [
+        { type: "text", text: "What do you see in this image? Describe it in detail." },
+        {
+          type: "image_url",
+          image_url: {
+            url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg",
+          },
+        },
+      ],
+    },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+
+Install the OpenAI SDK: `npm install openai`
+</Tab>
+
+<Tab title="TypeScript">
+```typescript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.MORPHEUS_API_KEY!,
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const response = await client.chat.completions.create({
+  model: "kimi-k2.5",
+  messages: [
+    {
+      role: "user",
+      content: [
+        { type: "text", text: "What do you see in this image? Describe it in detail." },
+        {
+          type: "image_url",
+          image_url: {
+            url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg",
+          },
+        },
+      ],
+    },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+
+Install the OpenAI SDK: `npm install openai`
+</Tab>
+</Tabs>
+
+## Using Base64 Images
+
+For local images or when you want to avoid external URLs, encode the image as base64:
+
+<Tabs>
+<Tab title="Python">
+```python
+import base64
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.mor.org/api/v1"
+)
+
+# Read and encode a local image
+with open("image.jpg", "rb") as f:
+    image_data = base64.b64encode(f.read()).decode("utf-8")
+
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Describe this image."},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{image_data}"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+import OpenAI from "openai";
+import fs from "fs";
+
+const client = new OpenAI({
+  apiKey: "YOUR_API_KEY",
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+// Read and encode a local image
+const imageData = fs.readFileSync("image.jpg").toString("base64");
+
+const response = await client.chat.completions.create({
+  model: "kimi-k2.5",
+  messages: [
+    {
+      role: "user",
+      content: [
+        { type: "text", text: "Describe this image." },
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:image/jpeg;base64,${imageData}`,
+          },
+        },
+      ],
+    },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+</Tab>
+
+<Tab title="TypeScript">
+```typescript
+import OpenAI from "openai";
+import fs from "fs";
+
+const client = new OpenAI({
+  apiKey: process.env.MORPHEUS_API_KEY!,
+  baseURL: "https://api.mor.org/api/v1",
+});
+
+const imageData: string = fs.readFileSync("image.jpg").toString("base64");
+
+const response = await client.chat.completions.create({
+  model: "kimi-k2.5",
+  messages: [
+    {
+      role: "user",
+      content: [
+        { type: "text", text: "Describe this image." },
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:image/jpeg;base64,${imageData}`,
+          },
+        },
+      ],
+    },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+</Tab>
+</Tabs>
+
+## Multiple Images
+
+You can send multiple images in a single message for comparison or multi-image analysis:
+
+```python
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Compare these two images. What are the differences?"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image1.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image2.jpg"}
+                }
+            ]
+        }
+    ]
+)
+```
+
+## Use Cases
+
+<AccordionGroup>
+<Accordion title="Image Description">
+Ask the model to describe what it sees in an image — useful for accessibility, content moderation, or cataloging.
+
+```python
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Describe this image in one paragraph."},
+            {"type": "image_url", "image_url": {"url": "https://example.com/photo.jpg"}}
+        ]
+    }]
+)
+```
+</Accordion>
+
+<Accordion title="Document & Receipt Extraction">
+Extract structured data from photos of documents, receipts, or invoices.
+
+```python
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Extract all line items, totals, and the date from this receipt. Return as JSON."},
+            {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,..."}}
+        ]
+    }]
+)
+```
+</Accordion>
+
+<Accordion title="Math & Diagram Reasoning">
+`kimi-k2.5` excels at solving math problems from images and interpreting diagrams.
+
+```python
+response = client.chat.completions.create(
+    model="kimi-k2.5",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Solve the math problem shown in this image. Show your work step by step."},
+            {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
+        ]
+    }]
+)
+```
+</Accordion>
+
+<Accordion title="Code Screenshot Analysis">
+Have the model read and explain code from screenshots.
+
+```python
+response = client.chat.completions.create(
+    model="mistral-31-24b",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Read the code in this screenshot. Explain what it does and suggest improvements."},
+            {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
+        ]
+    }]
+)
+```
+</Accordion>
+</AccordionGroup>
+
+## Tips
+
+<Tip>
+**Choosing a model:** Use `kimi-k2.5` for complex visual reasoning, math, and multi-image analysis. Use `mistral-31-24b` when you need faster responses for simpler image tasks.
+</Tip>
+
+<Note>
+**Supported formats:** JPEG, PNG, GIF, and WebP images are supported. For base64, include the appropriate MIME type in the data URI (e.g., `data:image/png;base64,...`).
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Available Models" icon="sparkles" href="/documentation/models">
+  See all models and their capabilities.
+</Card>
+
+<Card title="Chat Completions API" icon="message" href="/api-reference/chat/completions">
+  Full API reference for chat completions.
+</Card>
+
+<Card title="Tool Calling Guide" icon="wrench" href="/documentation/guides/tool-calling">
+  Let models invoke tools and external APIs.
+</Card>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Get started with your first API call.
+</Card>
+</CardGroup>
