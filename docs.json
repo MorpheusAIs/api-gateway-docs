@@ -55,7 +55,8 @@
             "group": "Models",
             "pages": [
               "documentation/models",
-              "documentation/models/pricing"
+              "documentation/models/pricing",
+              "documentation/models/rate-limits"
             ]
           },
           {

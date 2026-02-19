@@ -1,0 +1,158 @@
+---
+title: "Rate Limits"
+description: "Morpheus Inference API request and token rate limits"
+---
+
+# Rate Limits
+
+Rate limits protect the Morpheus Inference API from abuse and ensure fair access for all users. Limits vary by **model category** — larger, more compute-intensive models have lower limits, while smaller models allow higher throughput.
+
+<Info>
+Rate limits are applied **per user, per model category**. Using a Small model and a Large model simultaneously counts against separate limits.
+</Info>
+
+---
+
+## Text Models
+
+Text models are grouped into three tiers based on model size: **Small (S)**, **Medium (M)**, and **Large (L)**. Each model on the [Available Models](/documentation/models) page is tagged with its tier.
+
+| Tier | Requests/min | Tokens/min |
+| :--- | -----------: | ---------: |
+| S    |          500 |  1,000,000 |
+| M    |           50 |    750,000 |
+| L    |           20 |    500,000 |
+
+<Accordion title="Which models are in each tier?">
+  **Small (S)** — Example: `llama-3.2-3b` `qwen3-4b`
+
+  **Medium (M)** — Example: `llama-3.3-70b` `qwen3-next-80b`
+
+  **Large (L)** — Example: `glm-5` `kimi-k2.5`
+
+  Visit [Available Models](/documentation/models) for the most up-to-date model classifications.
+</Accordion>
+
+<Tip>
+Models used with the `:web` suffix (e.g. `llama-3.3-70b:web`) share the same rate limit tier as the base model.
+</Tip>
+
+---
+
+## Other Models
+
+| Type      | Requests/min |
+| :-------- | -----------: |
+| Embedding |          500 |
+| Audio     |           60 |
+
+<Note>
+Embedding models have no tokens-per-minute limit — only the requests-per-minute limit applies.
+</Note>
+
+---
+
+## Response Headers
+
+Every API response includes OpenAI-compatible rate limit headers so you can monitor your usage programmatically:
+
+| Header | Description |
+| :--- | :--- |
+| `X-RateLimit-Limit-Requests` | Maximum requests allowed in the current window |
+| `X-RateLimit-Limit-Tokens` | Maximum tokens allowed per minute |
+| `X-RateLimit-Remaining-Requests` | Requests remaining in the current window |
+| `X-RateLimit-Remaining-Tokens` | Tokens remaining in the current minute |
+| `X-RateLimit-Reset-Requests` | ISO 8601 timestamp when the request window resets |
+| `X-RateLimit-Reset-Tokens` | ISO 8601 timestamp when the token window resets |
+| `Retry-After` | Seconds until you can retry (only present on `429` responses) |
+
+---
+
+## Handling Rate Limit Errors
+
+When you exceed a rate limit, the API returns a `429 Too Many Requests` response with an OpenAI-compatible error body:
+
+```json
+{
+  "error": {
+    "message": "Rate limit exceeded: 20/20 requests per minute. Please retry after 45 seconds.",
+    "type": "rate_limit_exceeded",
+    "param": null,
+    "code": "rate_limit_exceeded"
+  }
+}
+```
+
+### Best Practices
+
+<AccordionGroup>
+<Accordion title="Implement exponential backoff">
+When you receive a `429` response, wait and retry with increasing delays. Check the `Retry-After` header for the exact number of seconds to wait.
+
+```python
+import time
+import requests
+
+def make_request_with_retry(url, headers, data, max_retries=3):
+    for attempt in range(max_retries):
+        response = requests.post(url, headers=headers, json=data)
+        
+        if response.status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
+            time.sleep(retry_after)
+            continue
+        
+        return response
+    
+    raise Exception("Max retries exceeded")
+```
+</Accordion>
+
+<Accordion title="Monitor your usage via headers">
+Track `X-RateLimit-Remaining-Requests` and `X-RateLimit-Remaining-Tokens` in every response. Slow down proactively when remaining values approach zero instead of waiting for a `429`.
+</Accordion>
+
+<Accordion title="Choose the right model tier">
+If your workload requires high throughput, consider using a **Small** tier model like `qwen3-4b` or `llama-3.2-3b` which allow up to 500 requests/min. Reserve **Large** tier models for tasks that genuinely require their additional capability.
+</Accordion>
+
+<Accordion title="Batch requests efficiently">
+For embedding workloads, send multiple texts in a single request using the array input format instead of making individual calls per text. This helps you stay within RPM limits.
+</Accordion>
+</AccordionGroup>
+
+---
+
+## How Rate Limiting Works
+
+The Morpheus API uses a **fixed-window** rate limiter, aligned to 60-second boundaries (i.e., each calendar minute). Both request count (RPM) and token usage (TPM) are tracked independently:
+
+1. **Before processing**: The API checks your RPM count and estimated token usage against the limits for the requested model's tier.
+2. **After processing**: Actual token usage (input + output tokens combined) is recorded against your TPM allowance.
+3. **On limit exceeded**: The request is rejected with a `429` response before any compute is consumed (for RPM) or tracked for future requests (for TPM).
+
+<Info>
+If the rate limiting service encounters an internal error (e.g., Redis unavailable), the system **fails open** — your request will be processed normally rather than rejected.
+</Info>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Available Models" icon="robot" href="/documentation/models">
+  See all models with their tier badges (S, M, L).
+</Card>
+
+<Card title="Model Pricing" icon="tags" href="/documentation/models/pricing">
+  View per-model pricing and cost estimates.
+</Card>
+
+<Card title="Chat Completions" icon="message" href="/api-reference/chat/completions">
+  Full API reference for chat completions.
+</Card>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Make your first API call in minutes.
+</Card>
+</CardGroup>
