@@ -16,6 +16,10 @@ The Morpheus Inference API is **fully OpenAI-compatible** — vision works exact
 | Model | Context Window | Best For |
 |-------|---------------|----------|
 | `kimi-k2.5` | 256K | Visual reasoning, math from images, complex multimodal tasks |
+| `gemma-4-31b` | 256K | Document parsing, math/science from images, high-accuracy visual reasoning |
+| `gemma-4-26b-a4b` | 256K | Efficient image analysis, low-latency visual reasoning |
+| `qwen35-35b-a3b` | 256K | General-purpose image analysis, long context |
+| `qwen35-9b` | 256K | Fast image analysis, lightweight visual tasks |
 | `mistral-31-24b` | 128K | Fast image analysis, efficient visual processing |
 
 ## How It Works
@@ -373,7 +377,7 @@ response = client.chat.completions.create(
 ## Tips
 
 <Tip>
-**Choosing a model:** Use `kimi-k2.5` for complex visual reasoning, math, and multi-image analysis. Use `mistral-31-24b` when you need faster responses for simpler image tasks.
+**Choosing a model:** Use `kimi-k2.5` or `gemma-4-31b` for complex visual reasoning, math, and multi-image analysis. Use `gemma-4-26b-a4b` or `qwen35-9b` for fast, efficient image tasks. Use `mistral-31-24b` when you need quick responses for simpler image tasks.
 </Tip>
 
 <Note>

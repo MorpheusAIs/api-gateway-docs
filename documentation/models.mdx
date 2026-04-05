@@ -31,6 +31,9 @@ Models optimized for step-by-step thinking and complex problem solving.
 | `kimi-k2-thinking` | 256K | Code, Function Calling, Reasoning | Deep reasoning, math, logic, coding |
 | `glm-4.7-thinking` | 198K | Function Calling, Reasoning | Extended thinking, analysis |
 | `qwen3-235b` | 128K | Function Calling | Complex reasoning, long documents |
+| `arcee-trinity-large-thinking` | 256K | Code, Function Calling, Reasoning | Agentic workflows, multi-step planning, tool orchestration |
+| `gemma-4-26b-a4b` | 256K | Reasoning, Vision | Efficient reasoning, low-latency inference, image analysis |
+| `gemma-4-31b` | 256K | Reasoning, Vision | Math, science, coding, document parsing, visual reasoning |
 
 ### Mid-Size Models
 
@@ -40,6 +43,7 @@ Balanced performance and speed for most use cases.
 |-------|---------------|--------------|----------|
 | `llama-3.3-70b` | 128K | Function Calling | General purpose, reliable |
 | `qwen3-next-80b` | 256K | Function Calling | Next-gen reasoning, long context |
+| `qwen35-35b-a3b` | 256K | Function Calling, Vision | General purpose, long context, image analysis |
 | `mistral-31-24b` | 128K | Function Calling, Vision | Fast, efficient, image analysis |
 | `venice-uncensored` | 32K | — | Uncensored, creative, roleplay |
 
@@ -50,6 +54,7 @@ Optimized for speed and low latency.
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
 | `glm-4.7-flash` | 200K | Function Calling, Reasoning | Agentic coding, tool-use workflows, local deployment |
+| `qwen35-9b` | 256K | Function Calling, Vision | Fast responses, image analysis, simple tasks |
 | `llama-3.2-3b` | 128K | Function Calling | Fastest responses, simple tasks |
 
 ## Embeddings Models
@@ -86,13 +91,13 @@ Models with function calling can invoke tools and APIs. Use the `tools` paramete
 <Accordion title="Reasoning">
 Reasoning models support extended thinking and step-by-step problem solving. They're optimized for complex math, logic, and analytical tasks.
 
-**Supported models:** `glm-5`, `kimi-k2.5`, `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.7-flash`, `glm-4.7`, `minimax-m2.5`
+**Supported models:** `glm-5`, `kimi-k2.5`, `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.7-flash`, `glm-4.7`, `minimax-m2.5`, `arcee-trinity-large-thinking`, `gemma-4-26b-a4b`, `gemma-4-31b`
 </Accordion>
 
 <Accordion title="Vision">
 Vision-capable models can analyze images passed in the messages array.
 
-**Supported models:** `mistral-31-24b`, `kimi-k2.5`
+**Supported models:** `mistral-31-24b`, `kimi-k2.5`, `gemma-4-26b-a4b`, `gemma-4-31b`, `qwen35-35b-a3b`, `qwen35-9b`
 </Accordion>
 
 <Accordion title="Web Search">
@@ -104,7 +109,7 @@ Any model can be upgraded with real-time web search by appending `:web` to the m
 <Accordion title="Code Optimization">
 Models specifically optimized for code generation and programming tasks.
 
-**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`, `glm-5`, `minimax-m2.5`
+**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`, `glm-5`, `minimax-m2.5`, `arcee-trinity-large-thinking`
 </Accordion>
 </AccordionGroup>
 
@@ -203,6 +208,7 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 - **`qwen3-coder-480b-a35b-instruct`** - Top choice for code generation (256K context)
 - **`minimax-m2.5`** - SOTA agentic coding, full-stack development (198K context)
 - **`glm-5`** - Agentic engineering, multi-file systems design (200K context)
+- **`arcee-trinity-large-thinking`** - Agentic coding, multi-turn tool calling (256K context)
 - **`kimi-k2-thinking`** - Best for complex algorithmic problems with reasoning
 - **`llama-3.3-70b`** - Good balance of speed and quality
 </Accordion>
@@ -214,11 +220,15 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 - **`qwen3-coder-480b-a35b-instruct`** - 256K context window
 - **`glm-5`** - 200K context, excellent at document analysis
 - **`kimi-k2-thinking`** - 256K context with reasoning
+- **`arcee-trinity-large-thinking`** - 256K context, agentic reasoning
+- **`gemma-4-31b`** - 256K context, multimodal reasoning
 </Accordion>
 
 <Accordion title="Best for speed">
 - **`glm-4.7-flash`** - 30B MoE (3B active), 200K context, runs on consumer GPUs
 - **`llama-3.2-3b`** - Very fast, 128K context
+- **`gemma-4-26b-a4b`** - MoE reasoning, near-4B inference speed (256K context)
+- **`qwen35-9b`** - Fast with vision support (256K context)
 - **`mistral-31-24b`** - Good speed with vision support
 </Accordion>
 
@@ -228,12 +238,15 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 - **`kimi-k2-thinking`** - Deep reasoning chains, 256K context
 - **`glm-4.7-thinking`** - Extended thinking mode, 198K context
 - **`qwen3-235b`** - Complex analysis, 128K context
+- **`arcee-trinity-large-thinking`** - Agentic reasoning, multi-step planning, 256K context
+- **`gemma-4-31b`** - Math, science, visual reasoning, 256K context
 </Accordion>
 
 <Accordion title="Best for AI agents">
 - **`minimax-m2.5`** - Purpose-built for agents, 80.2% SWE-Bench, multi-step tool orchestration
 - **`glm-5`** - Long-horizon agentic tasks, #1 open-source on Vending Bench 2
 - **`kimi-k2.5`** - Agent Swarm with up to 100 parallel sub-agents
+- **`arcee-trinity-large-thinking`** - Purpose-built for long-horizon agents, multi-turn tool calling
 - **`glm-4.7-flash`** - Lightweight agentic coding, efficient tool-use workflows
 </Accordion>
 
