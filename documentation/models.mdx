@@ -15,6 +15,7 @@ These are the most capable models available for complex tasks.
 
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
+| `glm-5.1-non-thinking` | 200K | Code, Function Calling | High-throughput inference, tool-use without extended thinking |
 | `minimax-m2.5` | 198K | Code, Function Calling, Reasoning | AI agents, autonomous workflows, multi-step tool orchestration |
 | `qwen3-coder-480b-a35b-instruct` | 256K | Code, Function Calling | Code generation, programming |
 | `hermes-3-llama-3.1-405b` | 128K | — | General purpose, instruction following |
@@ -26,6 +27,9 @@ Models optimized for step-by-step thinking and complex problem solving.
 
 | Model | Context Window | Capabilities | Best For |
 |-------|---------------|--------------|----------|
+| `glm-5.1` | 200K | Code, Function Calling, Reasoning | Agentic engineering, complex systems, next-gen reasoning |
+| `kimi-k2.6` | 256K | Code, Function Calling, Reasoning, Vision | Math, visual reasoning, parallel agent workflows |
+| `MiniMax-M2.7` | 198K | Code, Function Calling, Reasoning | AI agents, autonomous workflows, cost-efficient orchestration |
 | `glm-5` | 200K | Code, Function Calling, Reasoning | Agentic engineering, complex systems, long-horizon tasks |
 | `kimi-k2.5` | 256K | Code, Function Calling, Reasoning, Vision | Math, visual reasoning, parallel agent workflows |
 | `kimi-k2-thinking` | 256K | Code, Function Calling, Reasoning | Deep reasoning, math, logic, coding |
@@ -85,19 +89,19 @@ For vector embeddings and semantic search.
 <Accordion title="Function Calling">
 Models with function calling can invoke tools and APIs. Use the `tools` parameter in your chat completion request to define available functions.
 
-**Supported models:** Most models except `venice-uncensored` and `hermes-3-llama-3.1-405b`
+**Supported models:** Most models except `venice-uncensored` and `hermes-3-llama-3.1-405b`. Includes `glm-5.1`, `glm-5.1-non-thinking`, `kimi-k2.6`, `MiniMax-M2.7`, and more.
 </Accordion>
 
 <Accordion title="Reasoning">
 Reasoning models support extended thinking and step-by-step problem solving. They're optimized for complex math, logic, and analytical tasks.
 
-**Supported models:** `glm-5`, `kimi-k2.5`, `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.7-flash`, `glm-4.7`, `minimax-m2.5`, `arcee-trinity-large-thinking`, `gemma-4-26b-a4b`, `gemma-4-31b`
+**Supported models:** `glm-5.1`, `glm-5`, `kimi-k2.6`, `kimi-k2.5`, `kimi-k2-thinking`, `glm-4.7-thinking`, `glm-4.7-flash`, `glm-4.7`, `minimax-m2.5`, `MiniMax-M2.7`, `arcee-trinity-large-thinking`, `gemma-4-26b-a4b`, `gemma-4-31b`
 </Accordion>
 
 <Accordion title="Vision">
 Vision-capable models can analyze images passed in the messages array.
 
-**Supported models:** `mistral-31-24b`, `kimi-k2.5`, `gemma-4-26b-a4b`, `gemma-4-31b`, `qwen35-35b-a3b`, `qwen35-9b`
+**Supported models:** `mistral-31-24b`, `kimi-k2.6`, `kimi-k2.5`, `gemma-4-26b-a4b`, `gemma-4-31b`, `qwen35-35b-a3b`, `qwen35-9b`
 </Accordion>
 
 <Accordion title="Web Search">
@@ -109,7 +113,7 @@ Any model can be upgraded with real-time web search by appending `:web` to the m
 <Accordion title="Code Optimization">
 Models specifically optimized for code generation and programming tasks.
 
-**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`, `glm-5`, `minimax-m2.5`, `arcee-trinity-large-thinking`
+**Supported models:** `qwen3-coder-480b-a35b-instruct`, `kimi-k2-thinking`, `glm-5.1`, `glm-5`, `kimi-k2.6`, `MiniMax-M2.7`, `minimax-m2.5`, `arcee-trinity-large-thinking`
 </Accordion>
 </AccordionGroup>
 
@@ -123,6 +127,9 @@ The model tables above only list base model names. To use any model **with web s
 
 | Base Model | With Web Search | What Changes |
 |------------|----------------|--------------|
+| `glm-5.1` | `glm-5.1:web` | Adds real-time internet search to responses |
+| `kimi-k2.6` | `kimi-k2.6:web` | Combines deep reasoning with current web data |
+| `MiniMax-M2.7` | `MiniMax-M2.7:web` | Adds web search to agent workflows |
 | `glm-5` | `glm-5:web` | Adds real-time internet search to responses |
 | `kimi-k2.5` | `kimi-k2.5:web` | Combines deep reasoning with current web data |
 | `glm-4.7-flash` | `glm-4.7-flash:web` | Adds web search to fast, efficient responses |
@@ -207,6 +214,8 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 <Accordion title="Best for coding">
 - **`qwen3-coder-480b-a35b-instruct`** - Top choice for code generation (256K context)
 - **`minimax-m2.5`** - SOTA agentic coding, full-stack development (198K context)
+- **`glm-5.1`** - Next-gen agentic engineering, multi-file systems design (200K context)
+- **`MiniMax-M2.7`** - Cost-efficient agentic coding, tool orchestration (198K context)
 - **`glm-5`** - Agentic engineering, multi-file systems design (200K context)
 - **`arcee-trinity-large-thinking`** - Agentic coding, multi-turn tool calling (256K context)
 - **`kimi-k2-thinking`** - Best for complex algorithmic problems with reasoning
@@ -216,8 +225,10 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 <Accordion title="Best for long documents">
 - **`minimax-m2.5`** - 198K context window
 - **`qwen3-next-80b`** - 256K context window
+- **`kimi-k2.6`** - 256K context with multimodal reasoning
 - **`kimi-k2.5`** - 256K context with multimodal reasoning
 - **`qwen3-coder-480b-a35b-instruct`** - 256K context window
+- **`glm-5.1`** - 200K context, excellent at document analysis
 - **`glm-5`** - 200K context, excellent at document analysis
 - **`kimi-k2-thinking`** - 256K context with reasoning
 - **`arcee-trinity-large-thinking`** - 256K context, agentic reasoning
@@ -233,8 +244,11 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 </Accordion>
 
 <Accordion title="Best for reasoning">
+- **`kimi-k2.6`** - Next-gen math/logic benchmarks, multimodal, 256K context
 - **`kimi-k2.5`** - Top math/logic benchmarks (AIME 96%), multimodal, 256K context
+- **`glm-5.1`** - Next-gen agentic engineering, systems reasoning, 200K context
 - **`glm-5`** - Agentic engineering, systems reasoning, 200K context
+- **`MiniMax-M2.7`** - Cost-efficient reasoning, agent workflows, 198K context
 - **`kimi-k2-thinking`** - Deep reasoning chains, 256K context
 - **`glm-4.7-thinking`** - Extended thinking mode, 198K context
 - **`qwen3-235b`** - Complex analysis, 128K context
@@ -244,7 +258,10 @@ Model availability depends on active providers in the Morpheus Inference Marketp
 
 <Accordion title="Best for AI agents">
 - **`minimax-m2.5`** - Purpose-built for agents, 80.2% SWE-Bench, multi-step tool orchestration
+- **`MiniMax-M2.7`** - Next-gen agents, cost-efficient orchestration, 198K context
+- **`glm-5.1`** - Next-gen long-horizon agentic tasks, advanced reasoning, 200K context
 - **`glm-5`** - Long-horizon agentic tasks, #1 open-source on Vending Bench 2
+- **`kimi-k2.6`** - Agent Swarm with up to 100 parallel sub-agents
 - **`kimi-k2.5`** - Agent Swarm with up to 100 parallel sub-agents
 - **`arcee-trinity-large-thinking`** - Purpose-built for long-horizon agents, multi-turn tool calling
 - **`glm-4.7-flash`** - Lightweight agentic coding, efficient tool-use workflows

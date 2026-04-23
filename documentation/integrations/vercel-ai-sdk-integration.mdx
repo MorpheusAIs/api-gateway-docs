@@ -110,6 +110,12 @@ Popular models available through Morpheus:
 
 - **llama-3.3-70b:web** - Meta's Llama 3.3 with web search tool calling
 - **llama-3.3-70b** - Meta's Llama 3.3 base model
+- **glm-5.1:web** - GLM 5.1 with web search and reasoning
+- **glm-5.1** - GLM 5.1 with reasoning and function calling
+- **kimi-k2.6:web** - Kimi K2.6 with web search and vision
+- **kimi-k2.6** - Kimi K2.6 with reasoning, vision, and function calling
+- **MiniMax-M2.7:web** - MiniMax M2.7 with web search
+- **MiniMax-M2.7** - MiniMax M2.7 with reasoning and function calling
 - **qwen3-235b:web** - Qwen 3 with web search tool calling
 - **qwen3-235b** - Qwen 3 base model
 
@@ -323,6 +329,12 @@ import { useChat } from 'ai/react';
 import { useState } from 'react';
 
 const models = [
+  { name: 'GLM 5.1 (Web)', value: 'glm-5.1:web' },
+  { name: 'GLM 5.1', value: 'glm-5.1' },
+  { name: 'Kimi K2.6 (Web)', value: 'kimi-k2.6:web' },
+  { name: 'Kimi K2.6', value: 'kimi-k2.6' },
+  { name: 'MiniMax M2.7 (Web)', value: 'MiniMax-M2.7:web' },
+  { name: 'MiniMax M2.7', value: 'MiniMax-M2.7' },
   { name: 'Llama 3.3 70B (Web)', value: 'llama-3.3-70b:web' },
   { name: 'Llama 3.3 70B', value: 'llama-3.3-70b' },
   { name: 'Qwen 3 235B (Web)', value: 'qwen3-235b:web' },
@@ -430,6 +442,12 @@ Allow users to switch between different Morpheus models:
 
 ```typescript app/page.tsx
 const models = [
+  { name: 'GLM 5.1 (Web)', value: 'glm-5.1:web' },
+  { name: 'GLM 5.1', value: 'glm-5.1' },
+  { name: 'Kimi K2.6 (Web)', value: 'kimi-k2.6:web' },
+  { name: 'Kimi K2.6', value: 'kimi-k2.6' },
+  { name: 'MiniMax M2.7 (Web)', value: 'MiniMax-M2.7:web' },
+  { name: 'MiniMax M2.7', value: 'MiniMax-M2.7' },
   { name: 'Llama 3.3 70B (Web)', value: 'llama-3.3-70b:web' },
   { name: 'Llama 3.3 70B', value: 'llama-3.3-70b' },
   { name: 'Qwen 3 235B (Web)', value: 'qwen3-235b:web' },

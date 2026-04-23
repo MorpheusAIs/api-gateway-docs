@@ -255,6 +255,62 @@ Copy and paste the following configuration into your `opencode.json` file:
             "context": 256000,
             "output": 16384
           }
+        },
+        "glm-5.1": {
+          "name": "GLM 5.1",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          }
+        },
+        "glm-5.1:web": {
+          "name": "GLM 5.1 (Web)",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          }
+        },
+        "glm-5.1-non-thinking": {
+          "name": "GLM 5.1 Non-Thinking",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          }
+        },
+        "glm-5.1-non-thinking:web": {
+          "name": "GLM 5.1 Non-Thinking (Web)",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          }
+        },
+        "kimi-k2.6": {
+          "name": "Kimi K2.6",
+          "limit": {
+            "context": 256000,
+            "output": 16384
+          }
+        },
+        "kimi-k2.6:web": {
+          "name": "Kimi K2.6 (Web)",
+          "limit": {
+            "context": 256000,
+            "output": 16384
+          }
+        },
+        "MiniMax-M2.7": {
+          "name": "MiniMax M2.7",
+          "limit": {
+            "context": 198000,
+            "output": 16384
+          }
+        },
+        "MiniMax-M2.7:web": {
+          "name": "MiniMax M2.7 (Web)",
+          "limit": {
+            "context": 198000,
+            "output": 16384
+          }
         }
       }
     }
@@ -421,8 +477,12 @@ The following models are included in the configuration above:
 
 | Model | Context | Output | Best For |
 |-------|---------|--------|----------|
+| **GLM 5.1** | 200K | 65K | Agentic engineering, complex reasoning |
+| **GLM 5.1 Non-Thinking** | 200K | 65K | High-throughput inference, tool-use |
 | **GLM 4.7** | 198K | 65K | General purpose, long context, documentation |
 | **GLM 4.7 Thinking** | 198K | 65K | Extended thinking, analysis, reasoning |
+| **Kimi K2.6** | 256K | 16K | Visual reasoning, agent workflows, math |
+| **MiniMax M2.7** | 198K | 16K | Cost-efficient agents, tool orchestration |
 | **GPT OSS 120B** | 128K | 8K | GPT-style responses, function calling |
 | **Qwen3 Coder 480B** | 256K | 16K | Complex code generation, architecture design |
 | **Kimi K2 Thinking** | 256K | 16K | Complex problem solving, multi-step reasoning |
