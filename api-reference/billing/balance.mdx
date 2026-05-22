@@ -1,0 +1,106 @@
+---
+title: "Get Balance"
+api: "GET /api/v1/billing/balance"
+description: "Check remaining credits, daily staking allowance, and paid balance"
+---
+
+Get the current credit balance for the authenticated user. Use this endpoint to answer:
+
+- **How many credits do I have remaining?** → `total_available`
+- **How much daily staking credit is left?** → `staking.available`
+- **How much pre-paid credit is left?** → `paid.available`
+- **What is my total daily allowance?** → `staking.daily_amount`
+
+Credits are denominated in USD. The API consumes **daily staking allowance first**, then pre-paid credits if [Allow Overages](/documentation/getting-started/credits#credit-usage-order) is enabled.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key or Cognito JWT: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Response
+
+<ResponseField name="total_available" type="string" required>
+  Total spendable credits across all buckets (paid + staking).
+</ResponseField>
+
+<ResponseField name="paid" type="object" required>
+  Pre-purchased credit balance (Available Credit in the dashboard).
+
+  <Expandable title="Paid balance fields">
+    <ResponseField name="posted_balance" type="string">
+      Posted paid credits balance.
+    </ResponseField>
+
+    <ResponseField name="pending_holds" type="string">
+      Pending holds (negative amount while usage is in flight).
+    </ResponseField>
+
+    <ResponseField name="available" type="string">
+      Available pre-paid credits (`posted_balance` + `pending_holds`).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="staking" type="object" required>
+  Daily staking allowance (Daily API credit remaining in the dashboard).
+
+  <Expandable title="Staking balance fields">
+    <ResponseField name="daily_amount" type="string">
+      Configured daily staking allowance in USD.
+    </ResponseField>
+
+    <ResponseField name="refresh_date" type="string | null">
+      Date of the last staking refresh (ISO 8601 date).
+    </ResponseField>
+
+    <ResponseField name="available" type="string">
+      Remaining daily staking credits for the current period.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="is_staker" type="boolean">
+  `true` if the user has linked wallets with active MOR stake.
+</ResponseField>
+
+<ResponseField name="allow_overage" type="boolean">
+  When enabled, paid credits are used automatically after the daily staking allowance is exhausted.
+</ResponseField>
+
+<ResponseField name="currency" type="string">
+  Currency code (USD).
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.mor.org/api/v1/billing/balance \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+</RequestExample>
+
+<ResponseExample>
+```json Success
+{
+  "paid": {
+    "posted_balance": "25.00",
+    "pending_holds": "-0.12",
+    "available": "24.88"
+  },
+  "staking": {
+    "daily_amount": "5.00",
+    "refresh_date": "2026-05-22",
+    "available": "3.47"
+  },
+  "total_available": "28.35",
+  "is_staker": true,
+  "allow_overage": false,
+  "currency": "USD"
+}
+```
+</ResponseExample>
+
+<Tip>
+To estimate **daily usage consumed**, subtract `staking.available` from `staking.daily_amount`.
+</Tip>

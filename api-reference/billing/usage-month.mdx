@@ -1,0 +1,71 @@
+---
+title: "List Usage for Month"
+api: "GET /api/v1/billing/usage/month"
+description: "Get detailed usage charges for a specific calendar month"
+---
+
+Get a paginated list of **posted usage charges** for a specific calendar month. This is a convenience endpoint equivalent to [List Usage](/api-reference/billing/usage) with a `from`/`to` date range scoped to one month.
+
+Use this when building monthly reports or billing dashboards.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key or Cognito JWT: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="year" type="integer" required>
+  Four-digit year (for example, `2026`).
+</ParamField>
+
+<ParamField query="month" type="integer" required>
+  Month number from 1 to 12.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of items to return (minimum 1).
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of items to skip for pagination.
+</ParamField>
+
+### Response
+
+Same shape as [List Usage](/api-reference/billing/usage): a paginated `UsageListResponse` with `items`, `total`, `limit`, `offset`, and `has_more`.
+
+<RequestExample>
+```bash cURL
+curl "https://api.mor.org/api/v1/billing/usage/month?year=2026&month=5&limit=20" \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+</RequestExample>
+
+<ResponseExample>
+```json Success
+{
+  "items": [
+    {
+      "id": "0192a1b2-c3d4-7890-abcd-ef1234567890",
+      "created_at": "2026-05-15T09:12:00Z",
+      "model_name": "llama-3.3-70b",
+      "endpoint": "/api/v1/chat/completions",
+      "tokens_total": 512,
+      "amount_paid": "0.00",
+      "amount_staking": "0.0088",
+      "amount_total": "0.0088"
+    }
+  ],
+  "total": 42,
+  "limit": 20,
+  "offset": 0,
+  "has_more": true
+}
+```
+</ResponseExample>
+
+<Note>
+For arbitrary date ranges, use [List Usage](/api-reference/billing/usage) with `from` and `to` query parameters instead.
+</Note>

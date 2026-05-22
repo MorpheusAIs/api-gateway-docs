@@ -1,0 +1,167 @@
+---
+title: "List Transactions"
+api: "GET /api/v1/billing/transactions"
+description: "Get full credit ledger history including purchases, usage, and refunds"
+---
+
+Get a paginated list of all **credit ledger entries** for the authenticated user. This is the full account history — purchases, daily staking refreshes, usage charges, refunds, and adjustments.
+
+Use this endpoint when you need the complete financial audit trail, not just inference usage.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key or Cognito JWT: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of items to return (minimum 1).
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of items to skip for pagination.
+</ParamField>
+
+<ParamField query="entry_type" type="string">
+  Filter by ledger entry type:
+
+  - `purchase` — Credit top-ups (Stripe, Coinbase, etc.)
+  - `staking_refresh` — Daily staking allowance refresh
+  - `usage_hold` — Pending hold while a request is in flight
+  - `usage_charge` — Finalized inference usage charge
+  - `refund` — Credit refund
+  - `adjustment` — Manual or system adjustment
+</ParamField>
+
+<ParamField query="from" type="string">
+  Filter entries created after this datetime (ISO 8601).
+</ParamField>
+
+<ParamField query="to" type="string">
+  Filter entries created before this datetime (ISO 8601).
+</ParamField>
+
+### Response
+
+<ResponseField name="items" type="array">
+  List of ledger entries. Returns newest entries first.
+
+  <Expandable title="Ledger entry fields">
+    <ResponseField name="id" type="string">
+      Unique entry ID.
+    </ResponseField>
+
+    <ResponseField name="entry_type" type="string">
+      Type of ledger entry (`purchase`, `staking_refresh`, `usage_charge`, etc.).
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Entry status: `pending`, `posted`, or `voided`.
+    </ResponseField>
+
+    <ResponseField name="amount_paid" type="string">
+      Change to the paid credit bucket.
+    </ResponseField>
+
+    <ResponseField name="amount_staking" type="string">
+      Change to the staking credit bucket.
+    </ResponseField>
+
+    <ResponseField name="amount_total" type="string">
+      Total credit change.
+    </ResponseField>
+
+    <ResponseField name="model_name" type="string | null">
+      Model name (for usage entries).
+    </ResponseField>
+
+    <ResponseField name="endpoint" type="string | null">
+      API endpoint (for usage entries).
+    </ResponseField>
+
+    <ResponseField name="tokens_total" type="integer | null">
+      Total tokens (for usage entries).
+    </ResponseField>
+
+    <ResponseField name="payment_source" type="string | null">
+      Payment provider (for purchase entries).
+    </ResponseField>
+
+    <ResponseField name="description" type="string | null">
+      Human-readable description of the entry.
+    </ResponseField>
+
+    <ResponseField name="created_at" type="string">
+      When the entry was created (ISO 8601).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of matching entries.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Page size used for this response.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset used for this response.
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  Whether additional pages are available.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl "https://api.mor.org/api/v1/billing/transactions?entry_type=purchase&limit=10" \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+</RequestExample>
+
+<ResponseExample>
+```json Success
+{
+  "items": [
+    {
+      "id": "0192a1b2-c3d4-7890-abcd-ef1234567890",
+      "user_id": 1234,
+      "currency": "USD",
+      "status": "posted",
+      "entry_type": "purchase",
+      "amount_paid": "25.00",
+      "amount_staking": "0.00",
+      "amount_total": "25.00",
+      "payment_source": "stripe",
+      "description": "Credit purchase",
+      "created_at": "2026-05-01T10:00:00Z",
+      "updated_at": "2026-05-01T10:00:00Z"
+    },
+    {
+      "id": "0192a1b2-c3d4-7890-abcd-ef1234567891",
+      "entry_type": "usage_charge",
+      "status": "posted",
+      "amount_paid": "0.00",
+      "amount_staking": "-0.0042",
+      "amount_total": "-0.0042",
+      "model_name": "llama-3.3-70b",
+      "endpoint": "/api/v1/chat/completions",
+      "tokens_total": 384,
+      "created_at": "2026-05-22T14:30:00Z",
+      "updated_at": "2026-05-22T14:30:00Z"
+    }
+  ],
+  "total": 89,
+  "limit": 10,
+  "offset": 0,
+  "has_more": true
+}
+```
+</ResponseExample>
+
+<Note>
+For inference usage only, prefer [List Usage](/api-reference/billing/usage) — it returns a cleaner schema focused on API calls. Use **List Transactions** when you also need purchases, refreshes, and refunds.
+</Note>

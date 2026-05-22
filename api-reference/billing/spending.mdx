@@ -1,0 +1,95 @@
+---
+title: "Get Monthly Spending"
+api: "GET /api/v1/billing/spending"
+description: "Get monthly spending rollups for a year"
+---
+
+Get **monthly spending summaries** for a calendar year. Use this endpoint to answer **how much you used per month** without fetching individual usage line items.
+
+Returns all 12 months, including months with zero spending.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key or Cognito JWT: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="year" type="integer">
+  Year to retrieve spending for. Defaults to the current year.
+</ParamField>
+
+<ParamField query="mode" type="string" default="gross">
+  How spending is calculated:
+
+  - `gross` — Count usage charges only
+  - `net` — Include refunds in the calculation
+</ParamField>
+
+### Response
+
+<ResponseField name="year" type="integer">
+  Year covered by this response.
+</ResponseField>
+
+<ResponseField name="mode" type="string">
+  Spending calculation mode (`gross` or `net`).
+</ResponseField>
+
+<ResponseField name="months" type="array">
+  Twelve months of spending data, one entry per calendar month.
+
+  <Expandable title="Monthly spending fields">
+    <ResponseField name="year" type="integer">
+      Year of this month.
+    </ResponseField>
+
+    <ResponseField name="month" type="integer">
+      Month number (1–12).
+    </ResponseField>
+
+    <ResponseField name="amount" type="string">
+      Total spending for the month (negative value representing credits consumed).
+    </ResponseField>
+
+    <ResponseField name="transaction_count" type="integer">
+      Number of transactions in the month.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="string">
+  Total spending for the year.
+</ResponseField>
+
+<ResponseField name="currency" type="string">
+  Currency code (USD).
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl "https://api.mor.org/api/v1/billing/spending?year=2026&mode=gross" \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+</RequestExample>
+
+<ResponseExample>
+```json Success
+{
+  "year": 2026,
+  "mode": "gross",
+  "months": [
+    { "year": 2026, "month": 1, "amount": "-12.45", "transaction_count": 340 },
+    { "year": 2026, "month": 2, "amount": "-8.20", "transaction_count": 210 },
+    { "year": 2026, "month": 3, "amount": "0.00", "transaction_count": 0 }
+  ],
+  "total": "-45.67",
+  "currency": "USD"
+}
+```
+</ResponseExample>
+
+<Tip>
+Use [Get Monthly Spending](/api-reference/billing/spending) for charts and dashboards. Use [List Usage](/api-reference/billing/usage) when you need per-request detail.
+</Tip>

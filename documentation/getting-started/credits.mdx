@@ -90,6 +90,48 @@ After connecting, your daily credit allowance will appear under **Daily API cred
 
 ---
 
+## Check Credits via API
+
+You can check your credit balance and usage programmatically with your API key (`Authorization: Bearer sk-xxxxxx`).
+
+<CardGroup cols={2}>
+<Card title="Get Balance" icon="wallet" href="/api-reference/billing/balance">
+  Remaining credits, daily allowance, and pre-paid balance.
+</Card>
+
+<Card title="List Usage" icon="list" href="/api-reference/billing/usage">
+  Detailed per-request usage charges with token breakdown.
+</Card>
+
+<Card title="Monthly Spending" icon="chart-line" href="/api-reference/billing/spending">
+  Monthly spending rollups for dashboards and monitoring.
+</Card>
+
+<Card title="List Transactions" icon="receipt" href="/api-reference/billing/transactions">
+  Full ledger history — purchases, usage, refunds, and adjustments.
+</Card>
+</CardGroup>
+
+Quick example — check remaining credits:
+
+```bash
+curl https://api.mor.org/api/v1/billing/balance \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+
+Key response fields:
+
+| Field | Description |
+|-------|-------------|
+| `total_available` | Total spendable credits |
+| `staking.available` | Daily staking credits remaining |
+| `staking.daily_amount` | Total daily allowance |
+| `paid.available` | Pre-purchased credits remaining |
+
+See the [Billing API Reference](/api-reference/billing/balance) for all endpoints.
+
+---
+
 ## Credit Usage Order
 
 <Note>
@@ -148,6 +190,10 @@ Credits are **calculated and refreshed daily at midnight UTC**. Your allowance w
 ## Next Steps
 
 <CardGroup cols={2}>
+<Card title="Get Balance" icon="wallet" href="/api-reference/billing/balance">
+  Check remaining credits via the API.
+</Card>
+
 <Card title="View Model Pricing" icon="tags" href="/documentation/models/pricing">
   See per-model pricing and rate limits to estimate your credit usage.
 </Card>

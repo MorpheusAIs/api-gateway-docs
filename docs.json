@@ -140,6 +140,16 @@
             ]
           },
           {
+            "group": "Billing",
+            "pages": [
+              "api-reference/billing/balance",
+              "api-reference/billing/usage",
+              "api-reference/billing/usage-month",
+              "api-reference/billing/spending",
+              "api-reference/billing/transactions"
+            ]
+          },
+          {
             "group": "Utility",
             "pages": [
               "api-reference/utility/root",

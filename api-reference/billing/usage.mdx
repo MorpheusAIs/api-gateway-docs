@@ -1,0 +1,148 @@
+---
+title: "List Usage"
+api: "GET /api/v1/billing/usage"
+description: "Get detailed per-request usage charges with token and model breakdown"
+---
+
+Get a paginated list of **posted usage charges** for inference requests. Use this endpoint to answer **how much you used** at the request level — including model, endpoint, token counts, and credit amounts.
+
+Returns newest entries first. Only includes finalized usage charges, not pending holds.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  API key or Cognito JWT: `Bearer sk-xxxxxx`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of items to return (minimum 1).
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of items to skip for pagination.
+</ParamField>
+
+<ParamField query="from" type="string">
+  Filter entries created after this datetime (ISO 8601).
+</ParamField>
+
+<ParamField query="to" type="string">
+  Filter entries created before this datetime (ISO 8601).
+</ParamField>
+
+<ParamField query="model" type="string">
+  Filter by model name.
+</ParamField>
+
+### Response
+
+<ResponseField name="items" type="array">
+  List of usage entries.
+
+  <Expandable title="Usage entry fields">
+    <ResponseField name="id" type="string">
+      Unique entry ID.
+    </ResponseField>
+
+    <ResponseField name="created_at" type="string">
+      When the usage was recorded (ISO 8601).
+    </ResponseField>
+
+    <ResponseField name="model_name" type="string | null">
+      Human-readable model name.
+    </ResponseField>
+
+    <ResponseField name="model_id" type="string | null">
+      Model identifier.
+    </ResponseField>
+
+    <ResponseField name="endpoint" type="string | null">
+      API endpoint that was called (for example, `/api/v1/chat/completions`).
+    </ResponseField>
+
+    <ResponseField name="tokens_input" type="integer | null">
+      Input tokens consumed.
+    </ResponseField>
+
+    <ResponseField name="tokens_output" type="integer | null">
+      Output tokens consumed.
+    </ResponseField>
+
+    <ResponseField name="tokens_total" type="integer | null">
+      Total tokens consumed.
+    </ResponseField>
+
+    <ResponseField name="amount_paid" type="string">
+      Credits charged to the paid bucket.
+    </ResponseField>
+
+    <ResponseField name="amount_staking" type="string">
+      Credits charged to the daily staking bucket.
+    </ResponseField>
+
+    <ResponseField name="amount_total" type="string">
+      Total credits charged for this request.
+    </ResponseField>
+
+    <ResponseField name="request_id" type="string | null">
+      Request ID for correlation with API logs.
+    </ResponseField>
+
+    <ResponseField name="api_key_id" type="integer | null">
+      ID of the API key used for the request.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of matching entries.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Page size used for this response.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset used for this response.
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  Whether additional pages are available.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl "https://api.mor.org/api/v1/billing/usage?limit=10&model=llama-3.3-70b" \
+  -H "Authorization: Bearer sk-your-api-key"
+```
+</RequestExample>
+
+<ResponseExample>
+```json Success
+{
+  "items": [
+    {
+      "id": "0192a1b2-c3d4-7890-abcd-ef1234567890",
+      "created_at": "2026-05-22T14:30:00Z",
+      "model_name": "llama-3.3-70b",
+      "model_id": "0x415471125cc4d03b89818acb8426981fa28a3eee03a9097176297a9a6ae87c8d",
+      "endpoint": "/api/v1/chat/completions",
+      "tokens_input": 128,
+      "tokens_output": 256,
+      "tokens_total": 384,
+      "amount_paid": "0.00",
+      "amount_staking": "0.0042",
+      "amount_total": "0.0042",
+      "request_id": "req_abc123",
+      "api_key_id": 42
+    }
+  ],
+  "total": 156,
+  "limit": 10,
+  "offset": 0,
+  "has_more": true
+}
+```
+</ResponseExample>
